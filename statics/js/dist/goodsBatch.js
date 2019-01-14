@@ -273,7 +273,7 @@ var api = frameElement.api,
 					name: "salePrice",
 					label: "销售单价",
 					width: 0,
-					hidden: !0
+					hidden: !1
 				}, {
 					name: "purPrice",
 					label: "采购单价",
