@@ -260,11 +260,11 @@ i{
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="rateSalePrice">税后零售价</label></div>
-                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="salePrice" id="salePrice" readonly></div>
+                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="rateSalePrice" id="rateSalePrice" readonly></div>
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="RateWholesalePrice">税后批发价</label></div>
-                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="wholesalePrice" id="wholesalePrice"></div>
+                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="RateWholesalePrice" id="RateWholesalePrice" readonly></div>
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="discountRate1">折扣率一(%)</label></div>
@@ -438,6 +438,14 @@ i{
             }
         })
     </script>
+<script>
+    $('#salePrice').on('input',function () {
+        $('#rateSalePrice').val((parseInt($('#salePrice').val()) * <?php echo $rate?>) + parseInt($('#salePrice').val()));
+    });
+    $('#wholesalePrice').on('input',function () {
+        $('#RateWholesalePrice').val((parseInt($('#wholesalePrice').val()) * <?php echo $rate?>) + parseInt($('#wholesalePrice').val()));
+    })
+</script>
 </body>
 </html>
 

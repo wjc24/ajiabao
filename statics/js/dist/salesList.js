@@ -59,6 +59,14 @@ var THISPAGE = {
 				align: "right",
 				formatter: "currency"
 			}, {
+				name: "totalRateAmount",
+				label: "税后销售金额",
+				hidden: hiddenAmount,
+				index: "totalRateAmount",
+				width: 80,
+				align: "right",
+				formatter: "currency"
+			}, {
 				name: "amount",
 				label: "优惠后金额",
 				hidden: hiddenAmount,

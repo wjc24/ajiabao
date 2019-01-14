@@ -245,6 +245,7 @@ class Settings extends CI_Controller {
 	public function goods_manage() {
         $where  = '(isDelete=0) and typeNumber="brand"';
         $data['list'] = $this->mysql_model->get_results('category',$where,'path');
+        $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 		$this->load->view('settings/goods-manage',$data);
 	}
 

@@ -14,12 +14,14 @@ class InvSa extends CI_Controller {
 			case 'initSale':
 			    $this->common_model->checkpurview(7);
 			    $data['billNo'] = str_no('XS');
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 			    $this->load->view('scm/invSa/initSale',$data);
 				break;
 			case 'editSale':
 			    $this->common_model->checkpurview(6);
 			    $id = intval($this->input->get_post('id',TRUE));
 			    $data['billNo'] = $this->mysql_model->get_row('invoice',array('id'=>$id,'billType'=>'SALE'),'billNo');
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 			    $this->load->view('scm/invSa/initSale',$data);
 				break;
 			case 'initUnhxList':
@@ -94,6 +96,7 @@ class InvSa extends CI_Controller {
 			$v[$arr]['description']  = $row['description'];
 			$v[$arr]['billNo']       = $row['billNo'];
 			$v[$arr]['totalAmount']  = (float)abs($row['totalAmount']);
+			$v[$arr]['totalRateAmount']  = (float)abs($row['totalRateAmount']);
 			$v[$arr]['userName']     = $row['userName'];
 			$v[$arr]['transTypeName']= $row['transTypeName'];
 			//add by michen 20170724 begin
@@ -229,7 +232,7 @@ class InvSa extends CI_Controller {
 				'billNo','billType','transType','transTypeName','buId','billDate','srcOrderNo','srcOrderId',
 				'description','totalQty','amount','arrears','rpAmount','totalAmount','hxStateCode',
 				'totalArrears','disRate','disAmount','postData','createTime',
-				'salesId','uid','userName','accId','modifyTime','udf01','udf02','udf03'),$data,NULL);
+				'salesId','uid','userName','accId','modifyTime','udf01','udf02','udf03','totalRateAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$iid = $this->mysql_model->insert('invoice',$info);
 			$this->invoice_info($iid,$data);
@@ -261,7 +264,7 @@ class InvSa extends CI_Controller {
 				'billType','transType','transTypeName','buId','billDate','description','hxStateCode',
 				'totalQty','amount','arrears','rpAmount','totalAmount','uid','userName',
 				'totalArrears','disRate','disAmount','postData',
-				'salesId','accId','modifyTime','udf01','udf02','udf03'),$data,NULL);
+				'salesId','accId','modifyTime','udf01','udf02','udf03','totalRateAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$this->mysql_model->update('invoice',$info,array('id'=>$data['id']));
 			$this->invoice_info($data['id'],$data);
@@ -315,6 +318,7 @@ class InvSa extends CI_Controller {
 			$info['data']['udf01']        = $data['udf01'];
 			$info['data']['udf02']        = $data['udf02'];
 			$info['data']['udf03']        = $data['udf03'];
+			$info['data']['totalRateAmount']        = (float)abs($data['totalRateAmount']);
 			//add by michen 20170724 end
 
 			$list = $this->data_model->get_invoice_info('a.iid='.$id.' order by a.id');
@@ -333,6 +337,8 @@ class InvSa extends CI_Controller {
                         $v[$arr]['qty']          = (float)abs($dopey['qty']);
                         $v[$arr]['locationName'] = $dopey['locationName'];
                         $v[$arr]['amount']       = (float)abs($dopey['amount']);
+                        $v[$arr]['rateAmount']   = (float)abs($dopey['rateAmount']);
+                        $v[$arr]['arrived']      = (float)abs($row['arrived']);
                         $v[$arr]['taxAmount']    = (float)0;
                         $v[$arr]['price']        = (float)$dopey['price'];
                         $v[$arr]['tax']          = (float)0;
@@ -361,6 +367,8 @@ class InvSa extends CI_Controller {
     				$v[$arr]['qty']          = (float)abs($row['qty']);
     				$v[$arr]['locationName'] = $row['locationName'];
     				$v[$arr]['amount']       = (float)abs($row['amount']);
+    				$v[$arr]['rateAmount']   = (float)abs($row['rateAmount']);
+    				$v[$arr]['arrived']      = (float)abs($row['arrived']);
     				$v[$arr]['taxAmount']    = (float)$row['taxAmount'];
     				$v[$arr]['price']        = (float)$row['price'];
     				$v[$arr]['tax']          = (float)$row['tax'];
@@ -378,6 +386,7 @@ class InvSa extends CI_Controller {
     				$v[$arr]['mainUnit']     = $row['mainUnit'];
     				$arr++;
 			    }
+
 			}
 
 			$info['data']['entries']     = isset($v) ? $v : array();
@@ -799,6 +808,8 @@ class InvSa extends CI_Controller {
 			$v[$arr]['deduction']     = $row['deduction'];
 			$v[$arr]['serialno']      = $row['serialno'];
 			$v[$arr]['description']   = $row['description'];
+			$v[$arr]['rateAmount']    = $row['rateAmount'];
+			$v[$arr]['arrived']       = $row['arrived'];
 			if (intval($row['srcOrderId'])>0) {
 			    $v[$arr]['srcOrderEntryId']  = intval($row['srcOrderEntryId']);
 				$v[$arr]['srcOrderId']       = intval($row['srcOrderId']);

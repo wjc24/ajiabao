@@ -229,6 +229,9 @@ $(function() {
   </div>
 </div>
 <script src="<?php echo base_url()?>statics/js/dist/sales.js?ver=2017082001"></script>
+<script>
+    window.rate = <?php echo $rate ?>
+</script>
 </body>
 </html>
 

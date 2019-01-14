@@ -21,7 +21,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 		},
 		initDom: function(a) {
 			var b = this;
-			if (this.$_customer = $("#customer"), 
+			if (this.$_customer = $("#customer"),
 				//add by michen 20170724 begin
 				this.$linkMan = $("#linkMan"),
 				this.$linkPhone = $("#linkPhone"),
@@ -50,15 +50,15 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						linkMen=$.grep(linkMen,function(n,i){
 							return n.linkFirst==1;
 						});
-						
-						linkMan=linkMen[0];	
+
+						linkMan=linkMen[0];
 						if(linkMan){
 							//b.$linkMan.find("input").val(linkMan.linkName);
 							//b.$linkPhone.find("input").val(linkMan.linkMobile?linkMan.linkMobile:linkMan.linkPhone);
 							//b.$linkAddress.find("input").val(linkMan.province+linkMan.city+linkMan.county+linkMan.address);
 							THISPAGE.linkCombo.selectByValue(linkMan.linkName);
 						}
-						
+
 						}
 						//add by michen 20170724 end
 						a ? ($("#customer").data("contactInfo", a), b.setSaleByContact(a)) : $("#customer").removeData("contactInfo")
@@ -70,11 +70,11 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					name: a.contactName,
 					cLevel: a.cLevel
 				};
-				this.$_customer.data("contactInfo", d), 
+				this.$_customer.data("contactInfo", d),
 				this.customerCombo.input.val(a.contactName);
 				//add by michen 20170724 begin
 				SYSTEM.mbuId = a.buId;
-				debugger;
+				// debugger;
 				this.linkCombo = Business.linkCombo(this);
 				setTimeout(function(){THISPAGE.linkCombo.selectByValue(a.udf01)},10);
 				//add by michen 20170724 end
@@ -82,7 +82,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					this.salesCombo.input.val(SYSTEM.salesInfo[e].name);
 					break
 				}
-			} else Public.ajaxPost("../basedata/contact/getRecentlyContact?action=getRecentlyContact", 
+			} else Public.ajaxPost("../basedata/contact/getRecentlyContact?action=getRecentlyContact",
 					{
 						transType: originalData.transType,
 						billType: "SALE"
@@ -101,8 +101,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						linkMen=$.grep(linkMen,function(n,i){
 							return n.linkFirst==1;
 						});
-						
-						linkMan=linkMen[0];	
+
+						linkMan=linkMen[0];
 						if(linkMan){
 							b.$linkMan.find("input").val(linkMan.linkName);
 							b.$linkPhone.find("input").val(linkMan.linkMobile?linkMan.linkMobile:linkMan.linkPhone);
@@ -113,10 +113,10 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						//add by michen 20170724 end
 					}
 			});
-			hideCustomerCombo && this.customerCombo.disable(), 
+			hideCustomerCombo && this.customerCombo.disable(),
 			$("#customer").data("callback", function(a) {
 				b.setSaleByContact(a)
-			}), 
+			}),
 			this.$_date.datepicker({
 				onSelect: function(a) {
 					if (!(originalData.id > 0)) {
@@ -132,7 +132,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						})
 					}
 				}
-			}), 
+			}),
 			a.description && this.$_note.val(a.description),
 			//add by michen 20170724 begin
 			/*this.linkCombo = Business.linkCombo(this),
@@ -143,11 +143,11 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			//a.udf02 && this.$linkPhone.find("input").val(a.udf02),
 			//a.udf03 && this.$linkAddress.find("input").val(a.udf03),
 			//add by michen 20170724 end
-			this.$_discountRate.val(a.disRate), 
-			this.$_deduction.val(a.disAmount), 
-			this.$_discount.val(a.amount), 
-			this.$_payment.val(a.rpAmount), 
-			this.$_arrears.val(a.arrears), 
+			this.$_discountRate.val(a.disRate),
+			this.$_deduction.val(a.disAmount),
+			this.$_discount.val(a.amount),
+			this.$_payment.val(a.rpAmount),
+			this.$_arrears.val(a.arrears),
 			this.$_customerFree.val(a.customerFree),
 			requiredMoney && ($("#accountWrap").show(), SYSTEM.isAdmin !== !1 || SYSTEM.rights.SettAcct_QUERY ? this.accountCombo = Business.accountCombo($("#account"), {
 				width: 112,
@@ -324,6 +324,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						discountRate: b.discountRate || 0,
 						deduction: b.deduction || 0,
 						amount: b.amount,
+						rateAmount: b.rateAmount,
 						locationName: b.locationName,
 						locationId: b.locationId,
 						taxRate: b.taxRate || taxRequiredInput,
@@ -337,6 +338,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						$.isNumeric(h) && ($.isNumeric(i) ? (f.deduction = f.deduction || g * h * i / 100, f.amount = f.amount || g * h - f.deduction) : f.amount = f.amount || g * h)
 					}
 					f.amount = f.amount ? f.amount : f.price * f.qty;
+					f.rateAmount = f.rateAmount ? f.rateAmount : f.amount * rate + f.amount;
 					var j = Number(f.amount);
 					if (taxRequiredCheck) {
 						var k = f.taxRate,
@@ -445,7 +447,6 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				editable: !0,
 				align: "left",
 				edittype: "custom",
-				edittype: "custom",
 				editoptions: {
 					custom_element: p,
 					custom_value: q,
@@ -459,7 +460,6 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				hidden: !0,
 				title: !1,
 				editable: !0,
-				edittype: "custom",
 				edittype: "custom",
 				editoptions: {
 					custom_element: m,
@@ -489,6 +489,13 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				formatoptions: {
 					decimalPlaces: qtyPlaces
 				},
+				editable: !0
+			}, {
+				name: "arrived",
+				label: "已到数量",
+				width: 80,
+				align: "right",
+				formatter: "number",
 				editable: !0
 			}, {
 				name: "price",
@@ -545,6 +552,19 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					decimalPlaces: amountPlaces
 				},
 				editable: !0
+			},{
+				name: "rateAmount",
+				label: "税后销售金额",
+				hidden: hiddenAmount,
+				width: 100,
+				fixed: !0,
+				align: "right",
+				formatter: "currency",
+				formatoptions: {
+					showZero: !0,
+					decimalPlaces: amountPlaces
+				},
+				editable: !1
 			}];
 			this.calAmount = "amount", taxRequiredCheck && (B.pop(), B.push({
 				name: "amount",
@@ -839,9 +859,11 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							h = parseFloat($("#grid").jqGrid("getCell", a, f + 2));
 						if ($.isNumeric(g)) if ($.isNumeric(h)) var i = d * g * h / 100,
 							j = d * g - i,
+                            m = j * rate + j,
 							k = $("#grid").jqGrid("setRowData", a, {
 								deduction: i,
-								amount: j
+								amount: j,
+                                rateAmount:m
 							});
 						else var k = $("#grid").jqGrid("setRowData", a, {
 							amount: d * g
@@ -854,9 +876,11 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							h = parseFloat($("#grid").jqGrid("getCell", a, f + 1));
 						if ($.isNumeric(l)) if ($.isNumeric(h)) var i = d * l * h / 100,
 							j = d * l - i,
+							m = j * rate + j,
 							k = $("#grid").jqGrid("setRowData", a, {
 								deduction: i,
-								amount: j
+								amount: j,
+								rateAmount:m
 							});
 						else var k = $("#grid").jqGrid("setRowData", a, {
 							amount: d * l
@@ -870,9 +894,11 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						if ($.isNumeric(l) && $.isNumeric(g)) var m = l * g,
 							i = m * d / 100,
 							j = m - i,
+                            m = j * rate + j,
 							k = $("#grid").jqGrid("setRowData", a, {
 								deduction: i,
-								amount: j
+								amount: j,
+                                rateAmount:m
 							});
 						b(a), k && THISPAGE.calTotal();
 						break;
@@ -882,10 +908,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							g = parseFloat($("#grid").jqGrid("getCell", a, f - 2));
 						if ($.isNumeric(l) && $.isNumeric(g)) var m = l * g,
 							j = m - d,
+                            m = j * rate + j,
 							h = m ? (100 * d / m).toFixed(amountPlaces) : 0,
 							k = $("#grid").jqGrid("setRowData", a, {
 								discountRate: h,
-								amount: j
+								amount: j,
+                                rateAmount:m
 							});
 						b(a), k && THISPAGE.calTotal();
 						break;
@@ -898,14 +926,17 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								g = (d + i) / o;
 							if ($.isNumeric(o) && $.isNumeric(g)) {
 								var m = o * g,
+									s = m * rate + m;
 									h = m ? (100 * i / m).toFixed(amountPlaces) : 0;
 								$("#grid").jqGrid("setRowData", a, {
-									discountRate: h
+									discountRate: h,
+                                    rateAmount:s
 								})
 							}
 							$("#grid").jqGrid("setRowData", a, {
 								discountRate: h,
-								price: g
+								price: g,
+                                rateAmount:s
 							})
 						}
 						b(a), THISPAGE.calTotal();
@@ -1010,6 +1041,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					qty: a.totalQty,
 					deduction: a.totalDiscount,
 					amount: a.totalAmount,
+					rateAmount:a.totalRateAmount,
 					tax: a.totalTax,
 					taxAmount: a.totalTaxAmount
 				},
@@ -1082,6 +1114,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					qty: a.totalQty,
 					deduction: a.totalDiscount,
 					amount: a.totalAmount,
+					rateAmount: a.totalRateAmount,
 					tax: a.totalTax,
 					taxAmount: a.totalTaxAmount
 				}
@@ -1455,17 +1488,18 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			a.$_note.val(""), a.$_discountRate.val(originalData.disRate), a.$_deduction.val(originalData.disAmount), a.$_discount.val(originalData.amount), a.$_payment.val(originalData.rpAmount), a.$_arrears.val(originalData.arrears), a.$_customerFree.val(originalData.customerFree)
 		},
 		calTotal: function() {
-			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, h = a.length; h > g; g++) {
+			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0,m = 0, h = a.length; h > g; g++) {
 				var i = a[g],
 					j = $("#grid").jqGrid("getRowData", i);
-				j.qty && (b += parseFloat(j.qty)), j.deduction && (c += parseFloat(j.deduction)), j.amount && (d += parseFloat(j.amount)), j.tax && (e += parseFloat(j.tax)), j.taxAmount && (f += parseFloat(j.taxAmount))
+				j.qty && (b += parseFloat(j.qty)), j.deduction && (c += parseFloat(j.deduction)), j.amount && (d += parseFloat(j.amount)),j.rateAmount && (m += parseFloat(j.rateAmount)), j.tax && (e += parseFloat(j.tax)), j.taxAmount && (f += parseFloat(j.taxAmount))
 			}
 			if ($("#grid").jqGrid("footerData", "set", {
 				qty: b,
 				deduction: c,
 				amount: d,
 				tax: e,
-				taxAmount: f
+				taxAmount: f,
+                rateAmount:m
 			}), taxRequiredCheck) var k = (f - Number(this.$_deduction.val())).toFixed(2);
 			else var k = (d - Number(this.$_deduction.val())).toFixed(2);
 			var l = (Number(k) + Number(this.$_customerFree.val()) - Number(this.$_payment.val())).toFixed(2);
@@ -1502,6 +1536,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								}), $("#grid").jqGrid("editCellByColName", g, "qty"), !1
 							}
 						}
+						console.log(h);
 						f = {
 							invId: i.id,
 							invNumber: i.number,
@@ -1513,10 +1548,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							unitId: l.unitId || -1,
 							mainUnit: l.name || "",
 							qty: h.qty,
+                            arrived: h.arrived,
 							price: h.price,
 							discountRate: h.discountRate,
 							deduction: h.deduction,
 							amount: h.amount,
+							rateAmount: h.rateAmount,
 							locationId: k.id,
 							locationName: k.name,
 							serialno: h.serialno,
@@ -1569,6 +1606,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
 						totalDiscount: $("#grid").jqGrid("footerData", "get").deduction.replace(/,/g, ""),
 						totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                        totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
 						description: g === b.$_note[0].defaultValue ? "" : g,
 						disRate: $.trim(b.$_discountRate.val() || 0),
 						disAmount: $.trim(b.$_deduction.val() || 0),
@@ -1624,7 +1662,7 @@ $(function() {
 			urlParam.turn ? Public.ajaxGet("../scm/invSo/queryDetails?action=queryDetails", {
 				id: urlParam.id
 			}, function(b) {
-				200 === b.status ? (originalData = b.data, originalData.id = -1, originalData.orderId = b.data.id, originalData.orderNo = b.data.billNo, originalData.status = "add", THISPAGE.init(b.data), a.show(), hasLoaded = !0) : 
+				200 === b.status ? (originalData = b.data, originalData.id = -1, originalData.orderId = b.data.id, originalData.orderNo = b.data.billNo, originalData.status = "add", THISPAGE.init(b.data), a.show(), hasLoaded = !0) :
 				(parent.Public.tips({
 					type: 1,
 					content: b.msg
@@ -1656,11 +1694,13 @@ $(function() {
 					totalQty: 0,
 					totalDiscount: 0,
 					totalAmount: 0,
+                    totalRateAmount: 0,
 					totalTax: 0,
 					totalTaxAmount: 0,
 					disRate: 0,
 					disAmount: 0,
 					amount: "0.00",
+					rateAmount: "0.00",
 					rpAmount: "0.00",
 					arrears: "0.00",
 					accId: 0,
@@ -1703,11 +1743,13 @@ $(function() {
 		totalQty: 0,
 		totalDiscount: 0,
 		totalAmount: 0,
+        totalRateAmount: 0,
 		totalTax: 0,
 		totalTaxAmount: 0,
 		disRate: 0,
 		disAmount: 0,
 		amount: "0.00",
+		rateAmount: "0.00",
 		rpAmount: "0.00",
 		arrears: "0.00",
 		accId: 0,
