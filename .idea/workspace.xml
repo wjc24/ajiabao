@@ -2,9 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32004149-f12a-497c-b507-4257550cac68" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/views/settings/sign.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/css/htmleaf-demo.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/css/normalize.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/fonts/icomoon.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/fonts/icomoon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/fonts/icomoon.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/fonts/icomoon.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/images/qiandao_con.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/images/qiandao_day.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/images/qiandao_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/images/qiandao_sprits.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/js/jquery-1.11.0.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statics/sign/js/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/settings/goods-manage.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/settings/goods-manage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/home.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,11 +37,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="goodsManage.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="goodsManage.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statics/js/dist/goodsManage.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-800">
-              <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+              <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="database.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/config/database.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="446">
+              <caret line="53" column="42" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -122,7 +144,6 @@
         <option value="$PROJECT_DIR$/application/views/settings/vendor-manage.php" />
         <option value="$PROJECT_DIR$/application/views/login.php" />
         <option value="$PROJECT_DIR$/application/views/help/index.php" />
-        <option value="$PROJECT_DIR$/application/config/database.php" />
         <option value="$PROJECT_DIR$/statics/js/dist/default.js" />
         <option value="$PROJECT_DIR$/application/views/settings/settingRate.php" />
         <option value="$PROJECT_DIR$/statics/js/dist/brandList.js" />
@@ -133,6 +154,7 @@
         <option value="$PROJECT_DIR$/statics/js/dist/settingRate.js" />
         <option value="$PROJECT_DIR$/application/views/index.php" />
         <option value="$PROJECT_DIR$/application/views/settings/goods-manage.php" />
+        <option value="$PROJECT_DIR$/application/config/database.php" />
       </list>
     </option>
   </component>
@@ -166,6 +188,12 @@
               <item name="ajiabao" type="b2602c69:ProjectViewProjectNode" />
               <item name="ajiabao" type="462c0819:PsiDirectoryNode" />
               <item name="application" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ajiabao" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ajiabao" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ajiabao" type="b2602c69:ProjectViewProjectNode" />
@@ -268,12 +296,12 @@
       <workItem from="1540949641826" duration="29161000" />
       <workItem from="1541036212084" duration="30162000" />
       <workItem from="1541122588384" duration="7780000" />
-      <workItem from="1547434796191" duration="16622000" />
+      <workItem from="1547434796191" duration="16883000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="223199000" />
+    <option name="totallyTimeSpent" value="223460000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -484,13 +512,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/config/database.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/config/config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -644,7 +665,14 @@
     <entry file="file://$PROJECT_DIR$/statics/js/dist/goodsManage.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-800">
-          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/database.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="53" column="42" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
         </state>
       </provider>
     </entry>
