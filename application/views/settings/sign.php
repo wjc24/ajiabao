@@ -108,27 +108,30 @@
                 data:{user_id:user_id},
                 dataType: "JSON",
                 success:function (res) {
-                    var myDate = new Date();
-                    day = myDate.getDate();        //获取当前日(1-31)
+                    if(res){
+                        var myDate = new Date();
+                        day = myDate.getDate();        //获取当前日(1-31)
 
-                    $('.qiandao-history-inf').find('li:first>h4').html(res[0].continuity);
-                    $('.qiandao-history-inf').find('li:nth-child(2)>h4').html(res.length);
-                    $('.qiandao-history-inf').find('li:nth-child(3)>h4').html(res[0].sign_all);
-                    for(var i=0,l=res.length;i<l;i++){
+                        $('.qiandao-history-inf').find('li:first>h4').html(res[0].continuity);
+                        $('.qiandao-history-inf').find('li:nth-child(2)>h4').html(res.length);
+                        $('.qiandao-history-inf').find('li:nth-child(3)>h4').html(res[0].sign_all);
+                        for(var i=0,l=res.length;i<l;i++){
 
-                        var index = res[i].sign_time .lastIndexOf("-");
-                        str  = res[i].sign_time .substring(index + 1, res[i].sign_time .length);
-                        dateArray.push(str -1);
+                            var index = res[i].sign_time .lastIndexOf("-");
+                            str  = res[i].sign_time .substring(index + 1, res[i].sign_time .length);
+                            dateArray.push(str -1);
 
+                        }
+
+                        if (dateArray.indexOf(day-1) !== -1) {
+
+                            $qiandaoBnt.addClass('actived');
+                            _handle = false;
+                            $('.qiandao-notic').html("今日已签，请明日继续签到");
+                            $("#go").show();
+                        }
                     }
 
-                    if (dateArray.indexOf(day-1) !== -1) {
-
-                        $qiandaoBnt.addClass('actived');
-                        _handle = false;
-                        $('.qiandao-notic').html("今日已签，请明日继续签到");
-                        $("#go").show();
-                    }
                 },
                 error:function () {
                     parent.Public.tips({

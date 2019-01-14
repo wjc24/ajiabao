@@ -462,6 +462,12 @@ var dataReflush, list = {
 		dataRight: "SettAcct_QUERY",
 		target: "setting-base"
 	},
+	sign: {
+		name: "签到管理",
+		href: "../settings/settlement_account",
+		dataRight: "SettAcct_QUERY",
+		target: "setting-base"
+	},
 	//shippingAddress: {
 //		name: "发货地址管理",
 //		href: "../settings/shippingaddress",
