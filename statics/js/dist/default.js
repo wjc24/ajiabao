@@ -464,7 +464,7 @@ var dataReflush, list = {
 	},
 	sign: {
 		name: "签到管理",
-		href: "../settings/settlement_account",
+		href: "../sign/index",
 		dataRight: "SettAcct_QUERY",
 		target: "setting-base"
 	},
