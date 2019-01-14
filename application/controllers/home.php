@@ -23,7 +23,7 @@ class Home extends CI_Controller {
         $data['CNYtoJPY'] = $exchange->CNYtoJPY;
         $data['JPYtoCNY'] = $exchange->JPYtoCNY;
         $data['time'] = date('Y-m-d H:i:s',$exchange->time);
-        
+
         $user = $this->session->userdata('jxcsys');
         $where = "(user_id =".$user['uid'].") AND (sign_time ='".date('Y-m-d',time())."')";
         $sign = $this->db->where($where)->get('ci_sign')->row();
@@ -157,8 +157,7 @@ class Home extends CI_Controller {
         curl_close( $ch );
         return $response;
     }
-	
->>>>>>> 08f98a6fcddb8fbcbd3a3f5731467cda5afd4316
+
 	public function main(){
 		$this->load->view('main');
 	}
