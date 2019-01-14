@@ -108,7 +108,8 @@
                 data:{user_id:user_id},
                 dataType: "JSON",
                 success:function (res) {
-                    if(res){
+
+                    if(res.length != 0){
                         var myDate = new Date();
                         day = myDate.getDate();        //获取当前日(1-31)
 
