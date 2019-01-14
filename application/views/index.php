@@ -765,6 +765,8 @@ var _hmt = _hmt || [];
   </div>
   <div id="col-main">
     <div id="main-hd" class="cf">
+        <ul style="position: absolute;left: 20px;bottom: 30px;color: #fff;font-size: 10px">今日汇率：1人民币 = <span><?php echo $CNYtoJPY?></span>日元</ul>
+        <ul style="position: absolute;left: 80px;bottom: 5px;color: #fff;font-size: 10px">1日元 = <span><?php echo $JPYtoCNY?></span>人民币  <span style="font-size: 10px;color: #ddd;">(更新时间：<?php echo $time?>)</span></ul>
       <ul class="user-menu">
           <li class="space"><i class="iconfont" style="color: #fff">&#xe732;</i></li>
           <li><a href="javascript:void(0);"><?php echo $username?></a></li>

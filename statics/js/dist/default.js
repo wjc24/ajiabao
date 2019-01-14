@@ -518,6 +518,12 @@ var dataReflush, list = {
 		dataRight: "Assist_QUERY",
 		target: "setting-auxiliary"
 	},
+	settingRate: {
+		name: "税率",
+		href: "../settings/settingRate",
+		dataRight: "Assist_QUERY",
+		target: "setting-auxiliary"
+	},
 	assistingProp: {
 		name: "辅助属性",
 		href: "../settings/assistingprop",
