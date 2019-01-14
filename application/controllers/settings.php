@@ -50,6 +50,50 @@ class Settings extends CI_Controller {
 		$this->load->view('settings/goods-list',$data);
 	}
 
+    /**
+     * 设置税率
+     */
+    public function settingRate(){
+        $this->common_model->checkpurview();
+        if ($this->input->get('type') == 'rate'){
+            $data = $this->db->order_by('id DESC')->get('ci_rate')->row();
+            if ($data){
+                $json['status'] = 200;
+                $json['msg']    = 'success';
+                $json['data']['items'][0]['taxRate']   = $data->taxRate;
+            }else{
+                $json['status'] = 250;
+                $json['msg']    = 'fail';
+            }
+
+            die(json_encode($json));
+        }
+        $this->load->view('settings/settingRate');
+    }
+
+    /**
+     * 修改税率
+     */
+    public function editRate(){
+        $this->common_model->checkpurview();
+        if ($this->input->post('taxRate')){
+            $arr = array(
+                'taxRate' => $this->input->post('taxRate'),
+                'time'    => time()
+            );
+            $res = $this->db->insert('ci_rate',$arr);
+            if ($res){
+                $json['status'] = 200;
+                $json['msg']    = 'success';
+                $json['data']['items'][0]['taxRate']   = $this->input->post('taxRate');
+            }else{
+                $json['status'] = 250;
+                $json['msg']    = 'fail';
+            }
+            die(json_encode($json));
+        }
+        $this->load->view('settings/rate-manage');
+    }
 
 
 	public function storage_list() {
