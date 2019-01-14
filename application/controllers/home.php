@@ -40,8 +40,8 @@ class Home extends CI_Controller {
     public function sign(){
         $user_id = $this->input->post('user_id');
         $username = $this->input->post('username');
-        $last_sign = strtotime("- 1 day",time());
-        $sign = $this->db->where(['user_id'=>$user_id,'sign_time'=>date('Y-m-d',$last_sign)])->get('ci_sign')->row();
+
+        $sign = $this->db->where(['user_id'=>$user_id])->order_by('time DESC')->get('ci_sign')->row();
         if($sign){
             $add = array(
                 'user_id' => $user_id,
