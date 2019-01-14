@@ -259,14 +259,20 @@ i{
                             <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="vipPrice" id="vipPrice"></div>
                         </li>
                         <li class="row-item">
+                            <div class="label-wrap"><label for="rateSalePrice">税后零售价</label></div>
+                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="salePrice" id="salePrice" readonly></div>
+                        </li>
+                        <li class="row-item">
+                            <div class="label-wrap"><label for="RateWholesalePrice">税后批发价</label></div>
+                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="wholesalePrice" id="wholesalePrice"></div>
+                        </li>
+                        <li class="row-item">
                             <div class="label-wrap"><label for="discountRate1">折扣率一(%)</label></div>
                             <div class="ctn-wrap"><input type="text" value="" class="ui-input rate" name="discountRate1" id="discountRate1"></div>
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="discountRate2">折扣率二(%)</label></div>
                             <div class="ctn-wrap"><input type="text" value="" class="ui-input rate" name="discountRate2" id="discountRate2"></div>
-                        </li>
-                        <li class="row-item">
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="purchasePrice">预计采购价</label></div>
