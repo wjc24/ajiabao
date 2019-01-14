@@ -468,6 +468,12 @@ var dataReflush, list = {
 		dataRight: "SettAcct_QUERY",
 		target: "setting-base"
 	},
+    deliver: {
+    	name: "发货管理",
+        href: "../deliver/index",
+        dataRight: "SettAcct_QUERY",
+        target: "setting-base"
+	},
 	//shippingAddress: {
 //		name: "发货地址管理",
 //		href: "../settings/shippingaddress",
