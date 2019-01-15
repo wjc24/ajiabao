@@ -246,6 +246,136 @@
         height: 30px;
         border: 1px solid #ddd;
     }
+    /*施工人员弹框*/
+    #add_people .add_content .parts_l{
+        float: left;
+        height: 100%;
+        width: 100%;
+        border: 1px solid #f1f1f1;
+        overflow-y: auto;
+    }
+    #add_people .add_content .parts_l table{
+        /*height: 99.99%;*/
+        width: 99.99%;
+    }
+    #add_people .add_content .parts_l table thead tr{
+        /*width: 453px;*/
+        width: 100%;
+        height: 40px;
+        background-color: #ddd;
+        /*position: fixed;*/
+        /*top: 57px;*/
+    }
+    #add_people .add_content .parts_l table tbody tr:hover{
+        background-color: #f8ff94;
+    }
+    #add_people .add_content .parts_l table tbody tr td{
+        width: 11.111%;
+        height: 30px;
+        border: none;
+        border-bottom: 1px solid #f1f1f1;
+        border-right: 1px solid #f1f1f1;
+    }
+    #add_people .add_content .parts_r{
+        float: right;
+        height: 100%;
+        width: 30%;
+        border: 1px solid #f1f1f1;
+        overflow-y: auto;
+    }
+    .add{
+        position: fixed;
+        width: 770px;
+        height: 500px;
+        background-color: #fff;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        box-shadow: 1px 1px 10px 10px #a9a9a9;
+        border-radius: 3px;
+        z-index: 1998;
+    }
+    .add>.add_header{
+        background-color: #f5f5f5;
+        height: 32px;
+        width: 100%;
+        border-radius: 3px;
+    }
+    .add>.add_header>.add_title{
+        float: left;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-left: 10px;
+    }
+    .add>.add_header>.add_close{
+        float: right;
+        height: 32px;
+        line-height: 32px;
+        color: #aaa;
+        font-size: 18px;
+        width: 20px;
+        cursor: pointer;
+    }
+    .add>.add_content{
+        width: 100%;
+        height: 435px;
+        box-sizing: border-box;
+        padding: 25px;
+    }
+    .add>.add_content>.content_title{
+        height: 18px;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+    }
+    .add>.add_content>.content_main{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px 0;
+    }
+    .add>.add_content>.content_main:first-child{
+        height: 50%;
+    }
+    .add>.add_content>.content_main:last-child{
+        height: 20%;
+    }
+    .add>.add_content>.content_main>li{
+        width: 50%;
+        float: left;
+        margin-bottom: 5px;
+    }
+    .add>.add_content>.content_main>li>span{
+        display: inline-block;
+        width: 70px;
+        height: 30px;
+    }
+    .add>.add_content>.content_main>li>input{
+        width: 140px;
+        height: 24px;
+        border: 1px solid #ddd;
+    }
+    .add>.add_content>.content_main>li>span>select{
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+    .add>.add_content>.content_main>li>.sel{
+        display: inline-block;
+        border: 1px solid #ddd;
+        height: 24px;
+        line-height: 24px;
+        width: 140px;
+        margin-left: -3px;
+        outline: none;
+    }
+    .add_footer{
+        position: absolute;
+        width: 770px;
+        height: 33px;
+        bottom: 0;
+        right: 0;
+    }
 </style>
 </head>
 <body>
@@ -321,8 +451,8 @@
                     <tbody>
                     <?php if ($data) :?>
                         <?php foreach ($data as $k=>$v) :?>
-                            <tr>
-                                <input type="hidden" value="<?php echo $v['invoice_id']?>">  //单据ID
+                            <tr class="good_detail">
+                                <input type="hidden" value="<?php echo $v['invoice_id']?>">
                                 <td><span><?php echo $v['billDate'] ?></span></td>
                                 <td class="billNo"><span><?php echo $v['billNo'] ?></span></td>
                                 <td><span><?php echo $v['userName'] ?></span></td>
@@ -344,8 +474,31 @@
                                 <?php elseif($v['status'] == 3):?>
                                     <td><span><a href="javascript:0" class="ui-btn mrb detail">已出仓</a><input type="hidden" ></span></td>
                                 <?php endif;?>
-                                <td><span><a href="javascript:0" class="ui-btn mrb detail remind">提醒</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
+                                <?php if($v['remind'] == 1) :?>
+                                <td><span><a href="javascript:0" class="ui-btn mrb detail add_people">提醒</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
+                                <?php elseif($v['remind'] == 2):?>
+                                <td><span><a href="javascript:0" class="ui-btn mrb detail">已提醒</a></span></td>
+                                <?php endif;?>
+                            </tr>
                         <?php endforeach;?>
+                        <tr>
+                            <th>总计</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     <?php else: ?>
                         <tr>
                             <td colspan="16">暂无记录</td>
@@ -406,17 +559,18 @@
         <ul class="content_title"><h3>基本资料</h3></ul>
         <ul class="content_main clearfix">
             <input type="hidden" value="" id="invoice_info_id">
-            <li><span>船运/航空公司名称:</span><input type="text" id="shipping_name"></li>
-            <li><span>订舱号:</span><input type="text" id="booking_number"></li>
-            <li><span>集装箱号:</span><input type="text" id="container_number"></li>
-            <li><span>托盘号:</span><input type="text"  id="tray_number"></li>
-            <li><span>箱子编号:</span><input type="text" id="box_number"></li>
-            <li><span>箱子个数:</span><input type="number" min="0" id="boxes"></li>
-            <li><span>箱子长(米):</span><input oninput="volume();" type="number" min="0" id="long"></li>
-            <li><span>箱子宽(米):</span><input oninput="volume()" type="number" min="0" id="wide"></li>
-            <li><span>箱子高(米):</span><input oninput="volume()" type="number" min="0" id="high"></li>
-            <li ><span>箱子总体积(立方米):</span><input readonly type="text" id="box_volume"></li>
-            <li><span>到达港口:</span><input type="text" id="port"></li>
+            <li><span style="width: 30%;">船运/航空公司名称:</span><input type="text" id="shipping_name"></li>
+            <li><span style="width: 30%;">订舱号:</span><input type="text" id="booking_number"></li>
+            <li><span style="width: 30%;" >集装箱号:</span><input type="text" id="container_number"></li>
+            <li><span style="width: 30%;">托盘号:</span><input type="text"  id="tray_number"></li>
+            <li><span style="width: 30%;">到达港口:</span><input type="text" id="port"></li>
+            <li><span style="width: 30%;">箱子个数:</span><input type="number" min="0" id="boxes"></li>
+            <li ><span style="width: 30%;">箱子总体积(立方米):</span><input readonly type="text" id="box_volume"></li>
+            <li><span></span></li>
+            <li><span style="width: 30%;">箱子编号:</span><input type="text" id="box_number"></li>
+            <li><span style="width: 30%;">箱子长(米):</span><input oninput="volume();" type="number" min="0" id="long"></li>
+            <li><span style="width: 30%;">箱子宽(米):</span><input oninput="volume()" type="number" min="0" id="wide"></li>
+            <li><span style="width: 30%;">箱子高(米):</span><input oninput="volume()" type="number" min="0" id="high"></li>
         </ul>
     </div>
     <div id="add_footer">
@@ -429,9 +583,52 @@
         </td>
     </div>
 </div>
+<!--选择提醒人员弹框-->
+<div id="add_people" class="add" style="display: none;">
+    <div class="add_header clearfix">
+        <div class="add_title">选择提醒人员</div>
+        <div class="add_close close_add">&times;</div>
+    </div>
+    <div class="add_content clearfix">
+        <div class="parts_l">
 
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 5%;">
+                        <input type="checkbox" id="all">
+                    </th>
+                    <th>名字</th>
+                </tr>
+                </thead>
+                <tbody class="parts_main">
+                <?php foreach ($customer as $k=>$v) :?>
+                    <tr class="people_tr">
+                        <td class="check">
+                            <input type="checkbox" class="check_child" value="<?php echo $v->id ?>"><!--放id-->
+                        </td>
+                        <td class="people_td userName"><?php echo $v->nickname ?></td>
+
+                    </tr>
+                <?php endforeach;?>
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="add_footer">
+        <td colspan="2">
+            <div class="ui_buttons">
+                <input type="hidden" value="" id="invoice_info_id_2">
+                <input type="button" id="add_people_val" value="确定" class="ui_state_highlight" />
+                <input type="button" class="close_add" value="关闭" />
+            </div>
+        </td>
+    </div>
+</div>
 <script>
     $(function () {
+        volume_all();
 
         // 单选框
         $('#all').on('click',function () {
@@ -500,6 +697,8 @@
             $('#ldg_lockmask').css('display','none');
             $('#add').css('display','none');
             $("#invoice_info_id").val('');
+            $("#invoice_info_id_2").val('');
+            $('#add_people').css('display','none');
         });
         $("#save").click(function(){
             var shipping_name = $("#shipping_name").val();
@@ -565,6 +764,54 @@
                 });
             }
         });
+
+        $('.add_people').on('click',function () {
+            $('#add_people').show();
+            $('#ldg_lockmask').show();
+            invoice_info_id = $(this).parent().find('input').val();
+            $("#invoice_info_id_2").val(invoice_info_id);
+        });
+        $('#add_people_val').on('click',function () {
+            var userName = new Array();
+            $.each($('.check_child'),function(i,val){
+                if($(this).is(':checked')){
+                    userName.push($(this).val());
+                }
+            });
+            invoice_info_id_2 = $("#invoice_info_id_2").val();
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo site_url('deliver/remind');?>",
+                traditional: true,
+                data: {
+                    invoice_info_id:invoice_info_id_2,
+                    userName:JSON.stringify(userName),
+                },
+                dataType: "json",
+
+                success: function (data) {
+
+                    if(data.code == 1){
+                        parent.Public.tips({
+                            content:data.text
+                        });
+                        changes();
+                    }else if (data.code == 2){
+                        parent.Public.tips({
+                            type:1,
+                            content:data.text
+                        });
+                    } else{
+                        parent.Public.tips({
+                            type:1,
+                            content:"未知错误"
+                        });
+                    }
+
+                },
+            });
+        });
     });
     function changes() {
         document.getElementById("search").click();
@@ -614,7 +861,7 @@
             },
             dataType: "json",
             success: function (res) {
-                console.log(res);
+
                 if(res.code == 1){
                     parent.Public.tips({
                         content:res.text
@@ -668,6 +915,15 @@
         }
         $('#box_volume').val((long*wide*high).toFixed(4));
     }
+
+    //统计总体积
+    function volume_all(){
+       $.each($('.good_detail'),function (i,val) {
+           // var box_number = $(this).children(1).html();
+           // console.log(val);
+       });
+    }
+
 </script>
 <script>
     Public.pageTab();
