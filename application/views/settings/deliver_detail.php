@@ -39,14 +39,13 @@
     }
     .grid-wrap{
         background-color: #fff;
-        border: 1px solid #ddd;
-        height: 720px;
-        width: 98.5%;
+        height: 800px;
+        width: 100%;
         overflow: auto;
         position: relative;
     }
     .table{
-        width: 100.5%;
+        width: 100%;
     }
     table{
         border-collapse:collapse;
@@ -73,9 +72,10 @@
     }
     .table td>span{
         display: inline-block;
-
+        width: 100px;
         height: 33px;
         line-height: 33px;
+        margin-bottom: -6px;
 
     }
     #page{
@@ -252,82 +252,73 @@
 <div class="wrapper">
     <form action="<?php echo site_url('deliver/index');?>" method="post" id="form">
         <div class="mod-search cf">
-            <div class="fl" >
-                <ul class="ul-inline">
-                    <li>
-                        <span id="catorage"></span>
-                    </li>
-                    <li>
-                        <?php if ($like) :?>
-                            <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" value ="<?php echo $like ?>" style="width: 280px;">
-                        <?php else:?>
-                            <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="输入单据/运输公司/集装箱号/托盘号/箱子编号 查询" style="width: 280px;">
-                        <?php endif; ?>
-
-                    </li>
-                    <li><a class="ui-btn mrb" id="search">查询</a></li>
-                    <li>
-                        <select name="sel" id="sel" onchange="changes()">
-                            <?php if($sel == 0) :?>
-                                <option value="0" selected>请选择</option>
-                            <?php else :?>
-                                <option value="0" >请选择</option>
-                            <?php endif ;?>
-                            <?php if($sel == 1) :?>
-                                <option value="1" selected>未出仓</option>
-                            <?php else :?>
-                                <option value="1">未出仓</option>
-                            <?php endif ;?>
-                            <?php if($sel == 2) :?>
-                                <option value="2" selected>出仓中</option>
-                            <?php else :?>
-                                <option value="2">出仓中</option>
-                            <?php endif ;?>
-                            <?php if($sel == 3) :?>
-                                <option value="3" selected>已出仓</option>
-                            <?php else :?>
-                                <option value="3">已出仓</option>
-                            <?php endif ;?>
-
-                        </select>
-                    </li>
-                </ul>
-            </div>
-
+<!--            <div class="fl">-->
+<!--                <ul class="ul-inline">-->
+<!--                    <li>-->
+<!--                        <span id="catorage"></span>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        --><?php //if ($like) :?>
+<!--                            <input type="text" id="matchCon"  name="matchCon" class="ui-input ui-input-ph matchCon" value ="--><?php //echo $like ?><!--" style="width: 280px;">-->
+<!--                        --><?php //else:?>
+<!--                            <input type="text" id="matchCon"  name="matchCon" class="ui-input ui-input-ph matchCon" placeholder="输入卡号" style="width: 280px;">-->
+<!--                        --><?php //endif; ?>
+<!--                    </li>-->
+<!--                    <li><a class="ui-btn mrb" id="search" >查询</a></li>-->
+<!--                    <li>-->
+<!--                        <select name="sel" id="sel" onchange="changes()">-->
+<!--                            --><?php //if($sel == 0) :?>
+<!--                                <option value="0" selected>请选择</option>-->
+<!--                            --><?php //else :?>
+<!--                                <option value="0" >请选择</option>-->
+<!--                            --><?php //endif ;?>
+<!--                            --><?php //if($sel == 1) :?>
+<!--                                <option value="1" selected>未售出</option>-->
+<!--                            --><?php //else :?>
+<!--                                <option value="1">未售出</option>-->
+<!--                            --><?php //endif ;?>
+<!--                            --><?php //if($sel == 2) :?>
+<!--                                <option value="2" selected>售出未充值</option>-->
+<!--                            --><?php //else :?>
+<!--                                <option value="2">售出未充值</option>-->
+<!--                            --><?php //endif ;?>
+<!--                            --><?php //if($sel == 3) :?>
+<!--                                <option value="3" selected>售出已充值</option>-->
+<!--                            --><?php //else :?>
+<!--                                <option value="3">售出已充值</option>-->
+<!--                            --><?php //endif ;?>
+<!--                        </select>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
         </div>
         <div class="grid-wrap">
             <div class="table">
+                <input type="hidden" id="id" value="<?php echo $id ?>">
                 <table style="width: 100%;">
-                    <thead style="width: 100%;">
-                    <tr style="width: 100%;">
-                        <th>单据日期</th>
-                        <th>单据编号</th>
-                        <th style="width: 4%;">制单人</th>
+                    <thead >
+                    <tr>
+                        <th>订单号</th>
                         <th>商品名称</th>
-                        <th style="width: 3%;">商品数量</th>
+                        <th>商品数量</th>
                         <th>船运/航空公司名称</th>
                         <th>订舱号</th>
                         <th>集装箱号</th>
                         <th>托盘号</th>
                         <th>箱子编号</th>
-                        <th style="width: 3%;">箱子个数</th>
+                        <th>箱子个数</th>
                         <th>箱子总体积</th>
                         <th>到达港口</th>
                         <th>修改</th>
-                        <th style="width: 6%;">出仓</th>
-                        <th style="width: 5%;">提醒</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php if ($data) :?>
-                        <?php foreach ($data as $k=>$v) :?>
+                    <?php if($data) :?>
+                        <?php foreach ($data as $k=>$v): ?>
                             <tr>
-                                <input type="hidden" value="<?php echo $v['invoice_id']?>">  //单据ID
-                                <td><span><?php echo $v['billDate'] ?></span></td>
                                 <td class="billNo"><span><?php echo $v['billNo'] ?></span></td>
-                                <td><span><?php echo $v['userName'] ?></span></td>
-                                <td><span><?php echo $v['good_name'] ?></span></td>
-                                <td><span><?php echo $v['good_num'] ?></span></td>
+                                <td><span><?php echo $v['name'] ?></span></td>
+                                <td><span><?php echo $v['num'] ?></span></td>
                                 <td><span><?php echo $v['shipping_name'] ?></span></td>
                                 <td><span><?php echo $v['booking_number'] ?></span></td>
                                 <td><span><?php echo $v['container_number'] ?></span></td>
@@ -336,26 +327,16 @@
                                 <td><span><?php echo $v['boxes'] ?></span></td>
                                 <td><span><?php echo $v['box_volume'] ?></span></td>
                                 <td><span><?php echo $v['port'] ?></span></td>
-                                <td><span><a href="javascript:0" class="ui-btn mrb detail add_invoice">修改信息</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                                <?php if($v['status'] == 1) :?>
-                                    <td><span><a href="javascript:0" onclick="start(<?php echo $v['invoice_info_id']?>)" class="ui-btn mrb detail">出仓</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                                <?php elseif($v['status'] == 2):?>
-                                    <td><span><a href="javascript:0" onclick="end(<?php echo $v['invoice_info_id']?>)" class="ui-btn mrb detail">确认出仓</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                                <?php elseif($v['status'] == 3):?>
-                                    <td><span><a href="javascript:0" class="ui-btn mrb detail">已出仓</a><input type="hidden" ></span></td>
-                                <?php endif;?>
-                                <td><span><a href="javascript:0" class="ui-btn mrb detail remind">提醒</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                        <?php endforeach;?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="16">暂无记录</td>
-                        </tr>
-                    <?php endif ;?>
-
+                                <td><span><a href="javascript:void(0);" class="ui-btn ui-btn-sp edit">修改</a><input type="hidden"  value="<?php echo $v['good_id'] ?>"></span></td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php else:?>
+                        <tr><td colspan="11">暂无记录</td></tr>
+                    <?php endif;?>
                     </tbody>
                 </table>
             </div>
-            <div id="page" style="position: relative">
+            <div id="page">
                 <div class="page_left">&nbsp;</div>
                 <div class="page_center">
                     <div id="first"></div>
@@ -371,7 +352,7 @@
                     <div id="next"></div>
                     <div id="last"></div>
                     <div>
-                        <select name="page_num" id="page_num" onchange="changess()">
+                        <select name="page_num" id="page_num" onchange="changes()">
                             <?php if ($page_num == 20) :?>
                                 <option value="20" selected>20</option>
                             <?php else:?>
@@ -396,6 +377,7 @@
         </div>
     </form>
 </div>
+
 <div id="ldg_lockmask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; z-index: 1977;display: none;"></div>
 <div id="add" style="display: none;">
     <div id="add_header" class="clearfix">
@@ -405,7 +387,8 @@
     <div id="add_content">
         <ul class="content_title"><h3>基本资料</h3></ul>
         <ul class="content_main clearfix">
-            <input type="hidden" value="" id="invoice_info_id">
+            <input type="hidden" value="" id="good_id">
+            <input type="hidden" value="" id="billNo">
             <li><span>船运/航空公司名称:</span><input type="text" id="shipping_name"></li>
             <li><span>订舱号:</span><input type="text" id="booking_number"></li>
             <li><span>集装箱号:</span><input type="text" id="container_number"></li>
@@ -431,146 +414,94 @@
 </div>
 
 <script>
-    $(function () {
+    $("#save").click(function(){
+        var shipping_name = $("#shipping_name").val();
+        var booking_number = $("#booking_number").val();
+        var container_number = $("#container_number").val();
+        var tray_number = $("#tray_number").val();
+        var box_number = $("#box_number").val();
+        var boxes = $("#boxes").val();
+        var long = $("#long").val();
+        var wide = $("#wide").val();
+        var high = $("#high").val();
+        var box_volume = $("#box_volume").val();
+        var port = $("#port").val();
+        var good_id = $("#good_id").val();
+        var billNo = $("#billNo").val();
 
-        // 单选框
-        $('#all').on('click',function () {
-            var thisChecked = $(this).prop('checked');
-            $('.check_child').prop('checked',thisChecked);
 
-        });
-
-        $('.check_child').on('click',function(){
-            var totalNum =  $('.check_child').length;
-            var checkedNum =  $('.check_child:checked').length;
-            $('#all').prop('checked',totalNum==checkedNum);
-        });
-
-        $('#btn-batchDel').on('click',function () {
-            var checkitems = new Array();
-            $.each($('.check_child:checked'),function(){
-                checkitems.push($(this).val());
+        if(!shipping_name){
+            parent.Public.tips({
+                type:1,
+                content:"请填写全发货信息！"
             });
-            if (checkitems != ''){
-                $.ajax({
-                    url: "",
-                    type: "POST",
-                    data:{id:checkitems},
-                    dataType: "JSON",
-                    success:function (res) {
-                        if (res == 1){
-                            parent.Public.tips({
-                                content:'删除成功！'
-                            });
-                        } else{
-                            parent.Public.tips({
-                                type:1,
-                                content:'删除失败！'
-                            });
-                        }
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "<?php echo site_url('deliver/doadd');?>",
+                traditional: true,
+                data: {
+                    shipping_name: shipping_name,
+                    booking_number:booking_number,
+                    container_number:container_number,
+                    tray_number:tray_number,
+                    box_number:box_number,
+                    boxes:boxes,
+                    long:long,
+                    wide:wide,
+                    high:high,
+                    box_volume:box_volume,
+                    port:port,
+                    good_id:good_id,
+                    billNo:billNo,
+                },
+                dataType: "json",
 
-                    },
-                    error:function () {
+                success: function (data) {
+                    console.log(data);
+                    if(data.code == 1){
+                        parent.Public.tips({
+                            content:data.text
+                        });
+                         id = $("#id").val();
+                        location.href = "<?php echo site_url('deliver/add?id=')?>"+id;
+                    }else if (data.code == 2){
                         parent.Public.tips({
                             type:1,
-                            content:'出错啦！'
+                            content:data.text
+                        });
+                    } else{
+                        parent.Public.tips({
+                            type:1,
+                            content:"未知错误"
                         });
                     }
-                })
-            } else{
-                parent.Public.tips({
-                    type:2,
-                    content:'未选择要删除的项！'
-                });
-            }
-        });
 
-        $("#search").click(function () {
-            $("#form").submit();
-        });
+                },
+            });
+        }
 
-        // 添加发货信息
-        $('.add_invoice').on('click',function () {
-            $('#ldg_lockmask').css('display','');
-            $('#add').css('display','');
-            invoice_info_id = $(this).parent().find('input').val();
-            $("#invoice_info_id").val(invoice_info_id);
-        });
-        $('.close_add').on('click',function () {
-            $('#ldg_lockmask').css('display','none');
-            $('#add').css('display','none');
-            $("#invoice_info_id").val('');
-        });
-        $("#save").click(function(){
-            var shipping_name = $("#shipping_name").val();
-            var booking_number = $("#booking_number").val();
-            var container_number = $("#container_number").val();
-            var tray_number = $("#tray_number").val();
-            var box_number = $("#box_number").val();
-            var boxes = $("#boxes").val();
-            var long = $("#long").val();
-            var wide = $("#wide").val();
-            var high = $("#high").val();
-            var box_volume = $("#box_volume").val();
-            var port = $("#port").val();
-            var invoice_info_id = $("#invoice_info_id").val();
-
-
-            if(!shipping_name){
-                parent.Public.tips({
-                    type:1,
-                    content:"请填写全发货信息！"
-                });
-            }else{
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo site_url('deliver/doadd');?>",
-                    traditional: true,
-                    data: {
-                        shipping_name: shipping_name,
-                        booking_number:booking_number,
-                        container_number:container_number,
-                        tray_number:tray_number,
-                        box_number:box_number,
-                        boxes:boxes,
-                        long:long,
-                        wide:wide,
-                        high:high,
-                        box_volume:box_volume,
-                        port:port,
-                        invoice_info_id:invoice_info_id,
-                    },
-                    dataType: "json",
-
-                    success: function (data) {
-                        if(data.code == 1){
-                            parent.Public.tips({
-                                content:data.text
-                            });
-                            id = $("#id").val();
-                            location.href = "<?php echo site_url('deliver/index')?>";
-                        }else if (data.code == 2){
-                            parent.Public.tips({
-                                type:1,
-                                content:data.text
-                            });
-                        } else{
-                            parent.Public.tips({
-                                type:1,
-                                content:"未知错误"
-                            });
-                        }
-
-                    },
-                });
-            }
-        });
     });
-    function changes() {
-        document.getElementById("search").click();
+
+    $("#search").click(function () {
+        $("#form").submit();
+    });
+    //计算箱子体积
+    function volume() {
+
+        long = $('#long').val();
+        wide = $('#wide').val();
+        high = $('#high').val();
+        if(!long){
+            long = 0;
+        }else if(!wide){
+            wide =0;
+        }else if(!high){
+            high =0;
+        }
+        $('#box_volume').val((long*wide*high).toFixed(4));
     }
-    function changess() {
-        $("#page_now").val(1);
+    function changes() {
         document.getElementById("search").click();
     }
     $("#first").click(function () {
@@ -605,69 +536,85 @@
             changes();
         }
     });
-    function start(id){
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('deliver/start');?>",
-            data: {
-                id: id,
-            },
-            dataType: "json",
-            success: function (res) {
-                console.log(res);
-                if(res.code == 1){
-                    parent.Public.tips({
-                        content:res.text
-                    });
-                    changes();
-                } else{
-                    parent.Public.tips({
-                        type:1,
-                        content:res.text
-                    });
-                }
-            },
-        });
-    }
-    function end(id){
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('deliver/end');?>",
-            data: {
-                id: id,
-            },
-            dataType: "json",
-            success: function (res) {
+</script>
+<script>
+    $(function () {
+        // 单选框
+        $('#all').on('click',function () {
+            var thisChecked = $(this).prop('checked');
+            $('.check_child').prop('checked',thisChecked);
 
-                if(res.code == 1){
-                    parent.Public.tips({
-                        content:res.text
-                    });
-                    changes();
-                } else{
-                    parent.Public.tips({
-                        type:1,
-                        content:res.text
-                    });
-                }
-            },
         });
-    }
-    //计算箱子体积
-    function volume() {
 
-        long = $('#long').val();
-        wide = $('#wide').val();
-        high = $('#high').val();
-        if(!long){
-            long = 0;
-        }else if(!wide){
-            wide =0;
-        }else if(!high){
-            high =0;
-        }
-        $('#box_volume').val((long*wide*high).toFixed(4));
-    }
+        $('.check_child').on('click',function(){
+            var totalNum =  $('.check_child').length;
+            var checkedNum =  $('.check_child:checked').length;
+            $('#all').prop('checked',totalNum==checkedNum);
+        });
+
+        $('#btn-batchDel').on('click',function () {
+            var checkitems = new Array();
+            $.each($('.check_child:checked'),function(){
+                checkitems.push($(this).val());
+            });
+            if (checkitems != ''){
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo site_url('card/del');?>",
+                    data: {
+                        id: checkitems,
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if(data){
+                            parent.Public.tips({
+                                content:"删除成功"
+                            });
+                            location.href = "<?php echo site_url('card')?>";
+                        } else{
+                            parent.Public.tips({
+                                type:1,
+                                content:"删除失败"
+                            });
+                        }
+
+                    },
+                    error:function () {
+                        parent.Public.tips({
+                            type:1,
+                            content:"出错啦！"
+                        });
+                    }
+                })
+            } else{
+                parent.Public.tips({
+                    type:2,
+                    content:"未选择要删除的项！"
+                });
+            }
+        });
+
+        // 添加
+        $('.edit').on('click',function () {
+            $('#ldg_lockmask').css('display','');
+            $('#add').css('display','');
+            good_id = $(this).parent().find('input').val();
+            $("#good_id").val(good_id);
+            billNo = $(this).parent().parent().parent().find('.billNo').text();
+            $("#billNo").val(billNo);
+        });
+        $('.close_add').on('click',function () {
+            $('#ldg_lockmask').css('display','none');
+            $('#add').css('display','none');
+            $("#good_id").val('');
+            $("#billNo").val('');
+        });
+
+        $("#search").click(function () {
+            $("#form").submit();
+        });
+    });
 </script>
 <script>
     Public.pageTab();
@@ -689,7 +636,9 @@
     var goodsCombo = Business.goodsCombo($('#goodsAuto'), {
         extraListHtml: ''
     });
+
 </script>
 </body>
 </html>
+
 
