@@ -130,8 +130,13 @@ $(function() {
         </dd>
           <dd  class="pct20 tc">
               <select name="amountType" id="amountType" style="height: 29px;width: 50%;border: none;border-bottom: 1px solid #d6dee3;outline: none">
-                  <option value="1">课税前</option>
-                  <option value="2" selected>课税后</option>
+                  <?php if (!$amountType):?>
+                      <option value="1">课税前</option>
+                      <option value="2" selected>课税后</option>
+                  <?php else:?>
+                      <option value="1" <?php if ($amountType == '1'):?>selected<?php endif;?>>课税前</option>
+                      <option value="2" <?php if ($amountType == '2'):?>selected<?php endif;?>>课税后</option>
+                  <?php endif;?>
               </select>
           </dd>
       </dl>
@@ -236,7 +241,12 @@ $(function() {
 </div>
 <script src="<?php echo base_url()?>statics/js/dist/sales.js?ver=2017082001"></script>
 <script>
-    window.rate = <?php echo $rate ?>
+    window.rate = <?php echo $rate ?>;
+    $('#amountType').on('change',function () {
+        $('#discountRate').val(0);
+        $('#deduction').val(0);
+        THISPAGE.calTotal();
+    })
 </script>
 </body>
 </html>

@@ -205,6 +205,8 @@ $(function() {
 <script>
     window.rate = <?php echo $rate ?>;
     $('#amountType').on('change',function () {
+        $('#discountRate').val(0);
+        $('#deduction').val(0);
         THISPAGE.calTotal();
     })
 </script>

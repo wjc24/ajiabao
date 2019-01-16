@@ -27,7 +27,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				this.$linkPhone = $("#linkPhone"),
 				this.$linkAddress = $("#linkAddress"),
 				//add by michen 20170724 end
-					this.$_date = $("#date").val(system.endDate), this.$_number = $("#number"), this.$_note = $("#note"), this.$_discountRate = $("#discountRate"), this.$_deduction = $("#deduction"), this.$_discount = $("#discount"), this.$_payment = $("#payment"), this.$_arrears = $("#arrears"), this.$_totalArrears = $("#totalArrears"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_paymentTxt = $("#paymentTxt"), this.$_accountInfo = $("#accountInfo"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.$_checkName = $("#checkName"), this.$_customerFree = $("#customerFree"), this.customerArrears = 0, this.$_note.placeholder(), "150602" == originalData.transType) {
+					this.$_date = $("#date").val(system.endDate), this.$_number = $("#number"), this.$_note = $("#note"), this.$_discountRate = $("#discountRate"), this.$_deduction = $("#deduction"), this.$_discount = $("#discount"), this.$_payment = $("#payment"), this.$_arrears = $("#arrears"),this.$_amountType = $("#amountType"), this.$_totalArrears = $("#totalArrears"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_paymentTxt = $("#paymentTxt"), this.$_accountInfo = $("#accountInfo"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.$_checkName = $("#checkName"), this.$_customerFree = $("#customerFree"), this.customerArrears = 0, this.$_note.placeholder(), "150602" == originalData.transType) {
 				parent.$("#page-tab").find("li.l-selected").children("a").html("销货退货单");
 				$("#paymentTxt").html("本次退款")
 			} else {
@@ -196,7 +196,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			if (f += k, this.btn_edit = g, this.btn_audit = i, this.btn_view = h, this.btn_reaudit = j, this.btn_tempSave = k, a.id > 0) {
 				if (this.$_number.text(a.billNo), this.$_date.val(a.date), this.$_totalArrears.val(a.totalArrears), this.$_accountInfo.data("accountInfo", a.accounts), -1 === a.accId && (this.$_accountInfo.show(), b.$_payment.attr("disabled", "disabled").addClass("ui-input-dis")), $("#grid").jqGrid("footerData", "set", {
 					qty: a.totalQty,
-					amount: a.totalAmount
+					amount: a.totalAmount,
+					rateAmount: a.totalRateAmount
 				}), "list" !== urlParam.flag && (l = ""), "edit" === a.status) {
 					var m = "<span id=groupBtn>" + g + i + "</span>" + l;
 					a.temp || (m += k), this.$_toolBottom.html(m), !a.temp
@@ -325,6 +326,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						deduction: b.deduction || 0,
 						amount: b.amount,
 						rateAmount: b.rateAmount,
+						arrived: b.arrived,
 						locationName: b.locationName,
 						locationId: b.locationId,
 						taxRate: b.taxRate || taxRequiredInput,
@@ -339,7 +341,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					}
 					f.amount = f.amount ? f.amount : f.price * f.qty;
 					f.rateAmount = f.rateAmount ? f.rateAmount : f.amount * rate + f.amount;
-					var j = Number(f.amount);
+					f.arrived = f.arrives ? f.arrives : 0;
+                    var j = Number(f.amount);
 					if (taxRequiredCheck) {
 						var k = f.taxRate,
 							l = j * k / 100,
@@ -1207,12 +1210,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			}).getCombo()
 		},
 		disableEdit: function() {
-			this.customerCombo.disable(), this.salesCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_discountRate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_deduction.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_payment.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_customerFree.attr("disabled", "disabled").addClass("ui-input-dis"), this.accountCombo.disable(), $("#grid").jqGrid("setGridParam", {
+			this.customerCombo.disable(), this.salesCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"),this.$_amountType.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_discountRate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_deduction.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_payment.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_customerFree.attr("disabled", "disabled").addClass("ui-input-dis"), this.accountCombo.disable(), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !1
 			}), this.editable = !1
 		},
 		enableEdit: function() {
-			disEditable || (this.salesCombo.enable(), !hideCustomerCombo && this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"), this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), this.$_discountRate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deduction.removeAttr("disabled").removeClass("ui-input-dis"), this.$_payment.removeAttr("disabled").removeClass("ui-input-dis"), this.$_customerFree.removeAttr("disabled").removeClass("ui-input-dis"), this.accountCombo.enable(), $("#grid").jqGrid("setGridParam", {
+			disEditable || (this.salesCombo.enable(), !hideCustomerCombo && this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"),this.$_amountType.removeAttr("disabled").removeClass("ui-input-dis"), this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), this.$_discountRate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deduction.removeAttr("disabled").removeClass("ui-input-dis"), this.$_payment.removeAttr("disabled").removeClass("ui-input-dis"), this.$_customerFree.removeAttr("disabled").removeClass("ui-input-dis"), this.accountCombo.enable(), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !0
 			}), this.editable = !0)
 		},
@@ -1258,9 +1261,16 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					c.active = !0, c.doQuery()
 				}, 10)
 			}), Business.billsEvent(a, "sales"), this.$_deduction.keyup(function() {
-				var b = Number($(this).val()),
-					c = Number($("#grid").jqGrid("footerData", "get")[a.calAmount].replace(/,/g, "")),
-					d = (c - b).toFixed(amountPlaces);
+				if (a.$_amountType.val() == '1') {
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").amount.replace(/,/g, "")),
+                        d = (c - b).toFixed(amountPlaces);
+				}else{
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, "")),
+                        d = (c - b).toFixed(amountPlaces);
+				}
+
 				if (c) {
 					var e = b / c * 100,
 						f = Number(parseFloat(d) + Number(a.$_customerFree.val()) - parseFloat(a.$_payment.val() || 0));
@@ -1276,12 +1286,22 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					content: "优惠金额不能为负数！"
 				}), $(this).focus())
 			}), this.$_discountRate.keyup(function() {
-				var b = Number($(this).val()),
-					c = Number($("#grid").jqGrid("footerData", "get")[a.calAmount].replace(/,/g, "")),
-					d = c * (b / 100),
-					e = d.toFixed(amountPlaces),
-					f = (c - e).toFixed(amountPlaces),
-					g = Number(parseFloat(f)) + Number(a.$_customerFree.val()) - Number($.trim(a.$_payment.val()));
+                if (a.$_amountType.val() == '1') {
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").amount.replace(/,/g, "")),
+                        d = c * (b / 100),
+                        e = d.toFixed(amountPlaces),
+                        f = (c - e).toFixed(amountPlaces),
+                        g = Number(parseFloat(f)) + Number(a.$_customerFree.val()) - Number($.trim(a.$_payment.val()));
+				}else{
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, "")),
+                        d = c * (b / 100),
+                        e = d.toFixed(amountPlaces),
+                        f = (c - e).toFixed(amountPlaces),
+                        g = Number(parseFloat(f)) + Number(a.$_customerFree.val()) - Number($.trim(a.$_payment.val()));
+				}
+
 				THISPAGE.$_deduction.val(e), THISPAGE.$_discount.val(f), THISPAGE.$_arrears.val("-0.00" != g.toFixed(amountPlaces) ? g.toFixed(amountPlaces) : "0.00")
 			}).on("keypress", function(a) {
 				Public.numerical(a)
@@ -1483,7 +1503,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			$("#grid").clearGridData();
 			for (var b = 1; 8 >= b; b++) $("#grid").jqGrid("addRowData", b, {}), $("#grid").jqGrid("footerData", "set", {
 				qty: 0,
-				amount: 0
+				amount: 0,
+				rateAmount: 0
 			});
 			a.$_note.val(""), a.$_discountRate.val(originalData.disRate), a.$_deduction.val(originalData.disAmount), a.$_discount.val(originalData.amount), a.$_payment.val(originalData.rpAmount), a.$_arrears.val(originalData.arrears), a.$_customerFree.val(originalData.customerFree)
 		},
@@ -1501,7 +1522,14 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				taxAmount: f,
                 rateAmount:m
 			}), taxRequiredCheck) var k = (f - Number(this.$_deduction.val())).toFixed(2);
-			else var k = (d - Number(this.$_deduction.val())).toFixed(2);
+			else{
+                if (this.$_amountType.val() == '1'){
+                    s = d;
+                }else if (this.$_amountType.val() == '2') {
+                    s = m;
+                }
+                var k = (s - Number(this.$_deduction.val())).toFixed(2);
+			}
 			var l = (Number(k) + Number(this.$_customerFree.val()) - Number(this.$_payment.val())).toFixed(2);
 			l = Number(l) ? l : "0.00", this.$_discount.val(k), this.$_arrears.val(l)
 		},
@@ -1536,6 +1564,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								}), $("#grid").jqGrid("editCellByColName", g, "qty"), !1
 							}
 						}
+                        if (this.$_amountType.val() == '2') {
+                            h.beforeAmount = h.amount;
+                            h.amount = h.rateAmount;
+                        }else{
+                            h.beforeAmount = h.amount;
+                        }
 						console.log(h);
 						f = {
 							invId: i.id,
@@ -1554,6 +1588,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							deduction: h.deduction,
 							amount: h.amount,
 							rateAmount: h.rateAmount,
+                            beforeAmount: h.beforeAmount,
+                            amountType: this.$_amountType.val(),
 							locationId: k.id,
 							locationName: k.name,
 							serialno: h.serialno,
@@ -1592,35 +1628,72 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			var f = this._getEntriesData(a);
 			if (!f) return !1;
 			if (f.length > 0) {
-				var g = $.trim(b.$_note.val()),
-					h = {
-						id: originalData.id,
-						buId: e.id,
-						contactName: e.name,
-						salesId: b.salesCombo.getValue(),
-						salesName: b.salesCombo.getText(),
-						date: $.trim(b.$_date.val()),
-						billNo: $.trim(b.$_number.text()),
-						transType: originalData.transType,
-						entries: f,
-						totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
-						totalDiscount: $("#grid").jqGrid("footerData", "get").deduction.replace(/,/g, ""),
-						totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
-                        totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
-						description: g === b.$_note[0].defaultValue ? "" : g,
-						disRate: $.trim(b.$_discountRate.val() || 0),
-						disAmount: $.trim(b.$_deduction.val() || 0),
-						amount: $.trim(b.$_discount.val()),
-						rpAmount: $.trim(b.$_payment.val() || 0),
-						arrears: $.trim(Number(b.$_arrears.val()) ? Number(b.$_arrears.val()) : "0.00"),
-						totalArrears: "",
-						customerFree: $.trim(b.$_customerFree.val()),
-						//add by michen 20170724 -begin-
-						udf01:$.trim(b.$linkMan.find("input").val()),
-						udf02:$.trim(b.$linkPhone.find("input").val()),
-						udf03:$.trim(b.$linkAddress.find("input").val())
-						//add by michen 20170724 -end-
-					};
+                if ($.trim(b.$_amountType.val()) == '1'){
+                    var g = $.trim(b.$_note.val()),
+                        h = {
+                            id: originalData.id,
+                            buId: e.id,
+                            contactName: e.name,
+                            salesId: b.salesCombo.getValue(),
+                            salesName: b.salesCombo.getText(),
+                            date: $.trim(b.$_date.val()),
+                            billNo: $.trim(b.$_number.text()),
+                            transType: originalData.transType,
+                            entries: f,
+                            totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
+                            totalDiscount: $("#grid").jqGrid("footerData", "get").deduction.replace(/,/g, ""),
+                            totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                            totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                            totalBeforeAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                            description: g === b.$_note[0].defaultValue ? "" : g,
+                            disRate: $.trim(b.$_discountRate.val() || 0),
+                            disAmount: $.trim(b.$_deduction.val() || 0),
+                            amount: $.trim(b.$_discount.val()),
+                            rpAmount: $.trim(b.$_payment.val() || 0),
+                            arrears: $.trim(Number(b.$_arrears.val()) ? Number(b.$_arrears.val()) : "0.00"),
+                            amountType: $.trim(b.$_amountType.val()),
+                            totalArrears: "",
+                            customerFree: $.trim(b.$_customerFree.val()),
+                            //add by michen 20170724 -begin-
+                            udf01:$.trim(b.$linkMan.find("input").val()),
+                            udf02:$.trim(b.$linkPhone.find("input").val()),
+                            udf03:$.trim(b.$linkAddress.find("input").val())
+                            //add by michen 20170724 -end-
+                        };
+				}else{
+                    var g = $.trim(b.$_note.val()),
+                        h = {
+                            id: originalData.id,
+                            buId: e.id,
+                            contactName: e.name,
+                            salesId: b.salesCombo.getValue(),
+                            salesName: b.salesCombo.getText(),
+                            date: $.trim(b.$_date.val()),
+                            billNo: $.trim(b.$_number.text()),
+                            transType: originalData.transType,
+                            entries: f,
+                            totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
+                            totalDiscount: $("#grid").jqGrid("footerData", "get").deduction.replace(/,/g, ""),
+                            totalAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                            totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                            totalBeforeAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                            description: g === b.$_note[0].defaultValue ? "" : g,
+                            disRate: $.trim(b.$_discountRate.val() || 0),
+                            disAmount: $.trim(b.$_deduction.val() || 0),
+                            amount: $.trim(b.$_discount.val()),
+                            rpAmount: $.trim(b.$_payment.val() || 0),
+                            arrears: $.trim(Number(b.$_arrears.val()) ? Number(b.$_arrears.val()) : "0.00"),
+                            amountType: $.trim(b.$_amountType.val()),
+                            totalArrears: "",
+                            customerFree: $.trim(b.$_customerFree.val()),
+                            //add by michen 20170724 -begin-
+                            udf01:$.trim(b.$linkMan.find("input").val()),
+                            udf02:$.trim(b.$linkPhone.find("input").val()),
+                            udf03:$.trim(b.$linkAddress.find("input").val())
+                            //add by michen 20170724 -end-
+                        };
+				}
+
 				if (h.disRate < 0) return defaultPage.Public.tips({
 					type: 2,
 					content: "优惠率不能为负数！"
