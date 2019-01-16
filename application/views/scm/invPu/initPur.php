@@ -79,18 +79,25 @@ $(function() {
   <div class="bills cf">
     <div class="con-header">
       <dl class="cf">
-        <dd class="pct30">
+        <dd class="pct25">
           <label>供应商:</label>
           <span class="ui-combo-wrap" id="customer">
           <input type="text" name="" class="input-txt" autocomplete="off" value="" data-ref="date">
           <i class="ui-icon-ellipsis"></i></span></dd>
-        <dd class="pct25 tc">
+        <dd class="pct20 tc">
           <label>单据日期:</label>
           <input type="text" id="date" class="ui-input ui-datepicker-input" value="2015-08-27">
         </dd>
-        <dd id="identifier" class="pct25 tc">
+        <dd id="identifier" class="pct20 tc">
           <label>单据编号:</label>
-          <span id="number"><?php echo $billNo?></span></dd>
+          <span id="number"><?php echo $billNo?></span>
+        </dd>
+          <dd  class="pct20 tc">
+              <select name="amountType" id="amountType" style="height: 29px;width: 50%;border: none;border-bottom: 1px solid #d6dee3;outline: none">
+                  <option value="1">课税前</option>
+                  <option value="2" selected>课税后</option>
+              </select>
+          </dd>
       </dl>
     </div>
     <div class="grid-wrap">
@@ -190,5 +197,8 @@ $(function() {
   </div>
 </div>
 <script src="<?php echo base_url()?>statics/js/dist/purchase.js?ver=201510241557"></script>
+<script>
+    window.rate = <?php echo $rate ?>
+</script>
 </body>
 </html>

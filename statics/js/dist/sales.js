@@ -551,7 +551,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					showZero: !0,
 					decimalPlaces: amountPlaces
 				},
-				editable: !0
+				editable: !1
 			},{
 				name: "rateAmount",
 				label: "税后销售金额",

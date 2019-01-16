@@ -21,7 +21,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 		initDom: function(a) {
 			var b = this;
 			this.$_serialno = $("#serialno"),this.$_serialno.placeholder(),
-			this.$_customer = $("#customer"), this.$_date = $("#date").val(system.endDate), this.$_number = $("#number"), this.$_note = $("#note"), this.$_discountRate = $("#discountRate"), this.$_deduction = $("#deduction"), this.$_discount = $("#discount"), this.$_payment = $("#payment"), this.$_arrears = $("#arrears"), this.$_totalArrears = $("#totalArrears"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_paymentTxt = $("#paymentTxt"), this.$_accountInfo = $("#accountInfo"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.$_checkName = $("#checkName"), this.customerArrears = 0, this.$_note.placeholder(), "150502" == originalData.transType ? (parent.$("#page-tab").find("li.l-selected").children("a").html("购货退货单"), $("#paymentTxt").html("本次退款")) : (parent.$("#page-tab").find("li.l-selected").children("a").html("购货单"), $("#paymentTxt").html("本次付款")), this.customerCombo = Business.billSupplierCombo($("#customer"), {
+			this.$_customer = $("#customer"), this.$_date = $("#date").val(system.endDate), this.$_number = $("#number"), this.$_note = $("#note"), this.$_discountRate = $("#discountRate"), this.$_deduction = $("#deduction"), this.$_discount = $("#discount"), this.$_payment = $("#payment"), this.$_arrears = $("#arrears"),this.$_amountType = $("#amountType"), this.$_totalArrears = $("#totalArrears"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_paymentTxt = $("#paymentTxt"), this.$_accountInfo = $("#accountInfo"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.$_checkName = $("#checkName"), this.customerArrears = 0, this.$_note.placeholder(), "150502" == originalData.transType ? (parent.$("#page-tab").find("li.l-selected").children("a").html("购货退货单"), $("#paymentTxt").html("本次退款")) : (parent.$("#page-tab").find("li.l-selected").children("a").html("购货单"), $("#paymentTxt").html("本次付款")), this.customerCombo = Business.billSupplierCombo($("#customer"), {
 				defaultSelected: -1
 			}), "add" !== a.status || a.buId ? (this.$_customer.data("contactInfo", {
 				id: a.buId,
@@ -99,7 +99,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			var h = '<a class="ui-btn-prev" id="prev" title="上一张"><b></b></a><a class="ui-btn-next" id="next" title="下一张"><b></b></a>';
 			this.btn_edit = d, this.btn_audit = f, this.btn_view = e, this.btn_reaudit = g, a.id > 0 ? (this.$_number.text(a.billNo), this.$_date.val(a.date), this.$_totalArrears.val(a.totalArrears), this.$_accountInfo.data("accountInfo", a.accounts), -1 === a.accId && (this.$_accountInfo.show(), b.$_payment.attr("disabled", "disabled").addClass("ui-input-dis")), $("#grid").jqGrid("footerData", "set", {
 				qty: a.totalQty,
-				amount: a.totalAmount
+				amount: a.totalAmount,
+				rateAmount: a.totalRateAmount
 			}), "list" !== urlParam.flag && (h = ""), "edit" === a.status ? this.$_toolBottom.html("<span id=groupBtn>" + d + f + "</span>" + h) : a.checked ? ($("#mark").addClass("has-audit"), this.$_toolBottom.html('<span id="groupBtn">' + e + g + "</span>" + h)) : this.$_toolBottom.html('<span id="groupBtn">' + e + "</span>" + h), "150502" == a.transType ? this.idList = parent.cacheList.purchaseBackId || [] : this.idList = parent.cacheList.purchaseId || [], this.idPostion = $.inArray(String(a.id), this.idList), this.idLength = this.idList.length, 0 === this.idPostion && $("#prev").addClass("ui-btn-prev-dis"), this.idPostion === this.idLength - 1 && $("#next").addClass("ui-btn-next-dis"), this.$_userName.html(a.userName), this.$_modifyTime.html(a.modifyTime), this.$_createTime.html(a.createTime), this.$_checkName.html(a.checkName)) : (billRequiredCheck ? this.$_toolBottom.html("<span id=groupBtn>" + c + f + "</span>") : this.$_toolBottom.html('<span id="groupBtn">' + c + "</span>"), this.$_userName.html(system.realName || ""), this.$_modifyTime.parent().hide(), this.$_createTime.parent().hide(), this.$_checkName.parent().hide()), disEditable && (THISPAGE.disableEdit(), this.$_toolBottom.hide())
 		},
 		loadGrid: function(a) {
@@ -214,6 +215,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						discountRate: b.discountRate || 0,
 						deduction: b.deduction || 0,
 						amount: b.amount,
+						rateAmount: b.rateAmount,
 						locationName: b.locationName,
 						locationId: b.locationId,
 						taxRate: b.taxRate || taxRequiredInput,
@@ -227,6 +229,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						$.isNumeric(e) && ($.isNumeric(f) ? (c.deduction = c.deduction || d * e * f / 100, c.amount = c.amount || d * e - c.deduction) : c.amount = c.amount || d * e)
 					}
 					c.amount = c.amount ? c.amount : c.price * c.qty;
+                    c.rateAmount = c.rateAmount ? c.rateAmount : c.amount * rate + c.amount;
 					var g = Number(c.amount);
 					if (taxRequiredCheck) {
 						var h = c.taxRate,
@@ -335,7 +338,6 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				editable: !0,
 				align: "left",
 				edittype: "custom",
-				edittype: "custom",
 				editoptions: {
 					custom_element: p,
 					custom_value: q,
@@ -349,7 +351,6 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				hidden: !0,
 				title: !1,
 				editable: !0,
-				edittype: "custom",
 				edittype: "custom",
 				editoptions: {
 					custom_element: m,
@@ -434,7 +435,20 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					showZero: !0,
 					decimalPlaces: amountPlaces
 				},
-				editable: !0
+				editable: !1
+			}, {
+				name: "rateAmount",
+				label: "税后购货金额",
+				hidden: hiddenAmount,
+				width: 100,
+				fixed: !0,
+				align: "right",
+				formatter: "currency",
+				formatoptions: {
+					showZero: !0,
+					decimalPlaces: amountPlaces
+				},
+				editable: !1
 			}];
 			this.calAmount = "amount", taxRequiredCheck && (B.pop(), B.push({
 				name: "amount",
@@ -594,7 +608,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						var b = $("#" + a).data("goodsInfo");
 						if (b) {
 							var c = $("#grid").jqGrid("getRowData", a);
-							b = $.extend(!0, {}, b), b.skuName = c.skuName, b.mainUnit = c.mainUnit, b.unitId = c.unitId, b.qty = c.qty, b.price = c.price, b.discountRate = c.discountRate, b.deduction = c.deduction, b.amount = c.amount, b.taxRate = c.taxRate, b.tax = c.tax, b.taxAmount = c.taxAmount, b.locationName = c.locationName, $("#" + a).data("goodsInfo", b)
+							b = $.extend(!0, {}, b), b.skuName = c.skuName, b.mainUnit = c.mainUnit, b.unitId = c.unitId, b.qty = c.qty, b.price = c.price, b.discountRate = c.discountRate, b.deduction = c.deduction, b.amount = c.amount,b.rateAmount = c.rateAmount, b.taxRate = c.taxRate, b.tax = c.tax, b.taxAmount = c.taxAmount, b.locationName = c.locationName, $("#" + a).data("goodsInfo", b)
 						}
 					}
 					if (THISPAGE.curID = a, "goods" === b && (f(), $("#" + d + "_goods", "#grid").val(c), THISPAGE.goodsCombo.selectByText(c)), "skuName" === b) {
@@ -731,12 +745,15 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							h = parseFloat($("#grid").jqGrid("getCell", a, f + 2));
 						if ($.isNumeric(g)) if ($.isNumeric(h)) var i = d * g * h / 100,
 							j = d * g - i,
+                            m = j * rate + j,
 							k = $("#grid").jqGrid("setRowData", a, {
 								deduction: i,
-								amount: j
+								amount: j,
+								rateAmount: m
 							});
 						else var k = $("#grid").jqGrid("setRowData", a, {
-							amount: d * g
+							amount: d * g,
+							rateAmount: amount * rate + amount
 						});
 						b(a), k && THISPAGE.calTotal();
 						break;
@@ -746,12 +763,15 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							h = parseFloat($("#grid").jqGrid("getCell", a, f + 1));
 						if ($.isNumeric(l)) if ($.isNumeric(h)) var i = d * l * h / 100,
 							j = d * l - i,
+                            m = j * rate + j,
 							k = $("#grid").jqGrid("setRowData", a, {
 								deduction: i,
-								amount: j
+								amount: j,
+								rateAmount: m
 							});
 						else var k = $("#grid").jqGrid("setRowData", a, {
-							amount: d * l
+							amount: d * l,
+								rateAmount: amount * rate + amount
 						});
 						b(a), k && THISPAGE.calTotal();
 						break;
@@ -762,9 +782,11 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						if ($.isNumeric(l) && $.isNumeric(g)) var m = l * g,
 							i = m * d / 100,
 							j = m - i,
+                            m = j * rate + j,
 							k = $("#grid").jqGrid("setRowData", a, {
 								deduction: i,
-								amount: j
+								amount: j,
+								rateAmount: m
 							});
 						b(a), k && THISPAGE.calTotal();
 						break;
@@ -774,10 +796,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							g = parseFloat($("#grid").jqGrid("getCell", a, f - 2));
 						if ($.isNumeric(l) && $.isNumeric(g)) var m = l * g,
 							j = m - d,
+                            m = j * rate + j,
 							h = m ? (100 * d / m).toFixed(amountPlaces) : 0,
 							k = $("#grid").jqGrid("setRowData", a, {
 								discountRate: h,
-								amount: j
+								amount: j,
+								rateAmount: m
 							});
 						b(a), k && THISPAGE.calTotal();
 						break;
@@ -790,14 +814,17 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								g = (d + i) / o;
 							if ($.isNumeric(o) && $.isNumeric(g)) {
 								var m = o * g,
+                                    s = m * rate + m;
 									h = m ? (100 * i / m).toFixed(amountPlaces) : 0;
 								$("#grid").jqGrid("setRowData", a, {
-									discountRate: h
+									discountRate: h,
+									rateAmount: s
 								})
 							}
 							$("#grid").jqGrid("setRowData", a, {
 								discountRate: h,
-								price: g
+								price: g,
+                                rateAmount:s
 							})
 						}
 						b(a), THISPAGE.calTotal();
@@ -902,6 +929,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					qty: a.totalQty,
 					deduction: a.totalDiscount,
 					amount: a.totalAmount,
+					rateAmount: a.totalRateAmount,
 					tax: a.totalTax,
 					taxAmount: a.totalTaxAmount
 				},
@@ -963,6 +991,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					qty: a.totalQty,
 					deduction: a.totalDiscount,
 					amount: a.totalAmount,
+					rateAmount: a.totalRateAmount,
 					tax: a.totalTax,
 					taxAmount: a.totalTaxAmount
 				}
@@ -1301,15 +1330,16 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			a.$_serialno.val(""),a.$_note.val(""), a.$_discountRate.val(originalData.disRate), a.$_deduction.val(originalData.disAmount), a.$_discount.val(originalData.amount), a.$_payment.val(originalData.rpAmount), a.$_arrears.val(originalData.arrears)
 		},
 		calTotal: function() {
-			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, h = a.length; h > g; g++) {
+			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0,m = 0, h = a.length; h > g; g++) {
 				var i = a[g],
 					j = $("#grid").jqGrid("getRowData", i);
-				j.qty && (b += parseFloat(j.qty)), j.deduction && (c += parseFloat(j.deduction)), j.amount && (d += parseFloat(j.amount)), j.tax && (e += parseFloat(j.tax)), j.taxAmount && (f += parseFloat(j.taxAmount))
+				j.qty && (b += parseFloat(j.qty)), j.deduction && (c += parseFloat(j.deduction)), j.amount && (d += parseFloat(j.amount)), j.rateAmount && (m += parseFloat(j.rateAmount)),j.tax && (e += parseFloat(j.tax)), j.taxAmount && (f += parseFloat(j.taxAmount))
 			}
 			if ($("#grid").jqGrid("footerData", "set", {
 				qty: b,
 				deduction: c,
 				amount: d,
+				rateAmount:m,
 				tax: e,
 				taxAmount: f
 			}), taxRequiredCheck) var k = (f - Number(this.$_deduction.val())).toFixed(2);
@@ -1364,6 +1394,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							discountRate: h.discountRate,
 							deduction: h.deduction,
 							amount: h.amount,
+							rateAmount: h.rateAmount,
 							locationId: k.id,
 							locationName: k.name,
 							serialno: h.serialno,
@@ -1402,26 +1433,56 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			var f = this._getEntriesData(a);
 			if (!f) return !1;
 			if (f.length > 0) {
-				var g = $.trim(b.$_note.val()),
-					h = {
-						id: originalData.id,
-						buId: e.id,
-						contactName: e.name,
-						date: $.trim(b.$_date.val()),
-						billNo: $.trim(b.$_number.text()),
-						transType: originalData.transType,
-						entries: f,
-						totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
-						totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
-						description: g === b.$_note[0].defaultValue ? "" : g,
-						serialno: $.trim(b.$_serialno.val()),
-						disRate: $.trim(b.$_discountRate.val() || 0),
-						disAmount: $.trim(b.$_deduction.val() || 0),
-						amount: $.trim(b.$_discount.val()),
-						rpAmount: $.trim(b.$_payment.val() || 0),
-						arrears: $.trim(b.$_arrears.val()),
-						totalArrears: ""
-					};
+				if ($.trim(b.$_amountType.val()) == '1'){
+                    var g = $.trim(b.$_note.val()),
+                        h = {
+                            id: originalData.id,
+                            buId: e.id,
+                            contactName: e.name,
+                            date: $.trim(b.$_date.val()),
+                            billNo: $.trim(b.$_number.text()),
+                            transType: originalData.transType,
+                            entries: f,
+                            totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
+                            totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                            totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                            totalBeforeAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                            description: g === b.$_note[0].defaultValue ? "" : g,
+                            serialno: $.trim(b.$_serialno.val()),
+                            disRate: $.trim(b.$_discountRate.val() || 0),
+                            disAmount: $.trim(b.$_deduction.val() || 0),
+                            amount: $.trim(b.$_discount.val()),
+                            rpAmount: $.trim(b.$_payment.val() || 0),
+                            arrears: $.trim(b.$_arrears.val()),
+                            amountType: $.trim(b.$_amountType.val()),
+                            totalArrears: ""
+                        };
+				} else{
+                    var g = $.trim(b.$_note.val()),
+                        h = {
+                            id: originalData.id,
+                            buId: e.id,
+                            contactName: e.name,
+                            date: $.trim(b.$_date.val()),
+                            billNo: $.trim(b.$_number.text()),
+                            transType: originalData.transType,
+                            entries: f,
+                            totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
+                            totalAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                            totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                            totalBeforeAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                            description: g === b.$_note[0].defaultValue ? "" : g,
+                            serialno: $.trim(b.$_serialno.val()),
+                            disRate: $.trim(b.$_discountRate.val() || 0),
+                            disAmount: $.trim(b.$_deduction.val() || 0),
+                            amount: $.trim(b.$_discount.val()),
+                            rpAmount: $.trim(b.$_payment.val() || 0),
+                            arrears: $.trim(b.$_arrears.val()),
+                            amountType: $.trim(b.$_amountType.val()),
+                            totalArrears: ""
+                        };
+				}
+
 				if (h.disRate < 0) return defaultPage.Public.tips({
 					type: 2,
 					content: "优惠率不能为负数！"
@@ -1495,6 +1556,7 @@ $(function() {
 					totalQty: 0,
 					totalDiscount: 0,
 					totalAmount: 0,
+					totalRateAmount: 0,
 					totalTax: 0,
 					totalTaxAmount: 0,
 					disRate: 0,
@@ -1601,6 +1663,7 @@ $(function() {
 		totalQty: 0,
 		totalDiscount: 0,
 		totalAmount: 0,
+		totalRateAmount: 0,
 		totalTax: 0,
 		totalTaxAmount: 0,
 		disRate: 0,

@@ -260,11 +260,11 @@ i{
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="rateSalePrice">税后零售价</label></div>
-                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="rateSalePrice" id="rateSalePrice" readonly></div>
+                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="rateSalePrice" id="rateSalePrice"></div>
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="RateWholesalePrice">税后批发价</label></div>
-                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="RateWholesalePrice" id="RateWholesalePrice" readonly></div>
+                            <div class="ctn-wrap"><input type="text" value="" class="ui-input money" name="RateWholesalePrice" id="RateWholesalePrice"></div>
                         </li>
                         <li class="row-item">
                             <div class="label-wrap"><label for="discountRate1">折扣率一(%)</label></div>
@@ -440,11 +440,22 @@ i{
     </script>
 <script>
     $('#salePrice').on('input',function () {
-        $('#rateSalePrice').val((parseInt($('#salePrice').val()) * <?php echo $rate?>) + parseInt($('#salePrice').val()));
+        $('#rateSalePrice').val(decimal((parseFloat($('#salePrice').val()) * (1 + <?php echo $rate?>)),2));
     });
     $('#wholesalePrice').on('input',function () {
-        $('#RateWholesalePrice').val((parseInt($('#wholesalePrice').val()) * <?php echo $rate?>) + parseInt($('#wholesalePrice').val()));
-    })
+        $('#RateWholesalePrice').val(decimal((parseFloat($('#wholesalePrice').val()) * (1 + <?php echo $rate?>)),2));
+    });
+    $('#rateSalePrice').on('input',function () {
+        $('#salePrice').val(decimal(parseFloat($('#rateSalePrice').val()) / (1 + <?php echo $rate?>),2));
+    });
+    $('#RateWholesalePrice').on('input',function () {
+        $('#wholesalePrice').val(decimal(parseFloat($('#RateWholesalePrice').val()) / (1 + <?php echo $rate?>),2));
+    });
+
+    function decimal(num,v){
+        var vv = Math.pow(10,v);
+        return Math.round(num*vv)/vv;
+    }
 </script>
 </body>
 </html>
