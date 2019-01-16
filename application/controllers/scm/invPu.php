@@ -14,11 +14,13 @@ class InvPu extends CI_Controller {
 			case 'initPur':
 			    $this->common_model->checkpurview(2);
 				$data['billNo'] = str_no('CG');
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 			    $this->load->view('scm/invPu/initPur',$data);
 				break;
 			case 'editPur':
 			    $this->common_model->checkpurview(1);
 				$id = intval($this->input->get_post('id',TRUE));
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 				$data['billNo'] = $this->mysql_model->get_row('invoice',array('id'=>$id,'billType'=>'PUR'),'billNo');
 			    $this->load->view('scm/invPu/initPur',$data);
 				break;
@@ -74,6 +76,7 @@ class InvPu extends CI_Controller {
 			$v[$arr]['description']  = $row['description'];
 			$v[$arr]['billNo']       = $row['billNo'];
 			$v[$arr]['totalAmount']  = (float)abs($row['totalAmount']);
+			$v[$arr]['totalRateAmount']  = (float)abs($row['totalRateAmount']);
 			$v[$arr]['userName']     = $row['userName'];
 			$v[$arr]['transTypeName']= $row['transTypeName'];
 			$v[$arr]['disEditable']  = 0;
@@ -153,7 +156,7 @@ class InvPu extends CI_Controller {
 				'billNo','billType','transType','transTypeName','buId','billDate','postData','hxStateCode',
 				'serialno','description','totalQty','amount','arrears','rpAmount','totalAmount','createTime',
 				'totalArrears','disRate','disAmount','uid','userName','srcOrderNo','srcOrderId',
-				'accId','modifyTime'),$data,NULL);
+				'accId','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$iid = $this->mysql_model->insert('invoice',$info);
 			$this->invoice_info($iid,$data);
@@ -186,7 +189,7 @@ class InvPu extends CI_Controller {
 				'billType','transType','transTypeName','buId','billDate','hxStateCode',
 				'serialno','description','totalQty','amount','arrears','rpAmount','uid','userName',
 				'totalAmount','totalArrears','disRate','postData',
-				'disAmount','accId','modifyTime'),$data,NULL);
+				'disAmount','accId','modifyTime','totalRateAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$this->mysql_model->update('invoice',$info,array('id'=>$data['id']));
 			$this->invoice_info($data['id'],$data);
@@ -229,6 +232,7 @@ class InvPu extends CI_Controller {
 			$info['data']['disRate']            = (float)$data['disRate'];
 			$info['data']['disAmount']          = (float)$data['disAmount'];
 			$info['data']['amount']             = (float)abs($data['amount']);
+			$info['data']['rateAmount']             = (float)abs($data['rateAmount']);
 			$info['data']['rpAmount']           = (float)abs($data['rpAmount']);
 			$info['data']['arrears']            = (float)abs($data['arrears']);
 			$info['data']['userName']           = $data['userName'];
@@ -236,6 +240,7 @@ class InvPu extends CI_Controller {
 			$info['data']['totalDiscount']      = (float)$data['totalDiscount'];
 			$info['data']['totalTax']           = (float)$data['totalTax'];
 			$info['data']['totalAmount']        = (float)abs($data['totalAmount']);
+			$info['data']['totalRateAmount']        = (float)abs($data['totalRateAmount']);
 			$info['data']['serialno']        = $data['serialno'];
 			$info['data']['description']        = $data['description'];
 			$list = $this->data_model->get_invoice_info('a.isDelete=0 and a.iid='.$id.' order by a.id');
@@ -248,6 +253,7 @@ class InvPu extends CI_Controller {
 				$v[$arr]['invName']             = $row['invNumber'];
 				$v[$arr]['qty']                 = (float)abs($row['qty']);
 				$v[$arr]['amount']              = (float)abs($row['amount']);
+				$v[$arr]['rateAmount']              = (float)abs($row['rateAmount']);
 				$v[$arr]['taxAmount']           = (float)abs($row['taxAmount']);
 				$v[$arr]['price']               = (float)$row['price'];
 				$v[$arr]['tax']                 = (float)$row['tax'];
@@ -415,7 +421,7 @@ class InvPu extends CI_Controller {
 			$info = elements(array(
 				'billType','transType','transTypeName','buId','billDate','checked','checkName',
 				'serialno','description','totalQty','amount','arrears','rpAmount','totalAmount','hxStateCode',
-				'totalArrears','disRate','postData','disAmount','accId','modifyTime'),$data,NULL);
+				'totalArrears','disRate','postData','disAmount','accId','modifyTime','totalRateAmount'),$data,NULL);
 			$this->db->trans_begin();
 
 			//特殊情况
@@ -424,7 +430,7 @@ class InvPu extends CI_Controller {
 						'billNo','billType','transType','transTypeName','buId','billDate','checked','checkName',
 						'serialno','description','totalQty','amount','arrears','rpAmount','totalAmount','hxStateCode',
 						'totalArrears','disRate','disAmount','postData','createTime',
-						'salesId','uid','userName','accId','modifyTime'),$data,NULL);
+						'salesId','uid','userName','accId','modifyTime','totalRateAmount'),$data,NULL);
 			    $iid = $this->mysql_model->insert('invoice',$info);
 			    $this->invoice_info($iid,$data);
 				$data['id'] = $iid;
@@ -622,6 +628,7 @@ class InvPu extends CI_Controller {
 			$v[$arr]['deduction']        = $row['deduction'];
 			$v[$arr]['serialno']      = $row['serialno'];
 			$v[$arr]['description']      = $row['description'];
+			$v[$arr]['rateAmount']      = $row['rateAmount'];
 			if (intval($row['srcOrderId'])>0) {
 			    $v[$arr]['srcOrderEntryId']  = intval($row['srcOrderEntryId']);
 				$v[$arr]['srcOrderId']       = intval($row['srcOrderId']);
