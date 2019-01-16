@@ -1076,14 +1076,23 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			}).getCombo()
 		},
 		disableEdit: function() {
-			this.customerCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"),
+			this.customerCombo.disable(),
+			this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"),
+			this.$_amountType.attr("disabled", "disabled").addClass("ui-input-dis"),
 			this.$_serialno.attr("disabled", "disabled").addClass("ui-input-dis"),
-			this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_discountRate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_deduction.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_payment.attr("disabled", "disabled").addClass("ui-input-dis"), this.accountCombo.disable(), $("#grid").jqGrid("setGridParam", {
+			this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"),
+			this.$_discountRate.attr("disabled", "disabled").addClass("ui-input-dis"),
+			this.$_deduction.attr("disabled", "disabled").addClass("ui-input-dis"),
+			this.$_payment.attr("disabled", "disabled").addClass("ui-input-dis"),
+			this.accountCombo.disable(), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !1
-			}), this.editable = !1
+			}),
+			this.editable = !1
 		},
 		enableEdit: function() {
-			disEditable || (!hideCustomerCombo && this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"),
+			disEditable || (!hideCustomerCombo && this.customerCombo.enable(),
+				this.$_date.removeAttr("disabled").removeClass("ui-input-dis"),
+				this.$_amountType.removeAttr("disabled").removeClass("ui-input-dis"),
 					this.$_serialno.removeAttr("disabled").removeClass("ui-input-dis"),
 					this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), this.$_discountRate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deduction.removeAttr("disabled").removeClass("ui-input-dis"),
 					this.$_payment.removeAttr("disabled").removeClass("ui-input-dis"), this.accountCombo.enable(),
@@ -1132,9 +1141,15 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					c.active = !0, c.doQuery()
 				}, 10)
 			}), Business.billsEvent(a, "purchase"), this.$_deduction.keyup(function() {
-				var b = Number($(this).val()),
-					c = Number($("#grid").jqGrid("footerData", "get")[a.calAmount].replace(/,/g, "")),
-					d = (c - b).toFixed(amountPlaces);
+				if (a.$_amountType.val() == '1'){
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").amount.replace(/,/g, "")),
+                        d = (c - b).toFixed(amountPlaces);
+				} else{
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, "")),
+                        d = (c - b).toFixed(amountPlaces);
+				}
 				if (c) {
 					var e = b / c * 100,
 						f = d - Number($.trim(a.$_payment.val()));
@@ -1150,12 +1165,22 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					content: "优惠金额不能为负数！"
 				}), $(this).focus())
 			}), this.$_discountRate.keyup(function() {
-				var b = Number($(this).val()),
-					c = Number($("#grid").jqGrid("footerData", "get")[a.calAmount].replace(/,/g, "")),
-					d = c * (b / 100),
-					e = d.toFixed(amountPlaces),
-					f = (c - e).toFixed(amountPlaces),
-					g = f - Number($.trim(a.$_payment.val()));
+				if (a.$_amountType.val() == '1') {
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").amount.replace(/,/g, "")),
+                        d = c * (b / 100),
+                        e = d.toFixed(amountPlaces),
+                        f = (c - e).toFixed(amountPlaces),
+                        g = f - Number($.trim(a.$_payment.val()));
+				}else{
+                    var b = Number($(this).val()),
+                        c = Number($("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, "")),
+                        d = c * (b / 100),
+                        e = d.toFixed(amountPlaces),
+                        f = (c - e).toFixed(amountPlaces),
+                        g = f - Number($.trim(a.$_payment.val()));
+				}
+
 				THISPAGE.$_deduction.val(e), THISPAGE.$_discount.val(f), THISPAGE.$_arrears.val(g.toFixed(amountPlaces))
 			}).on("keypress", function(a) {
 				Public.numerical(a)
@@ -1325,7 +1350,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			$("#grid").clearGridData();
 			for (var b = 1; 8 >= b; b++) $("#grid").jqGrid("addRowData", b, {}), $("#grid").jqGrid("footerData", "set", {
 				qty: 0,
-				amount: 0
+				amount: 0,
+				rateAmount: 0
 			});
 			a.$_serialno.val(""),a.$_note.val(""), a.$_discountRate.val(originalData.disRate), a.$_deduction.val(originalData.disAmount), a.$_discount.val(originalData.amount), a.$_payment.val(originalData.rpAmount), a.$_arrears.val(originalData.arrears)
 		},

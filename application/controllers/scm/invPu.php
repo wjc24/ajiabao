@@ -22,6 +22,7 @@ class InvPu extends CI_Controller {
 				$id = intval($this->input->get_post('id',TRUE));
                 $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 				$data['billNo'] = $this->mysql_model->get_row('invoice',array('id'=>$id,'billType'=>'PUR'),'billNo');
+				$data['amountType'] = $this->mysql_model->get_row('invoice',array('id'=>$id,'billType'=>'PUR'),'amountType');
 			    $this->load->view('scm/invPu/initPur',$data);
 				break;
 			case 'initPurList':
@@ -79,6 +80,7 @@ class InvPu extends CI_Controller {
 			$v[$arr]['totalRateAmount']  = (float)abs($row['totalRateAmount']);
 			$v[$arr]['userName']     = $row['userName'];
 			$v[$arr]['transTypeName']= $row['transTypeName'];
+			$v[$arr]['amountType'] = $row['amountType'];
 			$v[$arr]['disEditable']  = 0;
 		}
 		$json['status']              = 200;

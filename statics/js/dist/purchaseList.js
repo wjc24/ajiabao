@@ -31,7 +31,7 @@ var THISPAGE = {
 			altRows: !0,
 			gridview: !0,
 			multiselect: !0,
-			colNames: ["操作", "单据日期", "单据编号", "供应商", "购货金额", "优惠后金额", "已" + c + "款", c + "款状态", "数量", "制单人", "已确认人", "备注", "订单来源"],
+			colNames: ["操作", "单据日期", "单据编号", "供应商", "购货金额", "课税前", "优惠后金额", "已" + c + "款", c + "款状态", "数量", "制单人", "已确认人", "备注", "订单来源"],
 			colModel: [{
 				name: "operating",
 				width: 60,
@@ -60,6 +60,20 @@ var THISPAGE = {
 				width: 100,
 				align: "right",
 				formatter: "currency"
+			}, {
+				name: "amountType",
+				index: "amountType",
+				hidden: hiddenAmount,
+				width: 50,
+				align: "center",
+                formatter: function(a) {
+                    switch (a) {
+                        case '1':
+                            return "是";
+                        default:
+                            return "&#160"
+                    }
+                }
 			}, {
 			// 	name: "totalRateAmount",
 			// 	index: "totalRateAmount",
