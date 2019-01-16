@@ -17,25 +17,19 @@ class Deliver  extends CI_Controller {
         $t = 0;
 
         foreach ($invoice as $k=>$v){
-
             if($sel && $sel != '0'){
                 $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%' OR booking_number LIKE '%".$like."%' OR container_number LIKE '%".$like."%' OR box_number LIKE '%".$like."%' OR shipping_name LIKE '%".$like."%') AND (STATUS = ".$sel.")";
             }else{
                 $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%' OR booking_number LIKE '%".$like."%' OR container_number LIKE '%".$like."%' OR box_number LIKE '%".$like."%' OR shipping_name LIKE '%".$like."%')";
             }
-            $invoice_id = $v->id;
-            $billNo = $v->billNo;
-            $billDate = $v->billDate;
-            $userName = $v->userName;
+
             $invoice_info = $this->db->where($where_invoice_info)->get('ci_invoice_info')->result();
-
             foreach ($invoice_info as $key=>$val){
-
-                $goods[$t]['invoice_id'] = $invoice_id;
+                $goods[$t]['invoice_id'] =$v->id;
                 $goods[$t]['invoice_info_id'] =$val->id;
-                $goods[$t]['billNo'] =$billNo;
-                $goods[$t]['billDate'] =$billDate;
-                $goods[$t]['userName'] =$userName;
+                $goods[$t]['billNo'] =$v->billNo;
+                $goods[$t]['billDate'] =$v->billDate;
+                $goods[$t]['userName'] =$v->userName;
                 $goods[$t]['good_id'] =$val->invId;
                 $good = $this->db->where(['id'=>$val->invId])->get('ci_goods')->row();
                 $goods[$t]['good_name'] =$good->name;
@@ -58,7 +52,6 @@ class Deliver  extends CI_Controller {
 
                 $t++;
             }
-
         }
 
         $total = count($goods);
@@ -90,7 +83,6 @@ class Deliver  extends CI_Controller {
                 }
             }
         }
-
         $customer = $this->db->get('ci_customer')->result();
 
         $this->load->view('/settings/deliver',['data'=>$new_goods,'like'=>$like,'sel'=>$sel,'page_now'=>$this->input->post('page_now'),'page_num'=>$page_num,'page_all'=>$page_all,'customer'=>$customer]);

@@ -237,23 +237,24 @@ $(document).keydown(function(event) {
             dataType: "json",
 
             success: function (data) {
-                console.log(data);
-                //if(data.code == 0){
-                //    parent.Public.tips({
-                //        content:data.text
-                //    });
-                //  //  location.href = "<?php //echo site_url('customer')?>//";
-                //}else if (data.code == 1){
-                //    parent.Public.tips({
-                //        type:1,
-                //        content:data.text
-                //    });
-                //} else{
-                //    parent.Public.tips({
-                //        type:1,
-                //        content:"未知错误"
-                //    });
-                //}
+
+                if(data.code == 1){
+                    parent.Public.tips({
+                        content:data.text
+                    });
+
+                    location.reload();
+                }else if (data.code == 2){
+                    parent.Public.tips({
+                        type:1,
+                        content:data.text
+                    });
+                } else{
+                    parent.Public.tips({
+                        type:1,
+                        content:"未知错误"
+                    });
+                }
 
             },
         });
