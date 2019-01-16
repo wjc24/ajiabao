@@ -60,6 +60,17 @@ $(document).keydown(function(event) {
           <label>交货日期:</label>
           <input type="text" id="deliveryDate" class="ui-input ui-datepicker-input" value="">
         </dd>
+          <dd  class="pct20 tc">
+              <select name="amountType" id="amountType" style="height: 29px;width: 50%;border: none;border-bottom: 1px solid #d6dee3;outline: none">
+                  <?php if (!$amountType):?>
+                      <option value="1">课税前</option>
+                      <option value="2" selected>课税后</option>
+                  <?php else:?>
+                      <option value="1" <?php if ($amountType == '1'):?>selected<?php endif;?>>课税前</option>
+                      <option value="2" <?php if ($amountType == '2'):?>selected<?php endif;?>>课税后</option>
+                  <?php endif;?>
+              </select>
+          </dd>
         <dd id="classes" class="pct15 tr">
           <label class="radio">
             <input type="radio" name="classes" value="150601">
@@ -150,5 +161,13 @@ $(document).keydown(function(event) {
   </div>
 </div>
 <script src="<?php echo base_url()?>statics/js/dist/salesOrder.js?ver=201510141132"></script>
+<script>
+    window.rate = <?php echo $rate ?>;
+    $('#amountType').on('change',function () {
+        $('#discountRate').val(0);
+        $('#deduction').val(0);
+        THISPAGE.calTotal();
+    })
+</script>
 </body>
 </html>

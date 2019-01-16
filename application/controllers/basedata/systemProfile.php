@@ -28,7 +28,7 @@ class Systemprofile extends CI_Controller {
 		    str_alert(200,'success',array('billNo'=>str_no($info[$billType]))); 
 		}
 		str_alert(-1,'生成失败'); 
-	}	
+	}
 	
 	
 	//系统设置

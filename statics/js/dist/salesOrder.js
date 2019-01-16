@@ -20,7 +20,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 		},
 		initDom: function(a) {
 			var b = this;
-			if (this.$_customer = $("#customer"), this.$_date = $("#date").val(system.endDate), this.$_deliveryDate = $("#deliveryDate").val(system.endDate), this.$_number = $("#number"), this.$_classes = $("#classes"), this.$_note = $("#note"), this.$_discountRate = $("#discountRate"), this.$_deduction = $("#deduction"), this.$_discount = $("#discount"), this.$_payment = $("#payment"), this.$_arrears = $("#arrears"), this.$_totalArrears = $("#totalArrears"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_paymentTxt = $("#paymentTxt"), this.$_accountInfo = $("#accountInfo"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.$_checkName = $("#checkName"), this.customerArrears = 0, this.$_note.placeholder(), "add" !== a.status || a.salesId) var c = ["id", a.salesId];
+			if (this.$_customer = $("#customer"), this.$_date = $("#date").val(system.endDate), this.$_deliveryDate = $("#deliveryDate").val(system.endDate), this.$_number = $("#number"), this.$_classes = $("#classes"), this.$_note = $("#note"), this.$_discountRate = $("#discountRate"), this.$_deduction = $("#deduction"), this.$_discount = $("#discount"), this.$_payment = $("#payment"), this.$_arrears = $("#arrears"),this.$_amountType = $("#amountType"), this.$_totalArrears = $("#totalArrears"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_paymentTxt = $("#paymentTxt"), this.$_accountInfo = $("#accountInfo"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.$_checkName = $("#checkName"), this.customerArrears = 0, this.$_note.placeholder(), "add" !== a.status || a.salesId) var c = ["id", a.salesId];
 			else var c = 0;
 			if (this.salesCombo = Business.billSalesCombo($("#sales"), {
 				defaultSelected: c
@@ -231,11 +231,15 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						discountRate: b.discountRate || 0,
 						deduction: b.deduction || 0,
 						amount: b.amount,
+                        rateAmount: b.rateAmount,
+                        arrived: b.arrived,
 						locationName: b.locationName,
 						taxRate: b.taxRate || taxRequiredInput,
 						safeDays: b.safeDays
 					};
 					f.amount = f.amount ? f.amount : f.price * f.qty;
+                    f.rateAmount = f.rateAmount ? f.rateAmount : f.amount * rate + f.amount;
+                    f.arrived = f.arrives ? f.arrives : 0;
 					var g = Number(f.amount);
 					if (taxRequiredCheck) {
 						var h = f.taxRate,
@@ -342,6 +346,16 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				},
 				editable: !0
 			}, {
+				name: "arrived",
+				label: "已到数量",
+				width: 80,
+				align: "right",
+				formatter: "number",
+				formatoptions: {
+					decimalPlaces: qtyPlaces
+				},
+				editable: !0
+			}, {
 				name: "price",
 				label: "销售单价",
 				hidden: hiddenAmount,
@@ -395,7 +409,20 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 					showZero: !0,
 					decimalPlaces: amountPlaces
 				},
-				editable: !0
+				editable: !1
+			}, {
+				name: "rateAmount",
+				label: "税后金额",
+				hidden: hiddenAmount,
+				width: 100,
+				fixed: !0,
+				align: "right",
+				formatter: "currency",
+				formatoptions: {
+					showZero: !0,
+					decimalPlaces: amountPlaces
+				},
+				editable: !1
 			}];
 			this.calAmount = "amount", taxRequiredCheck && (t.pop(), t.push({
 				name: "amount",
@@ -914,12 +941,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			}).getCombo()
 		},
 		disableEdit: function() {
-			this.customerCombo.disable(), this.salesCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_deliveryDate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_discountRate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_deduction.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_payment.attr("disabled", "disabled").addClass("ui-input-dis"), this.accountCombo.disable(), $("#grid").jqGrid("setGridParam", {
+			this.customerCombo.disable(), this.salesCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_amountType.attr("disabled", "disabled").addClass("ui-input-dis"),this.$_deliveryDate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_discountRate.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_deduction.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_payment.attr("disabled", "disabled").addClass("ui-input-dis"), this.accountCombo.disable(), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !1
 			}), this.editable = !1
 		},
 		enableEdit: function() {
-			disEditable || (this.salesCombo.enable(), this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deliveryDate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), this.$_discountRate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deduction.removeAttr("disabled").removeClass("ui-input-dis"), this.$_payment.removeAttr("disabled").removeClass("ui-input-dis"), this.accountCombo.enable(), $("#grid").jqGrid("setGridParam", {
+			disEditable || (this.salesCombo.enable(), this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"),this.$_amountType.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deliveryDate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), this.$_discountRate.removeAttr("disabled").removeClass("ui-input-dis"), this.$_deduction.removeAttr("disabled").removeClass("ui-input-dis"), this.$_payment.removeAttr("disabled").removeClass("ui-input-dis"), this.accountCombo.enable(), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !0
 			}), this.editable = !0)
 		},
@@ -1251,6 +1278,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						discountRate: g.discountRate,
 						deduction: g.deduction,
 						amount: g.amount,
+						rateAmount: g.rateAmount,
 						locationId: i.id,
 						locationName: i.name,
 						description: g.description
@@ -1293,6 +1321,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
 						totalDiscount: $("#grid").jqGrid("footerData", "get").deduction.replace(/,/g, ""),
 						totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+						totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
 						description: f === a.$_note[0].defaultValue ? "" : f,
 						disRate: $.trim(a.$_discountRate.val()),
 						disAmount: $.trim(a.$_deduction.val()),

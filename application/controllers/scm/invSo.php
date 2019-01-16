@@ -13,11 +13,15 @@ class InvSo extends CI_Controller {
 		switch ($action) {
 			case 'initSo':
 			    $this->common_model->checkpurview(189);
-			    $this->load->view('scm/invSo/initSo');
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
+			    $this->load->view('scm/invSo/initSo',$data);
 				break;
 			case 'editSo':
 			    $this->common_model->checkpurview(190);
-			    $this->load->view('scm/invSo/initSo');
+                $id   = intval($this->input->get_post('id',TRUE));
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
+                $data['amountType'] = $this->mysql_model->get_row('order',array('id'=>$id),'amountType');
+			    $this->load->view('scm/invSo/initSo',$data);
 				break;
 			case 'initSoList':
 			    $this->common_model->checkpurview(188);
