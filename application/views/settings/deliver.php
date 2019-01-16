@@ -466,7 +466,8 @@
                                 <td><span><?php echo $v['boxes'] ?></span></td>
                                 <td><span><?php echo $v['box_volume'] ?></span></td>
                                 <td><span><?php echo $v['port'] ?></span></td>
-                                <td><span><a href="javascript:0" class="ui-btn mrb detail add_invoice">修改信息</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
+                                <!--                                <td><span><a href="javascript:0" class="ui-btn mrb detail add_invoice">修改信息</a><input type="hidden" value="--><?php //echo $v['invoice_info_id']?><!--"></span></td>-->
+                                <td><span><a tabTxt="修改信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/add?id=".$v['invoice_info_id'])?>" class="ui-btn mrb detail">修改</a></span></td>
                                 <?php if($v['status'] == 1) :?>
                                     <td><span><a href="javascript:0" onclick="start(<?php echo $v['invoice_info_id']?>)" class="ui-btn mrb detail">出仓</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
                                 <?php elseif($v['status'] == 2):?>
@@ -475,9 +476,9 @@
                                     <td><span><a href="javascript:0" class="ui-btn mrb detail">已出仓</a><input type="hidden" ></span></td>
                                 <?php endif;?>
                                 <?php if($v['remind'] == 1) :?>
-                                <td><span><a href="javascript:0" class="ui-btn mrb detail add_people">提醒</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
+                                    <td><span><a href="javascript:0" class="ui-btn mrb detail add_people">提醒</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
                                 <?php elseif($v['remind'] == 2):?>
-                                <td><span><a href="javascript:0" class="ui-btn mrb detail">已提醒</a></span></td>
+                                    <td><span><a href="javascript:0" class="ui-btn mrb detail">已提醒</a></span></td>
                                 <?php endif;?>
                             </tr>
                         <?php endforeach;?>
@@ -918,10 +919,10 @@
 
     //统计总体积
     function volume_all(){
-       $.each($('.good_detail'),function (i,val) {
-           // var box_number = $(this).children(1).html();
-           // console.log(val);
-       });
+        $.each($('.good_detail'),function (i,val) {
+            // var box_number = $(this).children(1).html();
+            // console.log(val);
+        });
     }
 
 </script>
