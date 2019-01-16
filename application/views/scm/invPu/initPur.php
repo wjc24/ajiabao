@@ -198,7 +198,11 @@ $(function() {
 </div>
 <script src="<?php echo base_url()?>statics/js/dist/purchase.js?ver=201510241557"></script>
 <script>
-    window.rate = <?php echo $rate ?>
+    window.rate = <?php echo $rate ?>;
+    // $('#amountType').on('change',function () {
+    //     var amountType = $('#amountType').val();
+    //     $('#arrears').val()
+    // })
 </script>
 </body>
 </html>

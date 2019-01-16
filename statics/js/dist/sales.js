@@ -541,7 +541,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				editable: !0
 			}, {
 				name: "amount",
-				label: "销售金额",
+				label: "税前销售金额",
 				hidden: hiddenAmount,
 				width: 100,
 				fixed: !0,

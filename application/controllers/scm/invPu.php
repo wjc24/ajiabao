@@ -179,7 +179,9 @@ class InvPu extends CI_Controller {
     }
 
 
-
+    /**
+     * 修改
+     */
 	public function updateInvPu(){
 	    $this->common_model->checkpurview(3);
 	    $data = $this->input->post('postData',TRUE);
@@ -189,7 +191,7 @@ class InvPu extends CI_Controller {
 				'billType','transType','transTypeName','buId','billDate','hxStateCode',
 				'serialno','description','totalQty','amount','arrears','rpAmount','uid','userName',
 				'totalAmount','totalArrears','disRate','postData',
-				'disAmount','accId','modifyTime','totalRateAmount'),$data,NULL);
+				'disAmount','accId','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$this->mysql_model->update('invoice',$info,array('id'=>$data['id']));
 			$this->invoice_info($data['id'],$data);
@@ -207,7 +209,9 @@ class InvPu extends CI_Controller {
     }
 
 
-
+    /**
+     * 获取修改信息
+     */
 	public function update() {
 	    $this->common_model->checkpurview(1);
 	    $id   = intval($this->input->get_post('id',TRUE));
@@ -239,10 +243,11 @@ class InvPu extends CI_Controller {
 			$info['data']['status']             = intval($data['checked'])==1 ? 'view' : 'edit';    //edit
 			$info['data']['totalDiscount']      = (float)$data['totalDiscount'];
 			$info['data']['totalTax']           = (float)$data['totalTax'];
-			$info['data']['totalAmount']        = (float)abs($data['totalAmount']);
+			$info['data']['totalAmount']        = (float)abs($data['totalBeforeAmount']);
 			$info['data']['totalRateAmount']        = (float)abs($data['totalRateAmount']);
 			$info['data']['serialno']        = $data['serialno'];
 			$info['data']['description']        = $data['description'];
+			$info['data']['amountType']        = $data['amountType'];
 			$list = $this->data_model->get_invoice_info('a.isDelete=0 and a.iid='.$id.' order by a.id');
 			foreach ($list as $arr=>$row) {
 				$v[$arr]['invSpec']             = $row['invSpec'];
@@ -252,7 +257,7 @@ class InvPu extends CI_Controller {
 				$v[$arr]['goods']               = $row['invNumber'].' '.$row['invName'].' '.$row['invSpec'];
 				$v[$arr]['invName']             = $row['invNumber'];
 				$v[$arr]['qty']                 = (float)abs($row['qty']);
-				$v[$arr]['amount']              = (float)abs($row['amount']);
+				$v[$arr]['amount']              = (float)abs($row['beforeAmount']);
 				$v[$arr]['rateAmount']              = (float)abs($row['rateAmount']);
 				$v[$arr]['taxAmount']           = (float)abs($row['taxAmount']);
 				$v[$arr]['price']               = (float)$row['price'];
@@ -421,7 +426,7 @@ class InvPu extends CI_Controller {
 			$info = elements(array(
 				'billType','transType','transTypeName','buId','billDate','checked','checkName',
 				'serialno','description','totalQty','amount','arrears','rpAmount','totalAmount','hxStateCode',
-				'totalArrears','disRate','postData','disAmount','accId','modifyTime','totalRateAmount'),$data,NULL);
+				'totalArrears','disRate','postData','disAmount','accId','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			$this->db->trans_begin();
 
 			//特殊情况
@@ -430,7 +435,7 @@ class InvPu extends CI_Controller {
 						'billNo','billType','transType','transTypeName','buId','billDate','checked','checkName',
 						'serialno','description','totalQty','amount','arrears','rpAmount','totalAmount','hxStateCode',
 						'totalArrears','disRate','disAmount','postData','createTime',
-						'salesId','uid','userName','accId','modifyTime','totalRateAmount'),$data,NULL);
+						'salesId','uid','userName','accId','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			    $iid = $this->mysql_model->insert('invoice',$info);
 			    $this->invoice_info($iid,$data);
 				$data['id'] = $iid;
@@ -629,6 +634,8 @@ class InvPu extends CI_Controller {
 			$v[$arr]['serialno']      = $row['serialno'];
 			$v[$arr]['description']      = $row['description'];
 			$v[$arr]['rateAmount']      = $row['rateAmount'];
+			$v[$arr]['beforeAmount']      = $row['beforeAmount'];
+			$v[$arr]['amountType']      = $row['amountType'];
 			if (intval($row['srcOrderId'])>0) {
 			    $v[$arr]['srcOrderEntryId']  = intval($row['srcOrderEntryId']);
 				$v[$arr]['srcOrderId']       = intval($row['srcOrderId']);

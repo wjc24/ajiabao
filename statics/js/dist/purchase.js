@@ -425,7 +425,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				editable: !0
 			}, {
 				name: "amount",
-				label: "购货金额",
+				label: "税前购货金额",
 				hidden: hiddenAmount,
 				width: 100,
 				fixed: !0,
@@ -1330,7 +1330,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			a.$_serialno.val(""),a.$_note.val(""), a.$_discountRate.val(originalData.disRate), a.$_deduction.val(originalData.disAmount), a.$_discount.val(originalData.amount), a.$_payment.val(originalData.rpAmount), a.$_arrears.val(originalData.arrears)
 		},
 		calTotal: function() {
-			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0,m = 0, h = a.length; h > g; g++) {
+			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0,m = 0,s = 0, h = a.length; h > g; g++) {
 				var i = a[g],
 					j = $("#grid").jqGrid("getRowData", i);
 				j.qty && (b += parseFloat(j.qty)), j.deduction && (c += parseFloat(j.deduction)), j.amount && (d += parseFloat(j.amount)), j.rateAmount && (m += parseFloat(j.rateAmount)),j.tax && (e += parseFloat(j.tax)), j.taxAmount && (f += parseFloat(j.taxAmount))
@@ -1343,7 +1343,15 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 				tax: e,
 				taxAmount: f
 			}), taxRequiredCheck) var k = (f - Number(this.$_deduction.val())).toFixed(2);
-			else var k = (d - Number(this.$_deduction.val())).toFixed(2);
+			else{
+				if (this.$_amountType.val() == '1'){
+					s = d;
+				}else if (this.$_amountType.val() == '2') {
+					s = m;
+				}
+                var k = (s - Number(this.$_deduction.val())).toFixed(2);
+			}
+
 			var l = (k - Number(this.$_payment.val())).toFixed(2);
 			l = Number(l) ? l : "0.00", this.$_discount.val(k), this.$_arrears.val(l)
 		},
@@ -1378,7 +1386,12 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								}), $("#grid").jqGrid("editCellByColName", g, "qty"), !1
 							}
 						}
-						console.log(i);
+						if (this.$_amountType.val() == '2') {
+							h.beforeAmount = h.amount;
+                            h.amount = h.rateAmount;
+                        }else{
+                            h.beforeAmount = h.amount;
+						}
 						f = {
 							invId: i.id,
 							invNumber: i.number,
@@ -1395,6 +1408,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							deduction: h.deduction,
 							amount: h.amount,
 							rateAmount: h.rateAmount,
+                            beforeAmount: h.beforeAmount,
+                            amountType: this.$_amountType.val(),
 							locationId: k.id,
 							locationName: k.name,
 							serialno: h.serialno,
