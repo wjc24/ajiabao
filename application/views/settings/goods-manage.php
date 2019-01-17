@@ -439,17 +439,18 @@ i{
         })
     </script>
 <script>
+    window.rate = <?php echo $rate?>;
     $('#salePrice').on('input',function () {
-        $('#rateSalePrice').val(decimal((parseFloat($('#salePrice').val()) * (1 + <?php echo $rate?>)),2));
+        $('#rateSalePrice').val(decimal((parseFloat($('#salePrice').val()) * (1 + rate)),2));
     });
     $('#wholesalePrice').on('input',function () {
-        $('#RateWholesalePrice').val(decimal((parseFloat($('#wholesalePrice').val()) * (1 + <?php echo $rate?>)),2));
+        $('#RateWholesalePrice').val(decimal((parseFloat($('#wholesalePrice').val()) * (1 + rate)),2));
     });
     $('#rateSalePrice').on('input',function () {
-        $('#salePrice').val(decimal(parseFloat($('#rateSalePrice').val()) / (1 + <?php echo $rate?>),2));
+        $('#salePrice').val(decimal(parseFloat($('#rateSalePrice').val()) / (1 + rate),2));
     });
     $('#RateWholesalePrice').on('input',function () {
-        $('#wholesalePrice').val(decimal(parseFloat($('#RateWholesalePrice').val()) / (1 + <?php echo $rate?>),2));
+        $('#wholesalePrice').val(decimal(parseFloat($('#RateWholesalePrice').val()) / (1 + rate),2));
     });
 
     function decimal(num,v){

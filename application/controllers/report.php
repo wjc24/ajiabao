@@ -180,7 +180,7 @@ class Report extends CI_Controller {
 		$data['data']['total']['transType']   = '';
 		$data['data']['total']['skuId']       = '';
 		$data['data']['total']['qty']         = $sum1;
-		$data['data']['total']['unitPrice']   = $sum1>0 ? $sum3/$sum1 : 0;
+//		$data['data']['total']['unitPrice']   = $sum1>0 ? $sum3/$sum1 : 0;
 		$data['data']['total']['amount']      = $sum3;
 		$data['data']['total']['cost']        = '';
 		$data['data']['total']['unitCost']    = '';
@@ -516,7 +516,7 @@ class Report extends CI_Controller {
 		$data['data']['userdata']['billType']    = 'SALE';
 		$data['data']['userdata']['skuId']       = 0;
 		$data['data']['userdata']['qty']         = round($sum1,$this->systems['qtyPlaces']);
-		$data['data']['userdata']['unitPrice']   = $sum1>0 ? round($sum3/$sum1,$this->systems['qtyPlaces']) : 0;
+//		$data['data']['userdata']['unitPrice']   = $sum1>0 ? round($sum3/$sum1,$this->systems['qtyPlaces']) : 0;
 		$data['data']['userdata']['amount']      = round($sum3,2);
 		$data['data']['userdata']['extractCount']      = round($sum8,2);
 		$data['data']['userdata']['cost']        = '';
