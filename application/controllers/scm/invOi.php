@@ -256,7 +256,8 @@ class InvOi extends CI_Controller {
 				$v[$arr]['price']           = $row['price'];
 				$v[$arr]['brand']           = $row['brand'];
 				$v[$arr]['mainUnit']        = $row['mainUnit'];
-				$v[$arr]['amount']          = $row['amount'];
+				$v[$arr]['amount']          = $row['beforeAmount'];
+				$v[$arr]['rateAmount']          = $row['rateAmount'];
 				$v[$arr]['locationName']    = $row['locationName'];
 			}
 			$data['countpage']  = ceil(count($postData['entries'])/$data['num']); ;

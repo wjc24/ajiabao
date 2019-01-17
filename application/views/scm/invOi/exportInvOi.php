@@ -10,6 +10,7 @@
 				    <th width="120" align="center">业务类别</th>
 					<th width="120" align="center">供应商</th>
 					<th width="60" align="center">金额</th>
+					<th width="50" align="center">课税前</th>
 				    <th width="60" align="center">制单人</th>
 					<th width="60" >已确认人</th>
 					<th width="100" align="center">单据备注</th>
@@ -19,7 +20,8 @@
 					<th width="60" align="center">数量</th>	
 					<th width="80" align="center">入库单价</th>		
 					<th width="80" align="center">入库金额</th>	
-					<th width="60" align="center">仓库</th>	
+					<th width="80" align="center">税后入库金额</th>
+					<th width="60" align="center">仓库</th>
 					<th width="100" align="center">备注</th>	
 				</tr>
 			</thead>
@@ -38,6 +40,11 @@
 					<td rowspan="<?php echo $n?>" ><?php echo $row['transTypeName']?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['contactNo'].' '.$row['contactName'];?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['amount']?></td>
+					<td rowspan="<?php echo $n?>" ><?php if ($row['amountType'] == '1'){
+                                echo '是';
+                            }else{
+                                echo '';
+                            }?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['userName']?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['checkName']?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['description']?></td>
@@ -54,7 +61,8 @@
 					<td ><?php echo $row1['mainUnit']?></td>
 					<td ><?php echo abs($row1['qty'])?></td>
 					<td ><?php echo $row1['price']?></td>
-					<td ><?php echo abs($row1['amount'])?></td>
+					<td ><?php echo abs($row1['beforeAmount'])?></td>
+					<td ><?php echo abs($row1['rateAmount'])?></td>
 					<td ><?php echo $row1['locationName']?></td>
 					<td ><?php echo $row1['description']?></td>
 				</tr>
@@ -65,7 +73,8 @@
 					<td ><?php echo $row1['mainUnit']?></td>
 					<td ><?php echo abs($row1['qty'])?></td>
 					<td ><?php echo $row1['price']?></td>
-					<td ><?php echo abs($row1['amount'])?></td>
+					<td ><?php echo abs($row1['beforeAmount'])?></td>
+					<td ><?php echo abs($row1['rateAmount'])?></td>
 					<td ><?php echo $row1['locationName']?></td>
 					<td ><?php echo $row1['description']?></td>
 				</tr>
