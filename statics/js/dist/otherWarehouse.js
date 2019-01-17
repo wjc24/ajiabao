@@ -13,7 +13,7 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 			this.mod_PageConfig = Public.mod_PageConfig.init("otherWarehouse"), SYSTEM.isAdmin !== !1 || SYSTEM.rights.AMOUNT_INAMOUNT || (hiddenAmount = !0), this.loadGrid(a), this.initDom(a), this.initCombo(), this.addEvent()
 		},
 		initDom: function(a) {
-			this.$_customer = $("#customer"), this.$_date = $("#date").val(SYSTEM.endDate), this.$_number = $("#number"), this.$_transType = $("#transType"), this.$_note = $("#note"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_userName = $("#userName"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.customerArrears = 0;
+			this.$_customer = $("#customer"), this.$_date = $("#date").val(SYSTEM.endDate), this.$_number = $("#number"), this.$_transType = $("#transType"), this.$_note = $("#note"), this.$_toolTop = $("#toolTop"), this.$_toolBottom = $("#toolBottom"), this.$_userName = $("#userName"),this.$_amountType = $("#amountType"), this.$_modifyTime = $("#modifyTime"), this.$_createTime = $("#createTime"), this.customerArrears = 0;
 			var b = ["id", a.transType || 150706];
 			this.customerCombo = Business.billSupplierCombo($("#customer"), {
 				defaultSelected: 0,
@@ -53,16 +53,17 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 				name: a.contactName
 			}), this.customerCombo.input.val(a.contactName), this.$_number.text(a.billNo), this.$_date.val(a.date), a.description && this.$_note.val(a.description), $("#grid").jqGrid("footerData", "set", {
 				qty: a.totalQty,
-				amount: a.totalAmount
+				amount: a.totalAmount,
+				rateAmount: a.totalRateAmount,
 			}), "edit" === a.status ? this.$_toolBottom.html(this.btn_edit + this.btn_audit) : a.checked ? ($("#mark").addClass("has-audit"), this.$_toolBottom.html(this.btn_view + this.btn_reaudit + this.btn_p_n)) : this.$_toolBottom.html(this.btn_view + this.btn_p_n), this.salesListIds = parent.salesListIds || [], this.idPostion = $.inArray(String(a.id), this.salesListIds), this.idLength = this.salesListIds.length, 0 === this.idPostion && $("#prev").addClass("ui-btn-prev-dis"), this.idPostion === this.idLength - 1 && $("#next").addClass("ui-btn-next-dis"), this.$_userName.html(a.userName), this.$_modifyTime.html(a.modifyTime), this.$_createTime.html(a.createTime)) : (billRequiredCheck ? this.$_toolBottom.html(this.btn_add + this.btn_audit) : this.$_toolBottom.html(this.btn_add), this.$_userName.html(SYSTEM.realName || ""), this.$_modifyTime.parent().hide(), this.$_createTime.parent().hide())
 		},
 		disableEdit: function() {
-			this.customerCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), $("#grid").jqGrid("setGridParam", {
+			this.customerCombo.disable(), this.$_date.attr("disabled", "disabled").addClass("ui-input-dis"),this.$_amountType.attr("disabled", "disabled").addClass("ui-input-dis"), this.$_note.attr("disabled", "disabled").addClass("ui-input-dis"), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !1
 			}), this.editable = !1
 		},
 		enableEdit: function() {
-			disEditable || (this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"), this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), $("#grid").jqGrid("setGridParam", {
+			disEditable || (this.customerCombo.enable(), this.$_date.removeAttr("disabled").removeClass("ui-input-dis"),this.$_amountType.removeAttr("disabled").removeClass("ui-input-dis"), this.$_note.removeAttr("disabled").removeClass("ui-input-dis"), $("#grid").jqGrid("setGridParam", {
 				cellEdit: !0
 			}), this.editable = !0)
 		},
@@ -164,12 +165,15 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 						discountRate: b.discountRate || 0,
 						deduction: b.deduction || 0,
 						amount: b.amount,
+						rateAmount: b.rateAmount,
 						locationName: b.locationName,
 						locationId: b.locationId,
 						serNumList: b.serNumList,
 						safeDays: b.safeDays
 					};
-					SYSTEM.ISSERNUM && b.isSerNum && (c.qty = c.serNumList ? c.serNumList.length : 0), c.amount = c.amount ? c.amount : c.price * c.qty;
+					SYSTEM.ISSERNUM && b.isSerNum && (c.qty = c.serNumList ? c.serNumList.length : 0),
+						c.amount = c.amount ? c.amount : c.price * c.qty;
+                    c.rateAmount = c.rateAmount ? c.rateAmount : c.amount * rate + c.amount;
 					var d = (Number(c.amount), $("#grid").jqGrid("setRowData", a, c));
 					d && THISPAGE.calTotal()
 				}
@@ -338,7 +342,20 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 						showZero: !0,
 						decimalPlaces: amountPlaces
 					},
-					editable: !0
+					editable: !1
+				}, {
+					name: "rateAmount",
+					label: "税后入库金额",
+					hidden: hiddenAmount,
+					width: 100,
+					fixed: !0,
+					align: "right",
+					formatter: "currency",
+					formatoptions: {
+						showZero: !0,
+						decimalPlaces: amountPlaces
+					},
+					editable: !1
 				}, {
 					name: "description",
 					label: "备注",
@@ -533,7 +550,8 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 						var f = $("#grid").jqGrid("getCell", a, e + 1);
 						if (!isNaN(parseFloat(f))) {
 							var g = $("#grid").jqGrid("setRowData", a, {
-								amount: parseFloat(c) * parseFloat(f)
+								amount: parseFloat(c) * parseFloat(f),
+								rateAmount: (parseFloat(c) * parseFloat(f)) * rate + (parseFloat(c) * parseFloat(f))
 							});
 							g && THISPAGE.calTotal()
 						}
@@ -542,7 +560,8 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 						var h = $("#grid").jqGrid("getCell", a, e - 1);
 						if (!isNaN(parseFloat(h))) {
 							var g = $("#grid").jqGrid("setRowData", a, {
-								amount: parseFloat(c) * parseFloat(h)
+								amount: parseFloat(c) * parseFloat(h),
+								rateAmount: (parseFloat(c) * parseFloat(h)) * rate + (parseFloat(c) * parseFloat(h))
 							});
 							g && THISPAGE.calTotal()
 						}
@@ -600,7 +619,8 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 				userData: {
 					goods: "合计：",
 					qty: a.totalQty,
-					amount: a.totalAmount
+					amount: a.totalAmount,
+					rateAmount: a.totalRateAmount
 				},
 				userDataOnFooter: !0,
 				loadError: function(a, b, c) {
@@ -618,7 +638,7 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 				c.$_customer.data("contactInfo", {
 					id: a.buId,
 					name: a.contactName
-				}), c.customerCombo.input.val(a.contactName), c.$_date.val(a.date), c.$_number.text(a.billNo), c.$_note.val(a.description), c.$_userName.html(a.userName), c.$_modifyTime.html(a.modifyTime), c.$_createTime.html(a.createTime)
+				}), c.customerCombo.input.val(a.contactName), c.$_date.val(a.date),c.$_amountType.val(a.amountType), c.$_number.text(a.billNo), c.$_note.val(a.description), c.$_userName.html(a.userName), c.$_modifyTime.html(a.modifyTime), c.$_createTime.html(a.createTime)
 			}
 			$("#grid").clearGridData();
 			var c = this,
@@ -628,7 +648,8 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 				data: a.entries,
 				userData: {
 					qty: a.totalQty,
-					amount: a.totalAmount
+					amount: a.totalAmount,
+					rateAmount: a.totalRateAmount
 				},
 				cellEdit: !0,
 				datatype: "clientSide"
@@ -802,7 +823,8 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 			}
 			$("#grid").jqGrid("footerData", "set", {
 				qty: b,
-				amount: c
+				amount: c,
+				rateAmount: c * rate + c
 			})
 		},
 		_getEntriesData: function(a) {
@@ -835,6 +857,12 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 							}), $("#grid").jqGrid("editCellByColName", g, "qty"), !1
 						}
 					}
+                    if (this.$_amountType.val() == '2') {
+                        h.beforeAmount = h.amount;
+                        h.amount = h.rateAmount;
+                    }else{
+                        h.beforeAmount = h.amount;
+                    }
 					f = {
 						invId: i.id,
 						invNumber: i.number,
@@ -848,6 +876,9 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 						qty: h.qty,
 						price: h.price,
 						amount: h.amount,
+                        rateAmount: h.rateAmount,
+                        beforeAmount: h.beforeAmount,
+                        amountType: this.$_amountType.val(),
 						description: h.description,
 						locationId: k.id,
 						locationName: k.name,
@@ -882,21 +913,48 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 			var e = this._getEntriesData();
 			if (!e) return !1;
 			if (e.length > 0) {
-				var f = $.trim(a.$_note.val());
-				a.calTotal();
-				var g = {
-					id: originalData.id,
-					buId: d.id,
-					contactName: d.name,
-					date: $.trim(a.$_date.val()),
-					billNo: $.trim(a.$_number.text()),
-					transTypeId: a.transTypeCombo.getValue(),
-					transTypeName: a.transTypeCombo.getText(),
-					entries: e,
-					totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
-					totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
-					description: f === a.$_note[0].defaultValue ? "" : f
-				};
+                if ($.trim(b.$_amountType.val()) == '1'){
+                    var f = $.trim(a.$_note.val());
+                    a.calTotal();
+                    var g = {
+                        id: originalData.id,
+                        buId: d.id,
+                        contactName: d.name,
+                        date: $.trim(a.$_date.val()),
+                        billNo: $.trim(a.$_number.text()),
+                        transTypeId: a.transTypeCombo.getValue(),
+                        transTypeName: a.transTypeCombo.getText(),
+                        entries: e,
+                        totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
+                        totalAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                        totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                        totalBeforeAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                        amountType: $.trim(b.$_amountType.val()),
+                        description: f === a.$_note[0].defaultValue ? "" : f,
+
+                    };
+				}else{
+                    var f = $.trim(a.$_note.val());
+                    a.calTotal();
+                    var g = {
+                        id: originalData.id,
+                        buId: d.id,
+                        contactName: d.name,
+                        date: $.trim(a.$_date.val()),
+                        billNo: $.trim(a.$_number.text()),
+                        transTypeId: a.transTypeCombo.getValue(),
+                        transTypeName: a.transTypeCombo.getText(),
+                        entries: e,
+                        totalQty: $("#grid").jqGrid("footerData", "get").qty.replace(/,/g, ""),
+                        totalAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                        totalRateAmount: $("#grid").jqGrid("footerData", "get").rateAmount.replace(/,/g, ""),
+                        totalBeforeAmount: $("#grid").jqGrid("footerData", "get").amount.replace(/,/g, ""),
+                        amountType: $.trim(b.$_amountType.val()),
+                        description: f === a.$_note[0].defaultValue ? "" : f,
+
+                    };
+				}
+
 				return g
 			}
 			return parent.Public.tips({
@@ -940,9 +998,11 @@ $(function() {
 			}],
 			totalQty: 0,
 			totalAmount: 0,
+			totalRateAmount: 0,
 			disRate: 0,
 			disAmount: 0,
 			amount: "0.00",
+			rateAmount: "0.00",
 			rpAmount: "0.00",
 			arrears: "0.00"
 		}, urlParam.cacheId) {

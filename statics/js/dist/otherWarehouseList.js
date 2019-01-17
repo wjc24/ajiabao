@@ -70,6 +70,20 @@ var queryConditions = {
 					width: 100,
 					align: "right",
 					formatter: "currency"
+				},{
+					name: "amountType",
+					label: "课税前",
+					hidden: hiddenAmount,
+					width: 100,
+                    align: "center",
+                    formatter: function(a) {
+                        switch (a) {
+                            case '1':
+                                return "是";
+                            default:
+                                return "&#160"
+                        }
+                    }
 				}, {
 					name: "contactName",
 					label: "供应商",

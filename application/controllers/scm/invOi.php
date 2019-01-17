@@ -16,13 +16,17 @@ class InvOi extends CI_Controller {
 			case 'initOi':
 				$info = array('in'=>15,'out'=>19,'cbtz'=>152);
 				$this->common_model->checkpurview($info[$type]);
-			    $this->load->view('scm/invOi/initOi-'.$type);
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
+			    $this->load->view('scm/invOi/initOi-'.$type,$data);
 				break;
 			case 'editOi':
 				//$info = array('in'=>16,'out'=>20,'cbtz'=>153);
 				$info = array('in'=>14,'out'=>18,'cbtz'=>151);
 				$this->common_model->checkpurview($info[$type]);
-			    $this->load->view('scm/invOi/initOi-'.$type);
+                $id = intval($this->input->get_post('id',TRUE));
+                $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
+                $data['amountType'] = $this->mysql_model->get_row('invoice',array('id'=>$id,'billType'=>'OI'),'amountType');
+			    $this->load->view('scm/invOi/initOi-'.$type,$data);
 				break;
 			case 'initOiList':
 			    $info = array('in'=>14,'out'=>18,'cbtz'=>151);
@@ -57,6 +61,7 @@ class InvOi extends CI_Controller {
 			$v[$arr]['billType']     = $row['billType'];
 			$v[$arr]['id']           = intval($row['id']);
 		    $v[$arr]['amount']       = (float)abs($row['totalAmount']);
+		    $v[$arr]['amountType']       = $row['amountType'];
 			$v[$arr]['transType']    = intval($row['transType']);;
 			$v[$arr]['contactName']  = $row['contactName'];
 			$v[$arr]['description']  = $row['description'];
@@ -132,7 +137,7 @@ class InvOi extends CI_Controller {
 			$info = elements(array(
 				'billNo','billType','transType','transTypeName','buId','inLocationId',
 				'billDate','description','totalQty','totalAmount','postData','createTime',
-				'uid','userName','modifyTime'),$data,NULL);
+				'uid','userName','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$iid = $this->mysql_model->insert('invoice',$info);
 			$this->Oi_invoice_info($iid,$data);
@@ -162,7 +167,7 @@ class InvOi extends CI_Controller {
 			$data = $this->Oi_validform((array)json_decode($data, true));
 			$info = elements(array(
 				'transType','transTypeName','buId','postData','inLocationId','uid','userName',
-				'billDate','description','totalQty','totalAmount','modifyTime'),$data,NULL);
+				'billDate','description','totalQty','totalAmount','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			$this->db->trans_begin();
 			$this->mysql_model->update('invoice',$info,array('id'=>$data['id']));
 			$this->Oi_invoice_info($data['id'],$data);
@@ -191,7 +196,8 @@ class InvOi extends CI_Controller {
 				$v[$arr]['goods']        = $row['invNumber'].' '.$row['invName'].' '.$row['invSpec'];
 				$v[$arr]['invName']      = $row['invName'];
 				$v[$arr]['qty']          = (float)abs($row['qty']);
-				$v[$arr]['amount']       = (float)abs($row['amount']);
+				$v[$arr]['amount']       = (float)abs($row['beforeAmount']);
+                $v[$arr]['rateAmount']   = (float)abs($row['rateAmount']);
 				$v[$arr]['price']        = (float)abs($row['price']);
 				$v[$arr]['mainUnit']     = $row['mainUnit'];
 				$v[$arr]['brand']        = $row['invBrand'];
@@ -216,10 +222,12 @@ class InvOi extends CI_Controller {
 			$json['data']['createTime']  = $data['createTime'];
 			$json['data']['transType']   = intval($data['transType']);
 			$json['data']['totalQty']    = (float)$data['totalQty'];
-			$json['data']['totalAmount'] = (float)$data['totalAmount'];
+			$json['data']['totalAmount'] = (float)$data['totalBeforeAmount'];
 			$json['data']['userName']    = $data['userName'];
 			$json['data']['description'] = $data['description'];
 			$json['data']['amount']      = (float)abs($data['totalAmount']);
+            $json['data']['amountType']        = $data['amountType'];
+            $json['data']['totalRateAmount']        = (float)abs($data['totalRateAmount']);
 			$json['data']['checked']     = intval($data['checked']);
 			$json['data']['status']      = intval($data['checked'])==1 ? 'view' : 'edit';
 			$json['data']['entries']     = isset($v) ? $v : array();
@@ -987,6 +995,9 @@ class InvOi extends CI_Controller {
 			$v[$arr]['amount']        = abs($row['amount']);
 			$v[$arr]['price']         = abs($row['price']);
 			$v[$arr]['description']   = $row['description'];
+            $v[$arr]['rateAmount']    = $row['rateAmount'];
+            $v[$arr]['beforeAmount']      = $row['beforeAmount'];
+            $v[$arr]['amountType']      = $row['amountType'];
 		}
 		if (isset($v)) {
 		    if ($data['id']>0) {

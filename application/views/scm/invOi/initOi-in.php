@@ -37,23 +37,36 @@ $(document).keydown(function(event) {
   <div class="bills cf">
     <div class="con-header">
       <dl class="cf">
-        <dd class="pct30">
+        <dd class="pct25">
           <label>供应商：</label>
           <span class="ui-combo-wrap" id="customer">
           <input type="text" name="" class="input-txt" autocomplete="off" value="" data-ref="date">
           <i class="ui-icon-ellipsis"></i></span></dd>
-        <dd class="pct25 tc">
+        <dd class="pct20 tc">
           <label>单据日期：</label>
           <input type="text" id="date" class="ui-input ui-datepicker-input" value="2015-06-08">
         </dd>
-        <dd id="identifier" class="pct25 tc">
+        <dd id="identifier" class="pct20 tc">
           <label>单据编号：</label>
-          <span id="number"><?php echo str_no('QTRK')?></span></dd>
-        <dd class="fr pct20 tr">
+          <span id="number"><?php echo str_no('QTRK')?></span>
+        </dd>
+          <dd  class="pct20 tc">
+              <select name="amountType" id="amountType" style="height: 29px;width: 50%;border: none;border-bottom: 1px solid #d6dee3;outline: none">
+                  <?php if (!$amountType):?>
+                      <option value="1">课税前</option>
+                      <option value="2" selected>课税后</option>
+                  <?php else:?>
+                      <option value="1" <?php if ($amountType == '1'):?>selected<?php endif;?>>课税前</option>
+                      <option value="2" <?php if ($amountType == '2'):?>selected<?php endif;?>>课税后</option>
+                  <?php endif;?>
+              </select>
+          </dd>
+        <dd class="fr pct15 tr">
           <label>业务类别：</label>
           <span class="ui-combo-wrap" id="transType">
           <input type="text" name="" class="input-txt" autocomplete="off" value="" data-ref="date">
-          <i class="trigger"></i></span></dd>
+          <i class="trigger"></i></span>
+        </dd>
       </dl>
     </div>
     <div class="grid-wrap">
@@ -97,6 +110,12 @@ $(document).keydown(function(event) {
   </div>
 </div>
 <script src="<?php echo base_url()?>statics/js/dist/otherWarehouse.js?ver=20150522"></script>
+<script>
+    window.rate = <?php echo $rate ?>;
+    $('#amountType').on('change',function () {
+        THISPAGE.calTotal();
+    })
+</script>
 </body>
 </html>
 
