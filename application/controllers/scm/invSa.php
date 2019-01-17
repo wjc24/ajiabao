@@ -14,6 +14,8 @@ class InvSa extends CI_Controller {
 			case 'initSale':
 			    $this->common_model->checkpurview(7);
 			    $data['billNo'] = str_no('XS');
+                $id = intval($this->input->get_post('id',TRUE));
+                $data['amountType'] = $this->mysql_model->get_row('order',array('id'=>$id),'amountType');
                 $data['rate'] = $this->db->order_by('id DESC')->get('ci_rate')->row()->taxRate;
 			    $this->load->view('scm/invSa/initSale',$data);
 				break;
@@ -341,7 +343,7 @@ class InvSa extends CI_Controller {
                         $v[$arr]['locationName'] = $dopey['locationName'];
                         $v[$arr]['amount']       = (float)abs($dopey['beforeAmount']);
                         $v[$arr]['rateAmount']   = (float)abs($dopey['rateAmount']);
-                        $v[$arr]['arrived']      = (float)abs($row['arrived']);
+                        $v[$arr]['arrived']      = (float)abs($dopey['arrived']);
                         $v[$arr]['taxAmount']    = (float)0;
                         $v[$arr]['price']        = (float)$dopey['price'];
                         $v[$arr]['tax']          = (float)0;

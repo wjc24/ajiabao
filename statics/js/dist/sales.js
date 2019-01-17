@@ -858,8 +858,8 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						break;
 					case "qty":
 						var d = parseFloat(d),
-							g = parseFloat($("#grid").jqGrid("getCell", a, f + 1)),
-							h = parseFloat($("#grid").jqGrid("getCell", a, f + 2));
+							g = parseFloat($("#grid").jqGrid("getCell", a, f + 2)),
+							h = parseFloat($("#grid").jqGrid("getCell", a, f + 3));
 						if ($.isNumeric(g)) if ($.isNumeric(h)) var i = d * g * h / 100,
 							j = d * g - i,
                             m = j * rate + j,
@@ -869,13 +869,14 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
                                 rateAmount:m
 							});
 						else var k = $("#grid").jqGrid("setRowData", a, {
-							amount: d * g
+							amount: d * g,
+							rateAmount: d * g * rate
 						});
 						b(a), k && THISPAGE.calTotal();
 						break;
 					case "price":
 						var d = parseFloat(d),
-							l = parseFloat($("#grid").jqGrid("getCell", a, f - 1)),
+							l = parseFloat($("#grid").jqGrid("getCell", a, f - 2)),
 							h = parseFloat($("#grid").jqGrid("getCell", a, f + 1));
 						if ($.isNumeric(l)) if ($.isNumeric(h)) var i = d * l * h / 100,
 							j = d * l - i,
@@ -886,13 +887,14 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 								rateAmount:m
 							});
 						else var k = $("#grid").jqGrid("setRowData", a, {
-							amount: d * l
+							amount: d * l,
+							rateAmount:d * l * rate
 						});
 						b(a), k && THISPAGE.calTotal();
 						break;
 					case "discountRate":
 						var d = parseFloat(d),
-							l = parseFloat($("#grid").jqGrid("getCell", a, f - 2)),
+							l = parseFloat($("#grid").jqGrid("getCell", a, f - 3)),
 							g = parseFloat($("#grid").jqGrid("getCell", a, f - 1));
 						if ($.isNumeric(l) && $.isNumeric(g)) var m = l * g,
 							i = m * d / 100,
@@ -907,7 +909,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						break;
 					case "deduction":
 						var d = parseFloat(d),
-							l = parseFloat($("#grid").jqGrid("getCell", a, f - 3)),
+							l = parseFloat($("#grid").jqGrid("getCell", a, f - 4)),
 							g = parseFloat($("#grid").jqGrid("getCell", a, f - 2));
 						if ($.isNumeric(l) && $.isNumeric(g)) var m = l * g,
 							j = m - d,
@@ -1509,7 +1511,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 			a.$_note.val(""), a.$_discountRate.val(originalData.disRate), a.$_deduction.val(originalData.disAmount), a.$_discount.val(originalData.amount), a.$_payment.val(originalData.rpAmount), a.$_arrears.val(originalData.arrears), a.$_customerFree.val(originalData.customerFree)
 		},
 		calTotal: function() {
-			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0,m = 0, h = a.length; h > g; g++) {
+			for (var a = $("#grid").jqGrid("getDataIDs"), b = 0, c = 0, d = 0, e = 0, f = 0, g = 0,m = 0, s = 0, h = a.length; h > g; g++) {
 				var i = a[g],
 					j = $("#grid").jqGrid("getRowData", i);
 				j.qty && (b += parseFloat(j.qty)), j.deduction && (c += parseFloat(j.deduction)), j.amount && (d += parseFloat(j.amount)),j.rateAmount && (m += parseFloat(j.rateAmount)), j.tax && (e += parseFloat(j.tax)), j.taxAmount && (f += parseFloat(j.taxAmount))

@@ -69,6 +69,21 @@ var queryConditions = {
 				align: "right",
 				formatter: "currency"
 			}, {
+				name: "amountType",
+				label: "课税前",
+				hidden: hiddenAmount,
+				index: "amountType",
+				width: 80,
+				align: "center",
+				formatter: function(a) {
+					switch (a) {
+						case '1':
+							return "是";
+						default:
+							return "&#160"
+					}
+				}
+			}, {
 				name: "totalQty",
 				label: "数量",
 				index: "totalQty",

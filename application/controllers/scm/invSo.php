@@ -76,6 +76,7 @@ class InvSo extends CI_Controller {
 			$v[$arr]['totalAmount']  = (float)abs($row['totalAmount']);
 			$v[$arr]['userName']     = $row['userName'];
 			$v[$arr]['transTypeName']= $row['transTypeName'];
+            $v[$arr]['amountType'] = $row['amountType'];
 		}
 		$data['status'] = 200;
 		$data['msg']    = 'success';
@@ -123,7 +124,7 @@ class InvSo extends CI_Controller {
 				'billNo','billType','transType','transTypeName','buId',
 				'billDate','description','totalQty','amount','rpAmount','totalAmount',
 				'hxStateCode','totalArrears','disRate','disAmount','postData',
-				'salesId','uid','userName','accId','deliveryDate','modifyTime'),$data);
+				'salesId','uid','userName','accId','deliveryDate','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data);
 			$this->db->trans_begin();
 			$iid = $this->mysql_model->insert('order',$info);
 			$this->invso_info($iid,$data);
@@ -154,7 +155,7 @@ class InvSo extends CI_Controller {
 				'billNo','billType','transType','transTypeName','buId',
 				'billDate','description','totalQty','amount','rpAmount','totalAmount',
 				'hxStateCode','totalArrears','disRate','disAmount','postData',
-				'salesId','uid','userName','accId','deliveryDate','modifyTime'),$data);
+				'salesId','uid','userName','accId','deliveryDate','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data);
 			$this->db->trans_begin();
 			$this->mysql_model->update('order',$info,'(id='.$data['id'].')');
 			$this->invso_info($data['id'],$data);
@@ -202,8 +203,10 @@ class InvSo extends CI_Controller {
 			$info['data']['checked']            = intval($data['checked']);
 			$info['data']['status']             = intval($data['checked'])==1 ? 'view' : 'edit'; //edit
 			$info['data']['totalDiscount']      = (float)$data['totalDiscount'];
-			$info['data']['totalAmount']        = (float)abs($data['totalAmount']);
+			$info['data']['totalAmount']        = (float)abs($data['totalBeforeAmount']);
 			$info['data']['description']        = $data['description'];
+			$info['data']['amountType']        = $data['amountType'];
+            $info['data']['totalRateAmount']        = (float)abs($data['totalRateAmount']);
 			$list = $this->data_model->get_order_info('a.isDelete=0 and a.iid='.$id.' order by a.id');
 			foreach ($list as $arr=>$row) {
 				$v[$arr]['invSpec']           = $row['invSpec'];
@@ -215,7 +218,9 @@ class InvSo extends CI_Controller {
 				$v[$arr]['invName']      = $row['invName'];
 				$v[$arr]['qty']          = (float)abs($row['qty']);
 				$v[$arr]['locationName'] = $row['locationName'];
-				$v[$arr]['amount']       = (float)abs($row['amount']);
+                $v[$arr]['amount']       = (float)abs($row['beforeAmount']);
+                $v[$arr]['rateAmount']   = (float)abs($row['rateAmount']);
+                $v[$arr]['arrived']      = (float)abs($row['arrived']);
 				$v[$arr]['taxAmount']    = (float)$row['taxAmount'];
 				$v[$arr]['price']        = (float)$row['price'];
 				$v[$arr]['tax']          = (float)$row['tax'];
@@ -274,7 +279,9 @@ class InvSo extends CI_Controller {
 			$info['data']['userName']           = $data['userName'];
 			$info['data']['status']             = intval($data['checked'])==1 ? 'view' : 'edit'; //edit
 			$info['data']['totalDiscount']      = (float)$data['totalDiscount'];
-			$info['data']['totalAmount']        = (float)abs($data['totalAmount']);
+			$info['data']['totalAmount']        = (float)abs($data['totalBeforeAmount']);
+            $info['data']['totalRateAmount']        = (float)abs($data['totalRateAmount']);
+            $info['data']['amountType']        = $data['amountType'];
 			$list = $this->data_model->get_order_info('a.isDelete=0 and a.iid='.$id.' order by a.id');
 			foreach ($list as $arr=>$row) {
 				$v[$arr]['invSpec']           = $row['invSpec'];
@@ -286,7 +293,6 @@ class InvSo extends CI_Controller {
 				$v[$arr]['invName']      = $row['invName'];
 				$v[$arr]['qty']          = (float)abs($row['qty']);
 				$v[$arr]['locationName'] = $row['locationName'];
-				$v[$arr]['amount']       = (float)abs($row['amount']);
 				$v[$arr]['taxAmount']    = (float)$row['taxAmount'];
 				$v[$arr]['price']        = (float)$row['price'];
 				$v[$arr]['tax']          = (float)$row['tax'];
@@ -301,6 +307,10 @@ class InvSo extends CI_Controller {
 
 				$v[$arr]['unitId']       = intval($row['unitId']);
 				$v[$arr]['mainUnit']     = $row['mainUnit'];
+
+                $v[$arr]['arrived']      = (float)abs($row['arrived']);
+                $v[$arr]['amount']       = (float)abs($row['beforeAmount']);
+                $v[$arr]['rateAmount']   = (float)abs($row['rateAmount']);
 			}
 
 			$info['data']['entries']     = isset($v) ? $v : array();
@@ -448,7 +458,7 @@ class InvSo extends CI_Controller {
 				'billNo','billType','transType','transTypeName','buId','checked','checkName',
 				'billDate','description','totalQty','amount','rpAmount','totalAmount',
 				'hxStateCode','totalArrears','disRate','disAmount','postData',
-				'salesId','accId','deliveryDate','modifyTime'),$data);
+				'salesId','accId','deliveryDate','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data);
 			$this->db->trans_begin();
 			//特殊情况
 			if ($data['id'] < 0) {
@@ -456,7 +466,7 @@ class InvSo extends CI_Controller {
 					'billNo','billType','transType','transTypeName','buId','checked',
 					'billDate','description','totalQty','amount','rpAmount','totalAmount',
 					'hxStateCode','totalArrears','disRate','disAmount','checkName','postData',
-					'salesId','uid','userName','accId','deliveryDate','modifyTime'),$data,NULL);
+					'salesId','uid','userName','accId','deliveryDate','modifyTime','totalRateAmount','amountType','totalBeforeAmount'),$data,NULL);
 			    $iid = $this->mysql_model->insert('order',$info);
 			    $this->invso_info($iid,$data);
 				$data['id'] = $iid;
@@ -583,6 +593,10 @@ class InvSo extends CI_Controller {
 			$v[$arr]['deduction']     = $row['deduction'];
 			$v[$arr]['description']   = $row['description'];
 			$v[$arr]['uid']           = $data['uid'];
+            $v[$arr]['rateAmount']    = $row['rateAmount'];
+            $v[$arr]['arrived']       = $row['arrived'];
+            $v[$arr]['beforeAmount']      = $row['beforeAmount'];
+            $v[$arr]['amountType']      = $row['amountType'];
 		}
 		if (isset($v)) {
 			if (isset($data['id']) && $data['id']>0) {
