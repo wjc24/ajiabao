@@ -119,10 +119,24 @@ define(["jquery", "print"], function(a, b, c) {
 				decimalPlaces: Number(l.amountPlaces)
 			}
 		},  {
+			name: "amountType",
+			label: "课税前",
+			width: 50,
+			align: "center",
+			hidden: c,
+			formatter: function(a) {
+				switch (a) {
+					case '1':
+						return "是";
+					default:
+						return "&#160"
+				}
+			}
+		},  {
 			name: "status",
 			label: "付款情况",
-			width: 120,
-			align: "right",
+			width: 100,
+			align: "center",
 			hidden: c,
 		}, {
 			name: "billId",

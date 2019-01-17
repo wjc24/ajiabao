@@ -133,6 +133,21 @@ define(["jquery", "print"], function(a, b, c) {
 			hidden: a,
 			align: "right"
 		},{
+			name: "amountType",
+			label: "课税前",
+			width: 50,
+			fixed: !0,
+			hidden: a,
+			align: "center",
+			formatter: function(a) {
+				switch (a) {
+					case '1':
+						return "是";
+					default:
+						return "&#160"
+				}
+			}
+		},{
 			name: "extractCount",
 			label: "提成",
 			width: 100,

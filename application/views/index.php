@@ -779,7 +779,7 @@ var _hmt = _hmt || [];
       </ul>
     </div>
     <div id="main-bd">
-        <div class="nav">
+        <div class="nav" style="display: none">
             <div class="nav_top">
                 <div class="nav_l">
                     <ul class="clearfix">

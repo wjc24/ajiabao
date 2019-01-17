@@ -85,7 +85,9 @@ class Report extends CI_Controller {
 	}
 
 
-
+    /**
+     * 采购明细表
+     */
 	public function pu_detail_new() {
 	    $this->common_model->checkpurview(22);
 		$data['beginDate']  = str_enhtml($this->input->get_post('beginDate',TRUE));
@@ -93,7 +95,9 @@ class Report extends CI_Controller {
 		$this->load->view('report/pu-detail-new',$data);
 	}
 
-
+    /**
+     * 采购明细表信息
+     */
 	public function puDetail_detail() {
 	    $this->common_model->checkpurview(22);
 		$sum1 = $sum2 = $sum3 = 0;
@@ -139,6 +143,7 @@ class Report extends CI_Controller {
 			$v[$arr]['unit']          = $row['mainUnit'];
 			$v[$arr]['location']      = $row['locationName'];
 			$v[$arr]['description']   = $row['description'];
+			$v[$arr]['amountType']   = $row['amountType'];
 			$v[$arr]['baseQty']       = 0;
 			$v[$arr]['skuId']         = 0;
 			$v[$arr]['cost']          = 0;
@@ -413,13 +418,18 @@ class Report extends CI_Controller {
 	}
 
 
-
+    /**
+     * 销售明细表
+     */
 	public function sales_detail() {
 	    $this->common_model->checkpurview(31);
 		$this->load->view('report/sales-detail');
 	}
 
 
+    /**
+     * 销售明细表信息
+     */
 	public function salesDetail_detail() {
 	    $this->common_model->checkpurview(31);
 		$sum1 = $sum2 = $sum3 = $sum4 = $sum5 = $sum6 = $sum7 = $sum8 = 0;
@@ -478,6 +488,7 @@ class Report extends CI_Controller {
 			$v[$arr]['unit']          = $row['mainUnit'];
 			$v[$arr]['location']      = $row['locationName'];
 			$v[$arr]['description']   = $row['description'];
+			$v[$arr]['amountType']   = $row['amountType'];
 			$v[$arr]['skuId']         = 0;
 			$v[$arr]['cost']          = '';   //销售成本
 			$v[$arr]['unitCost']      = '';   //单位成本
@@ -552,6 +563,9 @@ class Report extends CI_Controller {
 		$this->load->view('report/sales-summary');
 	}
 
+    /**
+     * 销售利润表
+     */
 	public function sales_profit(){
 	    $this->common_model->checkpurview(34);
 	    $this->load->view('report/sales-profit');
@@ -673,6 +687,9 @@ class Report extends CI_Controller {
 		$this->load->view('report/salesDetail_invExporter',$data);
 	}
 
+    /**
+     * 销售利润表信息
+     */
 	public function salesProfit_inv() {
 	    $this->common_model->checkpurview(34);
 	    $page = max(intval($this->input->get_post('page',TRUE)),1);
