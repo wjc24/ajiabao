@@ -24,10 +24,17 @@
 		
 		<table width="800" align="center">
 			<tr height="15" align="left">
-				<td width="220" style="font-family:'宋体'; font-size:12px;height:20px;">客户：<?php echo $contactNo.' '.$contactName?> </td>
+				<td width="200" style="font-family:'宋体'; font-size:12px;height:20px;">客户：<?php echo $contactNo.' '.$contactName?> </td>
 				<td width="120" style="font-family:'宋体'; font-size:12px;height:20px;">销售人员：<?php echo $salesName?></td>
 				<td width="120" style="font-family:'宋体'; font-size:12px;height:20px;">单据日期：<?php echo $billDate?></td>
 				<td width="180" style="font-family:'宋体'; font-size:12px;height:20px;">单据编号：<?php echo $billNo?></td>
+                <td width="40" style="font-family:'宋体'; font-size:12px;height:20px;"><?php
+                    if ($amountType == '1'){
+                        echo '课税前';
+                    }else{
+                        echo '课税后';
+                    }
+                    ?></td>
 				<td width="50" style="font-family:'宋体'; font-size:12px;height:20px;">币别：RMB</td>
  
 			</tr>
@@ -37,15 +44,16 @@
 		<table width="900" border="1" cellpadding="2" cellspacing="1" align="center" style="border-collapse:collapse;border:solid #000000;border-width:1px 0 0 1px;">   
 			<tr style="height:20px">
 				    <td width="30" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;"  align="center">序号</td>
-					<td width="150" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">商品</td>
+					<td width="130" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">商品</td>
 					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">品牌</td>
 					<td width="30" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">单位</td>
 					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">数量</td>
-					<td width="60" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">销售单价</td>	
-					<td width="60" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣率(%)</td>	
-					<td width="50" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣额</td>	
-					<td width="60" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">销售金额</td>	
-					<td width="50" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">仓库</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">销售单价</td>
+					<td width="50" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣率(%)</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣额</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">销售金额</td>
+					<td width="75" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">税后销售金额</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">仓库</td>
 				</tr>
 		       <?php 
 			   $i = ($t-1)*$num + 1;
@@ -54,15 +62,16 @@
 			   ?>
 				<tr style="border:solid #000000;border-width:0 1px 1px 0;padding:2px;height:15px;font-family:'宋体'; font-size:12px;">
 				   <td width="30"  align="center"><?php echo $row['i']?></td>
-					<td width="150" style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;"><?php echo $row['goods'];?></td>
+					<td width="130" style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;"><?php echo $row['goods'];?></td>
 					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;"><?php echo $row['brand'];?></td>
 					<td width="30" align="center" style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;"><?php echo $row['invSpec']?></td>
 					<td width="40" align="right"><?php echo str_money(abs($row['qty']),$system['qtyPlaces'])?></td>
-					<td width="60" align="right"><?php echo abs($row['price'])?></td>
-					<td width="60" align="right"><?php echo $row['discountRate']?></td>
+					<td width="40" align="right"><?php echo abs($row['price'])?></td>
+					<td width="50" align="right"><?php echo $row['discountRate']?></td>
 					<td width="50" align="right"><?php echo $row['deduction']?></td>
-					<td width="60" align="right"><?php echo str_money(abs($row['amount']),2)?></td>
-					<td width="50"><?php echo $row['locationName']?></td>
+					<td width="40" align="right"><?php echo str_money(abs($row['amount']),2)?></td>
+					<td width="75" align="right"><?php echo str_money(abs($row['rateAmount']),2)?></td>
+					<td width="40"><?php echo $row['locationName']?></td>
 				</tr>
 				<?php 
 				    $s = $row['i'];
@@ -79,33 +88,39 @@
 				?>
 				<tr style="border:solid #000000;border-width:0 1px 1px 0;padding:2px;height:15px;font-family:'宋体'; font-size:12px;">
 				   <td width="30" align="center" style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;"><?php echo $m?></td>
-					<td width="150"></td>
+					<td width="130"></td>
 					<td width="30"></td>
 					<td width="40"></td>
 					<td width="60"></td>
 					<td width="60"></td>
 					<td width="50"></td>
-					<td width="60"></td>
-					<td width="80"></td>
+					<td width="50"></td>
+					<td width="50"></td>
+					<td width="75"></td>
 					<td width="50"></td>
 				</tr>
 				<?php }}?>
 				
 				 <?php if ($t==$countpage) {?>
 				 <tr style="height:20px">
-				   <td colspan="3" align="right" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px;height:15px;font-family:'宋体'; font-size:12px;">合计：</td>
+				   <td colspan="4" align="right" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px;height:15px;font-family:'宋体'; font-size:12px;">合计：</td>
 					<td width="60" align="right"><?php echo str_money(abs($totalQty),$system['qtyPlaces'])?></td>
 					<td width="60" align="center"></td>
 					<td width="60" align="center"></td>
 					<td width="60" align="center"></td>
-					<td width="60" align="right"><?php echo str_money(abs($totalAmount),2)?></td>
-					<td width="80" align="center"></td>
+                     <?php if ($amountType == '1') :?>
+                         <td width="60" align="right" ><?php echo str_money(abs($totalAmount),2)?></td>
+                         <td width="80" align="center"></td>
+                     <?php else:?>
+                         <td width="60" align="center"></td>
+                         <td width="80" align="right" ><?php echo str_money(abs($totalAmount),2)?></td>
+                     <?php endif;?>
 					<td width="50" align="center"></td>
 				</tr>
 				  
 				 
 				<tr target="id">
-				    <td colspan="10" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:12px;height:15px;">合计 金额大写： <?php echo str_num2rmb(abs($totalAmount))?> </td>
+				    <td colspan="11" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:12px;height:15px;">合计 金额大写： <?php echo str_num2rmb(abs($totalAmount))?> </td>
 				</tr>
 				<?php }?>
 		</table>

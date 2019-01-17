@@ -11,6 +11,7 @@
 					<th width="80" align="center">销售人员</th>
 					<th width="120" align="center">客户</th>
 					<th width="60" align="center">销售金额</th>
+					<th width="50" align="center">课税前</th>
 					<th width="60" align="center">订单状态</th>
 					<th width="60" align="center">交货日期</th>
 				    <th width="60" align="center">制单人</th>
@@ -24,7 +25,8 @@
 					<th width="60" align="center">折扣率(%)</th>
 					<th width="60" align="center">折扣额</th>	
 					<th width="60" align="center">金额</th>	
-					<th width="60" align="center">仓库</th>	
+					<th width="60" align="center">税后金额</th>
+					<th width="60" align="center">仓库</th>
 					<th width="100" align="center">备注</th>	
 					<th width="100" align="center">源单号</th>
 				</tr>
@@ -45,7 +47,12 @@
 					<td rowspan="<?php echo $n?>" ><?php echo $row['salesName']?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['contactNo'].' '.$row['contactName'];?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['totalAmount']?></td>
-					 
+					<td rowspan="<?php echo $n?>" ><?php if ($row['amountType'] == '1'){
+                            echo '是';
+                        }else{
+                            echo '';
+                        }?></td>
+
 					<td rowspan="<?php echo $n?>" ><?php echo intval($row['billStatus'])==2 ? '全部出库' :'未出库'?></td>
 					<td rowspan="<?php echo $n?>" ><?php echo $row['deliveryDate']?></td> 
 					 
@@ -67,7 +74,8 @@
 					<td ><?php echo $row1['price']?></td>
 					<td ><?php echo $row1['discountRate']?></td>
 					<td ><?php echo $row1['deduction']?></td>
-					<td ><?php echo abs($row1['amount'])?></td>
+					<td ><?php echo abs($row1['beforeAmount'])?></td>
+					<td ><?php echo abs($row1['rateAmount'])?></td>
 					<td ><?php echo $row1['locationName']?></td>
 					<td ><?php echo $row1['description']?></td>
 					<td ></td>
@@ -82,7 +90,8 @@
 					<td ><?php echo $row1['price']?></td>
 					<td ><?php echo $row1['discountRate']?></td>
 					<td ><?php echo $row1['deduction']?></td>
-					<td ><?php echo abs($row1['amount'])?></td>
+                    <td ><?php echo abs($row1['beforeAmount'])?></td>
+                    <td ><?php echo abs($row1['rateAmount'])?></td>
 					<td ><?php echo $row1['locationName']?></td>
 					<td ><?php echo $row1['description']?></td>
 					<td ></td>
