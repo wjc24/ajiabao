@@ -24,6 +24,7 @@ $arrears = count($list1)>0 ? $list1['amount'] : 0;
 				<th>单价</th>
 				<?php  }?>
 				<th>采购金额</th>
+				<th>课税前</th>
   				<th>整单折扣额</th>
   				<th>应付金额</th>
   				<th>实际付款金额</th>
@@ -71,6 +72,11 @@ $arrears = count($list1)>0 ? $list1['amount'] : 0;
 				   <td class="R"></td>
 				   <?php  }?>
   			       <td class="R"><?php echo str_money($row['totalAmount'],2)?></td>
+  			       <td class="R"><?php if ($row['amountType'] == '1'){
+                           echo '是';
+                       }else{
+                           echo '';
+                       }?></td>
   			       <td class="R"><?php echo str_money($row['disAmount'],2)?></td>
   			       <td class="R"><?php echo str_money($row['amount'],2)?></td>
   			       <td class="R"><?php echo str_money($row['rpAmount'],2)?></td>
@@ -115,8 +121,9 @@ $arrears = count($list1)>0 ? $list1['amount'] : 0;
 				<td class="R"></td>
 				<td class="R"></td>
 				<td class="R"></td>
-				<?php  }?>   
+				<?php  }?>
   				<td class="R B"><?php echo str_money($sum3,2)?></td>
+                    <td></td>
   				<td class="R B"><?php echo str_money($sum5,2)?></td>
   				<td class="R B"><?php echo str_money($sum2,2)?></td>
   				<td class="R B"><?php echo str_money($sum4,2)?></td>

@@ -149,6 +149,19 @@ define(["jquery", "print"], function(a, b, c) {
 				thousandsSeparator: ",",
 				decimalPlaces: Number(l.amountPlaces)
 			}
+		},  {
+			name: "amountType",
+			label: "课税前",
+			width: 50,
+			align: "center",
+			formatter: function(a) {
+				switch (a) {
+					case '1':
+						return "是";
+					default:
+						return "&#160"
+				}
+			}
 		}, {
 			name: "disAmount",
 			label: "整单折扣额",

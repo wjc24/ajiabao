@@ -89,6 +89,19 @@ define(["jquery", "print"], function(a, b, c) {
 			width: 80,
 			align: "right"
 		}, {
+			name: "amountType",
+			label: "课税前",
+			width: 50,
+			align: "center",
+			formatter: function(a) {
+				switch (a) {
+					case '1':
+						return "是";
+					default:
+						return "&#160"
+				}
+			}
+		}, {
 			name: "totalCost",
 			label: "销售成本",
 			width: 80,

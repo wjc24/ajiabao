@@ -729,6 +729,7 @@ class Report extends CI_Controller {
 	        $v[$arr]['disAmount'] = (float)$row['disAmount'];//优惠金额
 	        $v[$arr]['amount'] = (float)$row['amount'];//优惠后金额
 	        $v[$arr]['totalAmount'] = (float)$row['totalAmount'];//销售收入
+	        $v[$arr]['amountType'] = $row['amountType'];//销售收入
 	        //$v[$arr]['totalCost'] = (float)$row['totalCost'];//销售成本
 	        $v[$arr]['ysAmount'] = (float)$row['amount'];//应收金额
 	        $v[$arr]['rpAmount'] = (float)$row['rpAmount'];//已收款金额
@@ -1818,8 +1819,9 @@ class Report extends CI_Controller {
 	}
 
 
-
-
+    /**
+     * 客户对账单
+     */
 	public function customers_reconciliation_new() {
 	    $this->common_model->checkpurview(109);
 	    $data['customerId'] = $customerId  = intval($this->input->get_post('customerId',TRUE));
@@ -1830,7 +1832,9 @@ class Report extends CI_Controller {
 	}
 
 
-
+    /**
+     * 客户对账单信息
+     */
 	public function customerBalance_detail() {
 	    $this->common_model->checkpurview(109);
 		$sum1 = $sum2 = $sum3 = $sum4 = $sum5 = $sum6 = 0;
@@ -1889,6 +1893,7 @@ class Report extends CI_Controller {
 			$v[$arr]['spec']        = '';
 			$v[$arr]['rpAmount']    = $row['rpAmount'];
 			$v[$arr]['totalAmount'] = $row['totalAmount'];
+			$v[$arr]['amountType'] = $row['amountType'];
 			$v[$arr]['transType']   = $row['transTypeName'];
 			$v[$arr]['type']        = 1;
 			$v[$arr]['unit']        = '';
@@ -1949,6 +1954,9 @@ class Report extends CI_Controller {
 	}
 
 
+    /**
+     * 导出客户对账单
+     */
 	public function customerBalance_exporter() {
 	    $this->common_model->checkpurview(110);
 		$name = 'contact_balance_'.date('YmdHis').'.xls';
@@ -1970,6 +1978,9 @@ class Report extends CI_Controller {
 	}
 
 
+    /**
+     * 供应商对账表
+     */
 	public function suppliers_reconciliation_new() {
 	    $this->common_model->checkpurview(112);
 	    $data['supplierId'] = $supplierId  = intval($this->input->get_post('supplierId',TRUE));
@@ -1980,6 +1991,9 @@ class Report extends CI_Controller {
 	}
 
 
+    /**
+     * 供应商对账表信息
+     */
 	public function supplierBalance_detail() {
 	    $this->common_model->checkpurview(112);
 		$sum1 = $sum2 = $sum3 = $sum4 = $sum5 = $sum6 = 0;
@@ -2038,6 +2052,7 @@ class Report extends CI_Controller {
 			$v[$arr]['spec']        = '';
 			$v[$arr]['rpAmount']    = $row['rpAmount'];
 			$v[$arr]['totalAmount'] = $row['totalAmount'];
+			$v[$arr]['amountType'] = $row['amountType'];
 			$v[$arr]['transType']   = $row['transTypeName'];
 			$v[$arr]['type']        = 1;
 			$v[$arr]['unit']        = '';
@@ -2097,8 +2112,9 @@ class Report extends CI_Controller {
 		die(json_encode($data));
 	}
 
-
-
+    /**
+     * 导出供应商对账表
+     */
 	public function supplierBalance_exporter() {
 	    $this->common_model->checkpurview(113);
 		$name = 'supplier_balance_'.date('YmdHis').'.xls';

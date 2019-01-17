@@ -13,6 +13,7 @@
   				<th>业务类型</th>
   				<th>数量</th>
   				<th>销售收入</th>
+  				<th>课税前</th>
   				<th>销售成本</th>
   				<th>销售毛利<br/>(销售收入-销售成本)</th>
 				<th>毛利率</th>
@@ -83,6 +84,11 @@
   			       <td><?php echo $row['transTypeName']?></td>
 				   <td class="R"><?php echo str_money($row['totalQty'],$this->systems['qtyPlaces'])?></td>
   			       <td class="R"><?php echo str_money($row['totalAmount'],$this->systems['qtyPlaces'])?></td>
+                       <td class="R"><?php if ($row['amountType'] == '1'){
+                               echo '是';
+                           }else{
+                               echo '';
+                           }?></td>
   			       <td class="R"><?php echo str_money($sum,2)?></td>
 				   <td class="R"><?php echo str_money($totalAmount - $sum,2)?></td>
 				   <td class="R"><?php echo round($salepPofitRate,2)?>%</td>
@@ -103,6 +109,7 @@
   				<td colspan="5" class="R B">合计：</td>
   				<td class="R B"><?php echo str_money($sum1,$this->systems['qtyPlaces'])?></td>
   				<td class="R B"><?php echo str_money($sum4,$this->systems['qtyPlaces'])?></td>
+                    <td></td>
   				<td class="R B"><?php echo str_money($sum7,2)?></td>
   				<td class="R B"><?php echo str_money($sum8,2)?></td>
   				<td class="R B"><?php echo round($sum9,2)?>%</td>
