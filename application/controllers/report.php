@@ -187,6 +187,9 @@ class Report extends CI_Controller {
 		die(json_encode($data));
 	}
 
+    /**
+     * 导出采购明细表
+     */
 	public function puDetail_detailExporter() {
 	    $this->common_model->checkpurview(23);
 		$name = 'pu_detail_'.date('YmdHis').'.xls';
@@ -523,7 +526,9 @@ class Report extends CI_Controller {
 		die(json_encode($data));
 	}
 
-
+    /**
+     * 导出销售明细表
+     */
 	public function salesDetail_detailExporter() {
 	    $this->common_model->checkpurview(32);
 		$name = 'sales_detail_'.date('YmdHis').'.xls';

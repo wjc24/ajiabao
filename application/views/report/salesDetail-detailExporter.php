@@ -20,6 +20,7 @@
   				<th>数量</th>
   				<th>单价</th>
   				<th>销售收入</th>
+  				<th>课税前</th>
 				<th>备注</th>
                 <th>收款情况</th>
   				</tr>
@@ -46,6 +47,11 @@
 				   <td class="R"><?php echo str_money($qty,$this->systems['qtyPlaces'])?></td>
   			       <td class="R"><?php echo str_money($row['price'],$this->systems['qtyPlaces'])?></td>
   			       <td class="R"><?php echo str_money($amount,2)?></td>
+  			       <td class="R"><?php if ($row['amountType'] == '1'){
+                           echo '是';
+                       }else{
+                           echo '';
+                       }?></td>
 				   <td class="R"><?php echo $row['description']?></td>
                    <td class="R"><?php echo abs($row['hasCheck']) <= 0 ? '未收款' : (abs($row['hasCheck'])>=abs($row['amount'])? '全部收款' : '部分收款')?></td>
   			       </tr>

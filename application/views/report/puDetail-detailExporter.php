@@ -19,6 +19,7 @@
   				<th>数量</th>
   				<th>单价</th>
   				<th>采购金额</th>
+  				<th>课税前</th>
                 <th>付款情况</th>
   				</tr>
   			</thead>
@@ -41,6 +42,11 @@
 					   <td class="R"><?php echo str_money($row['qty'],$this->systems['qtyPlaces'])?></td>
 					   <td class="R"><?php echo str_money($row['price'],$this->systems['qtyPlaces'])?></td>
 					   <td class="R"><?php echo str_money($row['amount'],2)?></td>
+					   <td class="R"><?php if ($row['amountType'] == '1'){
+                               echo '是';
+                           }else{
+                               echo '';
+                           }?></td>
                        <td class="R"><?php echo abs($row['hasCheck']) <= 0 ? '未付款' : (abs($row['hasCheck'])>=abs($row['amount'])? '全部付款' : '部分付款')?></td>
   			       </tr>
 				 <?php 
