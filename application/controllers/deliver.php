@@ -109,22 +109,35 @@ class Deliver  extends CI_Controller {
     public function doadd(){
         $res =[];
         $data = $this->input->post(NULL,TRUE);
-        $box_volume = 0;
-        foreach (json_decode($data['boxs']) as $k=>$v){
-            $box_volume +=$v->box_single;
-        }
-
-        $edit = $this->db->update('ci_invoice_info',array('shipping_name'=>$data['shipping_name'],'booking_number'=>$data['booking_number'],'container_number'=>$data['container_number'], 'tray_number'=>$data['tray_number'],'boxes'=>$data['boxes'],'box_volume'=>$box_volume,'port'=>$data['port'],'box'=>$data['boxs']),array('id'=>$data['invoice_info_id']));
-//        die(json_encode($data['boxs']));
-        if($edit){
-            $res['code'] = 1;
-            $res['text'] = "修改成功";
-            die(json_encode($res));
-        }else{
-            $res['code'] = 2;
-            $res['text'] = "修改失败";
-            die(json_encode($res));
-        }
+        $add = array(
+            'invoice_info_id'=>$data['invoice_info_id'],
+            'shipping_name'=>$data['shipping_name'],
+            'booking_number'=>$data['booking_number'],
+            'port'=>$data['port'],
+            'boxes'=>$data['boxes'],
+            'box_volume'=>$data['box_volume'],
+            'good_logistics'=>$data['good_logistics'],
+            'content'=>json_encode($data['box']),
+            'start_time'=>time(),
+        );
+        $logistics_res = $this->db->insert('ci_logistics',$add);
+        die(json_encode($logistics_res));
+//        $box_volume = 0;
+//        foreach (json_decode($data['boxs']) as $k=>$v){
+//            $box_volume +=$v->box_single;
+//        }
+//
+//        $edit = $this->db->update('ci_invoice_info',array('shipping_name'=>$data['shipping_name'],'booking_number'=>$data['booking_number'],'container_number'=>$data['container_number'], 'tray_number'=>$data['tray_number'],'boxes'=>$data['boxes'],'box_volume'=>$box_volume,'port'=>$data['port'],'box'=>$data['boxs']),array('id'=>$data['invoice_info_id']));
+////        die(json_encode($data['boxs']));
+//        if($edit){
+//            $res['code'] = 1;
+//            $res['text'] = "修改成功";
+//            die(json_encode($res));
+//        }else{
+//            $res['code'] = 2;
+//            $res['text'] = "修改失败";
+//            die(json_encode($res));
+//        }
 
     }
 
