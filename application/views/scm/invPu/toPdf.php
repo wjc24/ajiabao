@@ -25,9 +25,15 @@
 		<table width="800" align="center">
 			<tr height="15" align="left" >
 				<td width="250" style="font-family:'宋体'; font-size:14px;height:20px;">供应商：<?php echo $contactNo.' '.$contactName?> </td>
-				<td width="10" ></td>
 				<td width="150" >单据日期：<?php echo $billDate?></td>
-				<td width="250" >单据编号：<?php echo $billNo?></td>
+				<td width="210" >单据编号：<?php echo $billNo?></td>
+                <td width="40" ><?php
+                        if ($amountType == '1'){
+                            echo '课税前';
+                        }else{
+                            echo '课税后';
+                        }
+                    ?></td>
 				<td width="60" >币别：RMB</td>
  
 			</tr>
@@ -38,15 +44,16 @@
 		         
 				<tr style="height:20px">
 				    <td width="30" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;"  align="center">序号</td>
-					<td width="130" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">商品</td>
+					<td width="100" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">商品</td>
 					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">品牌</td>
 					<td width="30" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">单位</td>
 					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">数量</td>
-					<td width="80" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">购货单价</td>	
-					<td width="60" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣率(%)</td>	
-					<td width="50" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣额</td>	
-					<td width="60" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">购货金额</td>	
-					<td width="80" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">仓库</td>	
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">购货单价</td>
+					<td width="55" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣率(%)</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">折扣额</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">购货金额</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">税后购货金额</td>
+					<td width="40" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;" align="center">仓库</td>
 				</tr>
 				
 		       <?php 
@@ -56,15 +63,16 @@
 			   ?>
 				<tr style="height:20px">
 				   <td width="30"  style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;" align="center"><?php echo $row['i']?></td>
-					<td width="130" ><?php echo $row['goods'];?></td>
+					<td width="100" ><?php echo $row['goods'];?></td>
 					<td width="40" align="center"><?php echo $row['brand']?></td>
 					<td width="30" align="center"><?php echo $row['mainUnit']?></td>
 					<td width="40" align="right"><?php echo $row['qty']?></td>
-					<td width="60" align="right"><?php echo $row['price']?></td>
-					<td width="60" align="right"><?php echo $row['discountRate']?></td>
-					<td width="50" align="right"><?php echo $row['deduction']?></td>
-					<td width="60" align="right"><?php echo $row['amount']?></td>
-					<td width="80"><?php echo $row['locationName']?></td>
+					<td width="40" align="right"><?php echo $row['price']?></td>
+					<td width="40" align="right"><?php echo $row['discountRate']?></td>
+					<td width="40" align="right"><?php echo $row['deduction']?></td>
+					<td width="40" align="right"><?php echo $row['amount']?></td>
+					<td width="40" align="right"><?php echo $row['rateAmount']?></td>
+					<td width="40"><?php echo $row['locationName']?></td>
 				</tr>
 				<?php 
 				    $s = $row['i'];
@@ -81,15 +89,16 @@
 				<tr style="border:solid #000000;border-width:0 1px 1px 0;padding:2px;height:15px;font-family:'宋体'; font-size:12px;">
 				    
 					<td width="30" style="border:solid #000000;border-width:0 1px 1px 0;height:15px;font-family:'宋体'; font-size:12px;" align="center"><?php echo $m?></td>
-					<td width="130" ></td>
+					<td width="100" ></td>
+					<td width="40" align="center"></td>
 					<td width="30" align="center"></td>
 					<td width="40" align="center"></td>
-					<td width="60" align="center"></td>
-					<td width="60" align="center"></td>
-					<td width="50" align="center"></td>
-					<td width="60" align="center"></td>
-					<td width="80" align="center"></td>
-					<td width="80" align="center"></td>
+					<td width="40" align="center"></td>
+					<td width="40" align="center"></td>
+					<td width="40" align="center"></td>
+					<td width="40" align="center"></td>
+					<td width="40" align="center"></td>
+					<td width="40" align="center"></td>
 				</tr>
 				<?php }}?>
 				
@@ -100,14 +109,20 @@
 					<td width="40" align="center"></td>
 					<td width="60" align="center"></td>
 					<td width="50" align="center"></td>
-					<td width="60" align="right" ><?php echo str_money(abs($totalAmount),2)?></td>
-					<td width="80" align="center"></td>
-					<td width="80" align="center"></td>
+                     <td width="80" align="center"></td>
+                     <?php if ($amountType == '1') :?>
+                        <td width="60" align="right" ><?php echo str_money(abs($totalAmount),2)?></td>
+                        <td width="80" align="center"></td>
+                     <?php else:?>
+                         <td width="80" align="center"></td>
+                         <td width="80" align="right" ><?php echo str_money(abs($totalAmount),2)?></td>
+                     <?php endif;?>
+					<td width="60" align="center"></td>
 				</tr>
 				  
 				 
 				<tr target="id">
-				    <td colspan="10" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;">合计 金额大写： <?php echo str_num2rmb(abs($totalAmount))?> </td>
+				    <td colspan="11" style="border:solid #000000;border-width:0 1px 1px 0;padding:2px; font-family:'宋体'; font-size:14px;height:15px;">合计 金额大写： <?php echo str_num2rmb(abs($totalAmount))?> </td>
 				</tr>
 				<?php }?>
 		</table>
@@ -122,7 +137,7 @@
 				<td width="200" style="font-family:'宋体'; font-size:14px;height:25px;"><?php echo $transType==150501 ? '本次付款：' :'本次退款：'?><?php echo str_money(abs($rpAmount),2)?></td>
 				<td width="200" style="font-family:'宋体'; font-size:14px;height:25px;">本次欠款：<?php echo str_money(abs($arrears),2)?></td>
 				<td width="50" style="font-family:'宋体'; font-size:14px;height:25px;"></td>
- 
+
 		  </tr>
 		</table>	
 		

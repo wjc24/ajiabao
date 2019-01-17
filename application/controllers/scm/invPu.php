@@ -147,8 +147,9 @@ class InvPu extends CI_Controller {
 	}
 
 
-
-
+    /**
+     * 新增购货单
+     */
 	public function add(){
 	    $this->common_model->checkpurview(2);
 	    $data = $this->input->post('postData',TRUE);
@@ -304,9 +305,9 @@ class InvPu extends CI_Controller {
     }
 
 
-
-
-
+    /**
+     * 转pdf
+     */
     public function toPdf() {
 	    $this->common_model->checkpurview(85);
 	    $id   = intval($this->input->get('id',TRUE));
@@ -324,9 +325,10 @@ class InvPu extends CI_Controller {
 				$v[$arr]['goods']           = $row['invNumber'].' '.$row['invName'].' '.$row['invSpec'];
 				$v[$arr]['qty']             = (float)abs($row['qty']);
 				$v[$arr]['price']           = $row['price'];
-				$v[$arr]['brand']        = $row['brand'];
+				$v[$arr]['brand']           = $row['brand'];
 				$v[$arr]['mainUnit']        = $row['mainUnit'];
-				$v[$arr]['amount']          = $row['amount'];
+				$v[$arr]['amount']          = $row['beforeAmount'];
+				$v[$arr]['rateAmount']          = $row['rateAmount'];
 				$v[$arr]['deduction']       = $row['deduction'];
 				$v[$arr]['discountRate']    = $row['discountRate'];
 				$v[$arr]['unitId']          = intval($row['unitId']);
