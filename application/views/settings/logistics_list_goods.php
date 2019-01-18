@@ -380,7 +380,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <form action="<?php echo site_url('deliver/index');?>" method="post" id="form">
+    <form action="<?php echo site_url('deliver/logistics_list_goods');?>" method="post" id="form">
         <div class="mod-search cf">
             <div class="fl" >
                 <ul class="ul-inline">
@@ -391,11 +391,11 @@
                         <?php if ($like) :?>
                             <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" value ="<?php echo $like ?>" style="width: 280px;">
                         <?php else:?>
-                            <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="输入单据/运输公司/集装箱号/托盘号/箱子编号 查询" style="width: 280px;">
+                            <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="输入商品名称 查询" style="width: 280px;">
                         <?php endif; ?>
 
                     </li>
-                    <li><a class="ui-btn mrb" id="search">查询</a></li>
+                    <li><a class="ui-btn mrb" id="search">查询</a><input type="hidden" name="logistics_id" value="<?php echo $logistics_id ?>"></li>
                     <li>
                         <select name="sel" id="sel" onchange="changes()">
                             <?php if($sel == 0) :?>
@@ -404,21 +404,15 @@
                                 <option value="0" >请选择</option>
                             <?php endif ;?>
                             <?php if($sel == 1) :?>
-                                <option value="1" selected>未出仓</option>
+                                <option value="1" selected>未领货</option>
                             <?php else :?>
-                                <option value="1">未出仓</option>
+                                <option value="1">未领货</option>
                             <?php endif ;?>
                             <?php if($sel == 2) :?>
-                                <option value="2" selected>出仓中</option>
+                                <option value="2" selected>已领货</option>
                             <?php else :?>
-                                <option value="2">出仓中</option>
+                                <option value="2">已领货</option>
                             <?php endif ;?>
-                            <?php if($sel == 3) :?>
-                                <option value="3" selected>已出仓</option>
-                            <?php else :?>
-                                <option value="3">已出仓</option>
-                            <?php endif ;?>
-
                         </select>
                     </li>
                 </ul>
@@ -430,79 +424,34 @@
                 <table style="width: 100%;">
                     <thead style="width: 100%;">
                     <tr style="width: 100%;">
-                        <th>单据日期</th>
-                        <th>单据编号</th>
-                        <th style="width: 4%;">制单人</th>
                         <th>商品名称</th>
-                        <th style="width: 3%;">商品数量</th>
-                        <th>船运/航空公司名称</th>
-                        <th>订舱号</th>
-                        <th>集装箱号</th>
-                        <th>托盘号</th>
-                        <th>箱子编号</th>
-                        <th style="width: 3%;">箱子个数</th>
-                        <th>箱子总体积</th>
-                        <th>到达港口</th>
-                        <th>修改</th>
-                        <th style="width: 6%;">出仓</th>
-                        <th style="width: 5%;">提醒</th>
+                        <th>领货时间</th>
+                        <th>状态</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php if ($data) :?>
                         <?php foreach ($data as $k=>$v) :?>
                             <tr class="good_detail">
-                                <input type="hidden" value="<?php echo $v['invoice_id']?>">
-                                <td><span><?php echo $v['billDate'] ?></span></td>
-                                <td class="billNo"><span><?php echo $v['billNo'] ?></span></td>
-                                <td><span><?php echo $v['userName'] ?></span></td>
-                                <td><span><?php echo $v['good_name'] ?></span></td>
-                                <td><span><?php echo $v['good_num'] ?></span></td>
-                                <td><span><?php echo $v['shipping_name'] ?></span></td>
-                                <td><span><?php echo $v['booking_number'] ?></span></td>
-                                <td><span><?php echo $v['container_number'] ?></span></td>
-                                <td><span><?php echo $v['tray_number'] ?></span></td>
-                                <td><span><?php echo $v['box_number'] ?></span></td>
-                                <td><span><?php echo $v['boxes'] ?></span></td>
-                                <td><span><?php echo $v['box_volume'] ?></span></td>
-                                <td><span><?php echo $v['port'] ?></span></td>
-                                <!--                                <td><span><a href="javascript:0" class="ui-btn mrb detail add_invoice">修改信息</a><input type="hidden" value="--><?php //echo $v['invoice_info_id']?><!--"></span></td>-->
-                                <td><span><a tabTxt="修改信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/add?id=".$v['invoice_info_id'])?>" class="ui-btn mrb detail">修改</a></span></td>
-                                <?php if($v['status'] == 1) :?>
-                                    <td><span><a href="javascript:0" onclick="start(<?php echo $v['invoice_info_id']?>)" class="ui-btn mrb detail">出仓</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                                <?php elseif($v['status'] == 2):?>
-                                    <td><span><a href="javascript:0" onclick="end(<?php echo $v['invoice_info_id']?>)" class="ui-btn mrb detail">确认出仓</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                                <?php elseif($v['status'] == 3):?>
-                                    <td><span><a href="javascript:0" class="ui-btn mrb detail">已出仓</a><input type="hidden" ></span></td>
+                                <input type="hidden" value="<?php echo $v->id?>">
+                                <td><span><a tabTxt="发货详情" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/logistics_detail_detail?id=".$v->id)?>"><?php echo $v->good_name ?></a></span></td>
+                                <?php if($v->end_time) :?>
+                                    <td><span><?php echo date('Y-m-d H:i',$v->end_time) ?></span></td>
+                                <?php else :?>
+                                    <td><span></span></td>
                                 <?php endif;?>
-                                <?php if($v['remind'] == 1) :?>
-                                    <td><span><a href="javascript:0" class="ui-btn mrb detail add_people">提醒</a><input type="hidden" value="<?php echo $v['invoice_info_id']?>"></span></td>
-                                <?php elseif($v['remind'] == 2):?>
-                                    <td><span><a href="javascript:0" class="ui-btn mrb detail">已提醒</a></span></td>
+
+                                <?php if($v->status == 1) :?>
+                                    <td><span>未领货</span></td>
+                                <?php elseif($v->status == 2):?>
+                                    <td><span>已领货</span></td>
                                 <?php endif;?>
                             </tr>
                         <?php endforeach;?>
-                        <tr>
-                            <th>总计</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
+
                     <?php else: ?>
                         <tr>
-                            <td colspan="16">暂无记录</td>
+                            <td colspan="3">暂无记录</td>
                         </tr>
                     <?php endif ;?>
 

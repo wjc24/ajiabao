@@ -132,7 +132,9 @@
 <body>
 <div class="wrapper">
     <span id="config" class="ui-icon ui-state-default ui-icon-config"></span>
+    <span style="margin-left: 2%;color: red;">本页面的内容不可修改，如需修改请前往物流管理。</span>
     <input type="hidden" id="invoice_info_id" value="<?php echo $id ?>">
+    <input type="hidden" id="max_num" value="<?php echo $max_num ?>">
     <?php foreach ($data as $k=>$v) :?>
 
     <div class="bills">
@@ -142,19 +144,19 @@
 
                 <li class="row-item">
                     <div class="label-wrap" style="width: 21%;"><label for="name">船运/航空公司名称:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="<?php echo  $v->shipping_name ?>" class="ui-input" name="shipping_name" id="shipping_name"></div>
+                    <div class="ctn-wrap"><input type="text" readonly value="<?php echo  $v->shipping_name ?>" class="ui-input" name="shipping_name" id="shipping_name"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap"><label for="birthday">订舱号:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="<?php echo  $v->booking_number ?>" class="ui-input" name="booking_number" id="booking_number"></div>
+                    <div class="ctn-wrap"><input type="text" readonly value="<?php echo  $v->booking_number ?>" class="ui-input" name="booking_number" id="booking_number"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap"><label for="birthday">到达港口:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="<?php echo  $v->port ?>" class="ui-input" name="port" id="port"></div>
+                    <div class="ctn-wrap"><input type="text" readonly value="<?php echo  $v->port ?>" class="ui-input" name="port" id="port"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap"><label for="birthday">箱子个数:</label></div>
-                    <div class="ctn-wrap"><input type="number" min="0" value="<?php echo  $v->boxes ?>" class="ui-input" name="boxes" id="boxes"></div>
+                    <div class="ctn-wrap"><input type="number" readonly min="0" value="<?php echo  $v->boxes ?>" class="ui-input" name="boxes" id="boxes"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap" style="width: 21%;"><label for="birthday">箱子总体积(立方米):</label></div>
@@ -162,9 +164,16 @@
                 </li>
                 <li class="row-item">
                     <div class="label-wrap" style="width: 21%;"><label for="birthday">运输商品数:</label></div>
-                    <div class="ctn-wrap"><input type="number" min="0" value="<?php echo  $v->good_logistics ?>" class="ui-input" name="good_logistics" id="good_logistics"></div>
+                    <div class="ctn-wrap"><input type="number" min="0" readonly value="<?php echo  $v->good_logistics ?>" class="ui-input" name="good_logistics" id="good_logistics"></div>
+                </li>
+                <li class="row-item" style="width: 40%;">
+                    <div class="label-wrap" style="width: 10%;"><label for="name">物流单:</label></div>
+                    <div class="ctn-wrap"><input type="text" readonly value="<?php echo  $v->logistics ?>" class="ui-input" name="logistics" id="logistics">（建议格式:WL+年月日+日流水号，如WL201901180001）</div>
                 </li>
             </ul>
+            <div class="label-wrap" style="width: 10%;"><label for="trade_remarks">贸易公司备注:</label></div>
+            <textarea name="" id="trade_remarks" readonly cols="250" rows="10"><?php echo  $v->trade_remarks ?></textarea>
+            <br>
             <div class="table">
                 <table style="width: 100%;">
 
@@ -184,7 +193,7 @@
                                 <span class="delete"></span>
                             </td>
                             <td class="one_category">集装箱号</td>
-                            <td><input type="text" value="<?php echo $val->container_number?>" class="container_number"></td>
+                            <td><input type="text" readonly value="<?php echo $val->container_number?>" class="container_number"></td>
                             <td><span></span></td>
                         </tr>
                         <?php if($val->child) :?>
@@ -195,7 +204,7 @@
                                         <span class="delete"></span>
                                     </td>
                                     <td class="two_category">托盘号</td>
-                                    <td><input type="text" value="<?php echo $v1->tray_number ?>" class="tray_number"></td>
+                                    <td><input type="text" readonly value="<?php echo $v1->tray_number ?>" class="tray_number"></td>
                                     <td><span></span></td>
                                 </tr>
                                 <?php if($v1->child) :?>
@@ -207,8 +216,8 @@
                                                 <span class="delete"></span>
                                             </td>
                                             <td class="three_category">箱子号</td>
-                                            <td><input type="text" value="<?php echo $v2->single_box ?>" class="single_box"></td>
-                                            <td>长(米)：<input type="number" min="0" value="<?php echo $v2->long ?>" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" value="<?php echo $v2->wide ?>" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;" value="<?php echo $v2->high ?>"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" value="<?php echo $v2->volume ?>" readonly></td>
+                                            <td><input type="text" readonly value="<?php echo $v2->single_box ?>" class="single_box"></td>
+                                            <td>长(米)：<input type="number" readonly min="0" value="<?php echo $v2->long ?>" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" readonly class="wide" value="<?php echo $v2->wide ?>" style="width: 10%;"> 高(米)：<input type="number" min="0" readonly class="high" style="width: 10%;" value="<?php echo $v2->high ?>"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" readonly class="volume" value="<?php echo $v2->volume ?>" readonly></td>
                                         </tr>
 
                                     <?php endforeach;?>
@@ -217,289 +226,20 @@
                         <?php endif;?>
                     <?php endforeach;?>
 
-
-
                     </tbody>
                 </table>
             </div>
-
+            <br>
+            <div class="label-wrap" style="width: 10%;"><label for="logistics_remarks">物流公司备注:</label></div>
+            <textarea name="" id="logistics_remarks" cols="250" rows="10" readonly><?php echo  $v->logistics_remarks ?></textarea>
         </div>
 
-        <div style="height: 30px;text-align: center;">
-            <button type="button" class="btn" id="submit" style="border: 1px solid #3279a0;background: -webkit-gradient(linear,0 0,0 100%,from(#4994be),to(#337fa9));color: #fff;">保存</button>
-        </div>
     </div>
     <?php endforeach;?>
 </div>
 
 
 </body>
-<script>
-    $(function () {
-        $("#tbody").on('click','.add',function () {
-            var category = $(this).parent().parent().attr('class');
-
-            if(category == "one"){
-
-                var add ='<tr class="one">\n' +
-                    '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
-                    '                                    <span class="delete"></span>\n' +
-                    '                                </td>\n' +
-                    '                                <td class="one_category" >集装箱号</td>\n' +
-                    '                                <td><input type="text" value="" class="container_number"></td>\n' +
-                    '                                <td><span></span></td>\n' +
-                    '                            </tr>\n' +
-                    '                            <tr class="two">\n' +
-                    '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
-                    '                                    <span class="delete"></span>\n' +
-                    '                                </td>\n' +
-                    '                                <td class="two_category" >托盘号</td>\n' +
-                    '                                <td><input type="text" value="" class="tray_number"></td>\n' +
-                    '                                <td><span></span></td>\n' +
-                    '                            </tr>\n' +
-                    '                            <tr class="three">\n' +
-                    '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
-                    '                                    <span class="delete"></span>\n' +
-                    '                                </td>\n' +
-                    '                                <td class="three_category" >箱子号</td>\n' +
-                    '                                <td><input type="text" value="" class="single_box"></td>\n' +
-                    '                                <td>长(米)：<input type="number" min="0" value="" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" readonly></td>\n' +
-                    '                            </tr>' ;
-
-                $('#tbody').append(add);
-            }else if(category == "two"){
-                var add =' <tr class="two">\n' +
-                    '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
-                    '                                    <span class="delete"></span>\n' +
-                    '                                </td>\n' +
-                    '                                <td class="two_category" >托盘号</td>\n' +
-                    '                                <td><input type="text" value="" class="tray_number"></td>\n' +
-                    '                                <td><span></span></td>\n' +
-                    '                            </tr>\n' +
-                    '                            <tr class="three">\n' +
-                    '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
-                    '                                    <span class="delete"></span>\n' +
-                    '                                </td>\n' +
-                    '                                <td class="three_category" >箱子号</td>\n' +
-                    '                                <td><input type="text" value="" class="single_box"></td>\n' +
-                    '                                <td>长(米)：<input type="number" min="0" value="" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" readonly></td>\n' +
-                    '                            </tr>' ;
-                $(this).parent().parent().before(add);
-            }else if(category == "three"){
-                var add ='<tr class="three">\n' +
-                    '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
-                    '                                    <span class="delete"></span>\n' +
-                    '                                </td>\n' +
-                    '                                <td class="three_category" >箱子号</td>\n' +
-                    '                                <td><input type="text" value="" class="single_box"></td>\n' +
-                    '                                <td>长(米)：<input type="number" min="0" value="" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" readonly></td>\n' +
-                    '                            </tr>';
-                $(this).parent().parent().after(add);
-            }
-
-        });
-
-        $("#tbody").on('click','.delete',function () {
-            category = $(this).parent().parent().attr('class');
-
-            if(category == "one"){
-                if($(this).parent().parent().next().attr('class') == "two"){
-                    parent.Public.tips({
-                        type:1,
-                        content:"请先删除集装箱内的箱子！"
-                    });
-                }else{
-                    $(this).parent().parent().remove();
-                }
-            }else if(category == "two"){
-                if($(this).parent().parent().next().attr('class') == "three"){
-                    parent.Public.tips({
-                        type:1,
-                        content:"请先删除托盘内的箱子！"
-                    });
-                }else{
-                    $(this).parent().parent().remove();
-                }
-
-            }else if(category == "three"){
-                $(this).parent().parent().remove();
-            }
-
-        });
-
-        //计算每个箱子的体积
-        $("#tbody").on('input','.long',function () {
-            long = $(this).val();
-            wide = $(this).parent().find('.wide').val();
-            high = $(this).parent().find('.high').val();
-            if(!long){
-                long = 0;
-            }else if(!wide){
-                wide =0;
-            }else if(!high){
-                high =0;
-            }
-            $(this).parent().find('.volume').val((long*wide*high).toFixed(4));
-
-        });
-        $("#tbody").on('input','.wide',function () {
-            wide = $(this).val();
-            long = $(this).parent().find('.long').val();
-            high = $(this).parent().find('.high').val();
-            if(!long){
-                long = 0;
-            }else if(!wide){
-                wide =0;
-            }else if(!high){
-                high =0;
-            }
-            $(this).parent().find('.volume').val((long*wide*high).toFixed(4));
-
-        });
-        $("#tbody").on('input','.high',function () {
-            high = $(this).val();
-            wide = $(this).parent().find('.wide').val();
-            long = $(this).parent().find('.long').val();
-            if(!long){
-                long = 0;
-            }else if(!wide){
-                wide =0;
-            }else if(!high){
-                high =0;
-            }
-            $(this).parent().find('.volume').val((long*wide*high).toFixed(4));
-        });
-
-        $(".bills").on('click',"#submit",function () {
-
-            var shipping_name = $("#shipping_name").val();
-            var booking_number = $("#booking_number").val();
-            var port = $("#port").val();
-            var boxes = $("#boxes").val();
-            var box_volume = $("#box_volume").val();
-            var invoice_info_id = $("#invoice_info_id").val();
-            var good_logistics = $("#good_logistics").val();
-
-
-            var box = new Array();
-            one = 0;
-            two = 0;
-            three = 0;
-
-
-            $.each($("#tbody>tr"),function(i,val){
-                category = $(this).attr('class');
-                if(category == "one"){
-                    if(!box[one]){
-                        box[one] = {};
-                    }
-
-                    box[one]['container_number'] = $(this).find('.container_number').val();
-
-                    next = $(this).next().attr('class');
-                    if(next == "one"){
-                        one++;
-                        two = 0;
-                        three = 0;
-                    }
-                }
-                else if(category == "two"){
-                    if(!box[one]['child']){
-                        box[one]['child'] = {};
-                    }
-
-                    if(!box[one]['child'][two]){
-                        box[one]['child'][two] = {};
-                    }
-
-                    box[one]['child'][two]['tray_number'] = $(this).find('.tray_number').val();
-
-                    next = $(this).next().attr('class');
-                    if(next == "one"){
-                        one++;
-                        two = 0;
-                        three = 0;
-                    }else if(next == "two"){
-                        two++;
-                        three = 0;
-                    }
-                }else if(category == "three"){
-                    if(!box[one]['child'][two]['child']){
-                        box[one]['child'][two]['child'] = {};
-                    }
-                    if(!box[one]['child'][two]['child'][three]){
-                        box[one]['child'][two]['child'][three] = {};
-                    }
-
-                    box[one]['child'][two]['child'][three]['single_box'] = $(this).find('.single_box').val();
-                    box[one]['child'][two]['child'][three]['long'] = $(this).find('.long').val();
-                    box[one]['child'][two]['child'][three]['wide'] = $(this).find('.wide').val();
-                    box[one]['child'][two]['child'][three]['high'] = $(this).find('.high').val();
-                    box[one]['child'][two]['child'][three]['volume'] = $(this).find('.volume').val();
-                    next = $(this).next().attr('class');
-
-                    if(next == "one"){
-                        one++;
-                        two = 0;
-                        three = 0;
-                    }else if(next == "two"){
-                        two++;
-                        three = 0;
-                    }else if(next == "three"){
-                        three++;
-                    }
-
-                }
-
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo site_url('deliver/doadd');?>",
-                cache:false,
-                data: {
-                    shipping_name: shipping_name,
-                    booking_number: booking_number,
-                    port:port,
-                    boxes:boxes,
-                    box_volume:box_volume,
-                    box:box,
-                    invoice_info_id:invoice_info_id,
-                    good_logistics:good_logistics,
-                },
-                dataType: "json",
-
-                success: function (data) {
-
-                    if(data.code == 1){
-                        parent.Public.tips({
-                            content:data.text
-                        });
-
-                        location.reload();
-                    }else if (data.code == 2){
-                        parent.Public.tips({
-                            type:1,
-                            content:data.text
-                        });
-                    } else{
-                        parent.Public.tips({
-                            type:1,
-                            content:"未知错误"
-                        });
-                    }
-
-                },
-            });
-        });
-    });
-</script>
 
 </html>
 

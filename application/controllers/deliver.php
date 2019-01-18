@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Deliver  extends CI_Controller {
     public function index(){
 
-        $user = $this->session->userdata('jxcsys');
+
         $like = $this->input->post('matchCon');
         $sel = $this->input->post('sel');
         $page_now = (int)$this->input->post('page_now');
@@ -19,7 +19,7 @@ class Deliver  extends CI_Controller {
         foreach ($invoice as $k=>$v){
 
             if($sel && $sel != '0'){
-                $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%') AND (STATUS = ".$sel.")";
+                $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%') AND (deliver_status = ".$sel.")";
             }else{
                 $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%')";
             }
@@ -87,16 +87,41 @@ class Deliver  extends CI_Controller {
     //添加出仓信息
     public function add(){
         $id = $this->input->get('id');
+        $good_name = $this->input->get('good_name');
 
-        $this->load->view('/settings/deliver_add',['id'=>$id]);
+        $data = $this->db->where(['id'=>$id])->get('ci_invoice_info')->row();
+        $max_num = ((int)substr($data->qty,1))-$data->issued_num;
+        $this->load->view('/settings/deliver_add',['id'=>$id,'good_name'=>$good_name,'max_num'=>$max_num]);
     }
 
     //新增发货信息
     public function doadd(){
         $res =[];
+        $user = $this->session->userdata('jxcsys');
+
         $data = $this->input->post(NULL,TRUE);
+        $logistics = $this->db->where(['number'=>$data['logistics']])->get('ci_logistics_list')->row();
+        if(!$logistics){
+            $add_1 = array(
+                'number'=>$data['logistics'],
+                'addtime'=>time(),
+                'status'=>1,
+                'checkName'=>$user['name'],
+            );
+            $result = $this->db->insert('ci_logistics_list',$add_1);
+            $logistics_id = $this->db->insert_id();
+            if(!$result){
+                $res['code'] = 2;
+                $res['text'] = "发货失败";
+                die(json_encode($res));
+            }
+        }else{
+            $logistics_id = $logistics->id;
+        }
+
         $add = array(
             'invoice_info_id'=>$data['invoice_info_id'],
+            'good_name'=>$data['good_name'],
             'shipping_name'=>$data['shipping_name'],
             'booking_number'=>$data['booking_number'],
             'port'=>$data['port'],
@@ -104,12 +129,25 @@ class Deliver  extends CI_Controller {
             'box_volume'=>$data['box_volume'],
             'good_logistics'=>$data['good_logistics'],
             'content'=>json_encode($data['box']),
+            'logistics'=>$data['logistics'],
+            'logistics_id'=>$logistics_id,
             'start_time'=>time(),
+            'logistics_remarks'=>$data['logistics_remarks'],
+            'trade_remarks'=>$data['trade_remarks'],
         );
         $logistics_res = $this->db->insert('ci_logistics',$add);
 
 
-        if($logistics_res){
+            $invoice_info = $this->db->where(['id'=>$data['invoice_info_id']])->get('ci_invoice_info')->row();
+
+            if(($invoice_info->unissued_num + $data['good_logistics']) == ((int)substr($invoice_info->qty,1))){
+                $deliver_status = 3;
+            }else{
+                $deliver_status = 2;
+            }
+            $updata = $this->db->update('ci_invoice_info',array('issued_num'=>($data['good_logistics']+$invoice_info->issued_num),'unissued_num'=>((int)substr($invoice_info->qty,1) - $invoice_info->unissued_num - $data['good_logistics']),'deliver_status'=>$deliver_status),array('id'=>$data['invoice_info_id']));
+
+        if($logistics_res && $updata){
             $res['code'] = 1;
             $res['text'] = "发货成功";
             die(json_encode($res));
@@ -129,43 +167,129 @@ class Deliver  extends CI_Controller {
         $this->load->view('/settings/logistics_detail',['id'=>$id,'data'=>$data]);
     }
 
-    // 开始出仓
-    public function start(){
-        $id = $this->input->post('id');
-        $res =[];
-        $edit = $this->db->update('ci_invoice_info',array('status'=>2,'start_time'=>time()),array('id'=>$id));
-        if($edit){
+
+    //物流单列表
+    public function logisticsList(){
+        $like = $this->input->post('matchCon');
+        $sel = $this->input->post('sel');
+        $page_now = (int)$this->input->post('page_now');
+        $page_num = (int)$this->input->post('page_num');
+
+        if($sel && $sel != '0'){
+            $where = "(number LIKE '%".$like."%' OR checkName LIKE '%".$like."%') AND (status = ".$sel.")";
+        }else{
+            $where = "(number LIKE '%".$like."%' OR checkName LIKE '%".$like."%')";
+        }
+
+        $total = $this->db->where($where)->count_all('ci_logistics_list');
+
+        if(!$page_num){
+            $page_num = 20;
+        }
+
+        $page_all = ceil($total/$page_num);
+        if(!$page_now || $page_now == 1 || $page_now>$page_all){
+            $page_now = 0 ;
+        }else{
+            $page_now = ($page_now-1)*$page_num;
+        }
+        $data = $this->db->where($where)->limit($page_num,$page_now)->get('ci_logistics_list')->result();
+
+        $this->load->view('/settings/logistics_list',['data'=>$data,'like'=>$like,'sel'=>$sel,'page_now'=>$this->input->post('page_now'),'page_num'=>$page_num,'page_all'=>$page_all]);
+    }
+
+    //物流 商品列表
+    public function logistics_list_goods(){
+        $like = $this->input->post('matchCon');
+        $sel = $this->input->post('sel');
+        $page_now = (int)$this->input->post('page_now');
+        $page_num = (int)$this->input->post('page_num');
+        $logistics_id = $this->input->post('logistics_id');
+        $id = $this->input->get('id');
+        if(!$logistics_id){
+            $logistics_id = $id;
+        }
+        if($sel && $sel != '0'){
+            $where = "(logistics_id ='".$logistics_id."') AND (good_name LIKE '%".$like."%') AND (status = ".$sel.")";
+        }else{
+            $where = "(logistics_id ='".$logistics_id."') AND (good_name LIKE '%".$like."%')";
+        }
+        $total = $this->db->where($where)->count_all('ci_logistics');
+
+        if(!$page_num){
+            $page_num = 20;
+        }
+
+        $page_all = ceil($total/$page_num);
+        if(!$page_now || $page_now == 1 || $page_now>$page_all){
+            $page_now = 0 ;
+        }else{
+            $page_now = ($page_now-1)*$page_num;
+        }
+        $data = $this->db->where($where)->limit($page_num,$page_now)->get('ci_logistics')->result();
+
+
+        $this->load->view('/settings/logistics_list_goods',['logistics_id'=>$logistics_id,'data'=>$data,'like'=>$like,'sel'=>$sel,'page_now'=>$this->input->post('page_now'),'page_num'=>$page_num,'page_all'=>$page_all]);
+
+    }
+
+    //物流 商品发货详情
+    public function logistics_detail_detail(){
+
+        $id = $this->input->get('id');
+
+        $data = $this->db->where(['id'=>$id])->get('ci_logistics')->row();
+
+        $this->load->view('/settings/logistics_good_detail',['id'=>$id,'data'=>$data]);
+    }
+
+    //物流 修改商品发货记录
+    public function logistics_edit(){
+        $data = $this->input->post(NULL,TRUE);
+
+        $edit = array(
+            'shipping_name'=>$data['shipping_name'],
+            'booking_number'=>$data['booking_number'],
+            'port'=>$data['port'],
+            'boxes'=>$data['boxes'],
+            'box_volume'=>$data['box_volume'],
+            'good_logistics'=>$data['good_logistics'],
+            'content'=>json_encode($data['box']),
+            'logistics'=>$data['logistics'],
+            'logistics_remarks'=>$data['logistics_remarks'],
+            'trade_remarks'=>$data['trade_remarks'],
+            'end_time'=>time(),
+            'status'=>2,
+        );
+        $logistics_res = $this->db->update('ci_logistics',$edit,array('id'=>$data['invoice_info_id']));
+        $result_1 = $this->db->where(['id'=>$data['logistics_id']])->get('ci_logistics_list')->row();
+
+
+        if($result_1->end_time){
+
+        }else{
+            $result_2 = $this->db->where(['logistics_id'=>$data['logistics_id']])->get('ci_logistics')->result();
+            $t = 0;
+            foreach ($result_2 as $k=>$v){
+                if($v->status == 1){
+                    $t = 1;
+                }
+            }
+            if($t == 0){
+                $this->db->update('ci_logistics_list',array('end_time'=>time(),'status'=>3),array('id'=>$data['logistics_id']));
+            }else{
+                $this->db->update('ci_logistics_list',array('status'=>2),array('id'=>$data['logistics_id']));
+            }
+        }
+        if($logistics_res){
             $res['code'] = 1;
-            $res['text'] = "正在出仓中";
+            $res['text'] = "修改成功";
             die(json_encode($res));
         }else{
             $res['code'] = 2;
-            $res['text'] = "出仓失败";
+            $res['text'] = "修改失败";
             die(json_encode($res));
         }
-    }
-
-    // 出仓完成
-    public function end(){
-        $id = $this->input->post('id');
-        $res =[];
-        $edit = $this->db->update('ci_invoice_info',array('status'=>3,'end_time'=>time()),array('id'=>$id));
-        if($edit){
-            $res['code'] = 1;
-            $res['text'] = "出仓完成";
-            die(json_encode($res));
-        }else{
-            $res['code'] = 2;
-            $res['text'] = "出仓失败";
-            die(json_encode($res));
-        }
-    }
-
-    //
-    public function logistics(){
-        $data = $this->db->get('ci_logistics')->result();
-var_dump($data);
-        $this->load->view('/settings/logistics',['data'=>$data]);
     }
     //提醒
     public function remind(){
@@ -174,25 +298,18 @@ var_dump($data);
         foreach (json_decode($data['userName']) as $k=>$v){
 
             $customer = $this->db->where(['id'=>$v])->get('ci_customer')->row();
-            $wechat = $this->wechat($customer->openid,'111','4444','2019-1-15');
+            $wechat = $this->wechat($customer->openid,$data['logistic'],'4444','2019-1-15');
 
-            if($wechat->errcode != 0){
+            if($wechat['errcode'] != 0){
                 $res['code'] = 2;
-                $res['text'] = $customer->nickname."提醒错误".$wechat->errmsg;
+                $res['text'] = $customer->nickname."提醒错误".$wechat['errmsg'];
                 die(json_encode($res));
             }
         }
         if($wechat->errcode == 0){
-            $edit = $this->db->update('ci_invoice_info',array('remind'=>2),array('id'=>$data['invoice_info_id']));
-            if($edit){
-                $res['code'] = 1;
-                $res['text'] = "通知成功";
-                die(json_encode($res));
-            }else{
-                $res['code'] = 2;
-                $res['text'] = "通知失败";
-                die(json_encode($res));
-            }
+            $res['code'] = 1;
+            $res['text'] = "通知成功";
+            die(json_encode($res));
 
         }
     }
@@ -210,15 +327,21 @@ var_dump($data);
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" . $appid . "&secret=" . $appsecret . "";
 
             $result = $this->curl_post($url);
-
             $access_tokens = json_decode($result, true);
 
-            $this->db->update('ci_accesstoken',array('accesstoken'=>$access_tokens['access_token'],'time'=>time() + 7000),array('id'=>1));
+            if($access_tokens['errcode'] != 0){
+                return $access_tokens;
+            }else{
+                $this->db->update('ci_accesstoken',array('accesstoken'=>$access_tokens['access_token'],'time'=>time() + 7000),array('id'=>1));
 
-            $access_token =  $this->db->where(['id'=>1])->get('ci_accesstoken')->row();
+                $this->db->where(['id'=>1])->get('ci_accesstoken')->row();
+            }
+
+
 
 
         }
+        return "aaa";
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$access_token->accesstoken;
         $data = '{
                    "touser":"'.$openid.'",

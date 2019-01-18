@@ -29,15 +29,16 @@ class Sign extends CI_Controller {
         if(!$page_num){
             $page_num = 20;
         }
+
         $page_all = ceil($total/$page_num);
         if(!$page_now || $page_now == 1 || $page_now>$page_all){
             $page_now = 0 ;
         }else{
-            $page_now = ($page_now-1)*2;
+            $page_now = ($page_now-1)*$page_num;
         }
 
         $data = $this->db->where($where)->limit($page_num,$page_now)->order_by('time DESC')->get('ci_sign')->result();
 
-        $this->load->view('/settings/sign_list',['data'=>$data,'like'=>$like,'sel'=>$sel,'page_now'=>$page_now,'page_num'=>$page_num,'page_all'=>$page_all]);
+        $this->load->view('/settings/sign_list',['data'=>$data,'like'=>$like,'sel'=>$sel,'page_now'=>$this->input->post('page_now'),'page_num'=>$page_num,'page_all'=>$page_all]);
     }
 }

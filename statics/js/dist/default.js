@@ -476,7 +476,7 @@ var dataReflush, list = {
 	},
 	logistics: {
 		name: "物流管理",
-		href: "../deliver/logistics",
+		href: "../deliver/logisticsList",
 		dataRight: "SettAcct_QUERY",
 		target: "setting-base"
 	},

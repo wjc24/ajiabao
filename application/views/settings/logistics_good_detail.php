@@ -132,98 +132,118 @@
 <body>
 <div class="wrapper">
     <span id="config" class="ui-icon ui-state-default ui-icon-config"></span>
+    <input type="hidden" id="logistics_id" value="<?php echo $data->logistics_id ?>">
     <input type="hidden" id="invoice_info_id" value="<?php echo $id ?>">
-    <input type="hidden" id="good_name" value="<?php echo $good_name ?>">
     <input type="hidden" id="max_num" value="<?php echo $max_num ?>">
-    <div class="bills">
-        <div class="grid-wrap mb10" id="acGridWrap">
-            <ul style="font-size: 20px;font-weight: bold">发货公司资料</ul>
-            <ul class="mod-form-rows base-form clearfix" id="base-form">
 
-                <li class="row-item">
-                    <div class="label-wrap" style="width: 21%;"><label for="name">船运/航空公司名称:</label></div>
-                    <div class="ctn-wrap"><input type="text" required value="" class="ui-input" name="shipping_name" id="shipping_name" placeholder="必填" ></div>
-                </li>
-                <li class="row-item">
-                    <div class="label-wrap"><label for="birthday">订舱号:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="" class="ui-input" name="booking_number" id="booking_number" placeholder="必填"></div>
-                </li>
-                <li class="row-item">
-                    <div class="label-wrap"><label for="birthday">到达港口:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="" class="ui-input" name="port" id="port" placeholder="必填"></div>
-                </li>
-                <li class="row-item">
-                    <div class="label-wrap"><label for="birthday">箱子个数:</label></div>
-                    <div class="ctn-wrap"><input type="number" min="0" value="0"  readonly class="ui-input" name="boxes" id="boxes" placeholder="填完箱子可自动计算"></div>
-                </li>
-                <li class="row-item">
-                    <div class="label-wrap" style="width: 21%;"><label for="birthday">箱子总体积(立方米):</label></div>
-                    <div class="ctn-wrap"><input type="number"  min="0" value="0" readonly class="ui-input" name="box_volume" id="box_volume" placeholder="填完箱子可自动计算"></div>
-                </li>
-                <li class="row-item">
-                    <div class="label-wrap" style="width: 21%;"><label for="birthday">运输商品数:</label></div>
-                    <div class="ctn-wrap"><input type="number" min="0" value="" class="ui-input" name="good_logistics" id="good_logistics" placeholder="必填"></div>
-                </li>
-                <li class="row-item" style="width: 40%;">
-                    <div class="label-wrap" style="width: 10%;"><label for="name">物流单:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="" class="ui-input" name="logistics" id="logistics" placeholder="必填">（建议格式:WL+年月日+日流水号，如WL201901180001）</div>
-                </li>
-            </ul>
-            <div class="label-wrap" style="width: 10%;"><label for="trade_remarks">贸易公司备注:</label></div>
-            <textarea name="" id="trade_remarks" cols="250" rows="10"></textarea>
-            <br>
-            <div class="table">
-                <table style="width: 100%;">
+        <div class="bills">
+            <div class="grid-wrap mb10" id="acGridWrap">
+                <ul style="font-size: 20px;font-weight: bold">发货公司资料</ul>
+                <ul class="mod-form-rows base-form clearfix" id="base-form">
 
-                    <thead>
-                    <tr>
-                        <th style="width: 10%;">操作</th>
-                        <th style="width: 20%;">类别</th>
-                        <th style="width: 20%;">名称</th>
-                        <th style="width: 40%;">添加</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    <tr class="one">
-                        <td>
-                            <span class="add"></span>
-                            <span class="delete"></span>
-                        </td>
-                        <td class="one_category">集装箱号</td>
-                        <td><input type="text" value="" class="container_number"></td>
-                        <td><span></span></td>
-                    </tr>
-                    <tr class="two">
-                        <td>
-                            <span class="add"></span>
-                            <span class="delete"></span>
-                        </td>
-                        <td class="two_category">托盘号</td>
-                        <td><input type="text" value="" class="tray_number"></td>
-                        <td><span></span></td>
-                    </tr>
-                    <tr class="three">
-                        <td>
-                            <span class="add"></span>
-                            <span class="delete"></span>
-                        </td>
-                        <td class="three_category">箱子号</td>
-                        <td><input type="text" value="" class="single_box"></td>
-                        <td>长(米)：<input type="number" min="0" value="0" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" style="width: 10%;" value="0" > 高(米)：<input type="number" min="0" value="0" class="high" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" value="0" class="volume" readonly></td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <li class="row-item">
+                        <div class="label-wrap" style="width: 21%;"><label for="name">船运/航空公司名称:</label></div>
+                        <div class="ctn-wrap"><input type="text" value="<?php echo  $data->shipping_name ?>" class="ui-input" name="shipping_name" id="shipping_name"></div>
+                    </li>
+                    <li class="row-item">
+                        <div class="label-wrap"><label for="birthday">订舱号:</label></div>
+                        <div class="ctn-wrap"><input type="text" value="<?php echo  $data->booking_number ?>" class="ui-input" name="booking_number" id="booking_number"></div>
+                    </li>
+                    <li class="row-item">
+                        <div class="label-wrap"><label for="birthday">到达港口:</label></div>
+                        <div class="ctn-wrap"><input type="text" value="<?php echo  $data->port ?>" class="ui-input" name="port" id="port"></div>
+                    </li>
+                    <li class="row-item">
+                        <div class="label-wrap"><label for="birthday">箱子个数:</label></div>
+                        <div class="ctn-wrap"><input type="number" min="0" value="<?php echo  $data->boxes ?>" class="ui-input" name="boxes" id="boxes"></div>
+                    </li>
+                    <li class="row-item">
+                        <div class="label-wrap" style="width: 21%;"><label for="birthday">箱子总体积(立方米):</label></div>
+                        <div class="ctn-wrap"><input type="number" readonly min="0" value="<?php echo  $data->box_volume ?>" class="ui-input" name="box_volume" id="box_volume"></div>
+                    </li>
+                    <li class="row-item">
+                        <div class="label-wrap" style="width: 21%;"><label for="birthday">运输商品数:</label></div>
+                        <div class="ctn-wrap"><input type="number" min="0" readonly value="<?php echo  $data->good_logistics ?>" class="ui-input" name="good_logistics" id="good_logistics"></div>
+                    </li>
+                    <li class="row-item" style="width: 40%;">
+                        <div class="label-wrap" style="width: 10%;"><label for="name">物流单:</label></div>
+                        <div class="ctn-wrap"><input type="text" readonly value="<?php echo  $data->logistics ?>" class="ui-input" name="logistics" id="logistics">（建议格式:WL+年月日+日流水号，如WL201901180001）</div>
+                    </li>
+                </ul>
+                <div class="label-wrap" style="width: 10%;"><label for="trade_remarks">贸易公司备注:</label></div>
+                <textarea name="" id="trade_remarks" cols="250" rows="10"><?php echo  $data->trade_remarks ?></textarea>
+                <br>
+                <div class="table">
+                    <table style="width: 100%;">
 
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">操作</th>
+                            <th style="width: 20%;">类别</th>
+                            <th style="width: 20%;">名称</th>
+                            <th style="width: 40%;">添加</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        <?php foreach (json_decode($data->content) as $key=>$val) :?>
+                            <tr class="one">
+                                <td>
+                                    <span class="add"></span>
+                                    <span class="delete"></span>
+                                </td>
+                                <td class="one_category">集装箱号</td>
+                                <td><input type="text" value="<?php echo $val->container_number?>" class="container_number"></td>
+                                <td><span></span></td>
+                            </tr>
+                            <?php if($val->child) :?>
+                                <?php foreach ($val->child as $k1=>$v1) :?>
+                                    <tr class="two">
+                                        <td>
+                                            <span class="add"></span>
+                                            <span class="delete"></span>
+                                        </td>
+                                        <td class="two_category">托盘号</td>
+                                        <td><input type="text" value="<?php echo $v1->tray_number ?>" class="tray_number"></td>
+                                        <td><span></span></td>
+                                    </tr>
+                                    <?php if($v1->child) :?>
+                                        <?php foreach ($v1->child as $k2=>$v2) :?>
+
+                                            <tr class="three">
+                                                <td>
+                                                    <span class="add"></span>
+                                                    <span class="delete"></span>
+                                                </td>
+                                                <td class="three_category">箱子号</td>
+                                                <td><input type="text" value="<?php echo $v2->single_box ?>" class="single_box"></td>
+                                                <td>长(米)：<input type="number" min="0" value="<?php echo $v2->long ?>" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" value="<?php echo $v2->wide ?>" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;" value="<?php echo $v2->high ?>"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" value="<?php echo $v2->volume ?>" readonly></td>
+                                            </tr>
+
+                                        <?php endforeach;?>
+                                    <?php endif;?>
+                                <?php endforeach;?>
+                            <?php endif;?>
+                        <?php endforeach;?>
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <div class="label-wrap" style="width: 10%;"><label for="logistics_remarks">物流公司备注:</label></div>
+                <textarea name="" id="logistics_remarks" cols="250" rows="10"><?php echo  $data->logistics_remarks ?></textarea>
             </div>
-            <br>
-            <div class="label-wrap" style="width: 10%;"><label for="logistics_remarks">物流公司备注:</label></div>
-            <textarea name="" id="logistics_remarks" cols="250" rows="10"></textarea>
+
+            <div style="height: 30px;text-align: center;">
+                <?php if($data->status == 1) :?>
+                    <button type="button" class="btn" id="submit" style="border: 1px solid #3279a0;background: -webkit-gradient(linear,0 0,0 100%,from(#4994be),to(#337fa9));color: #fff;width: 8%;">保存并确认领货</button>
+                <?php else:?>
+                    <button type="button" class="btn" id="submit" style="border: 1px solid #3279a0;background: -webkit-gradient(linear,0 0,0 100%,from(#4994be),to(#337fa9));color: #fff;">保存</button>
+                <?php endif;?>
+            </div>
         </div>
 
-        <div style="height: 30px;text-align: center;">
-            <button type="button" class="btn" id="submit" style="border: 1px solid #3279a0;background: -webkit-gradient(linear,0 0,0 100%,from(#4994be),to(#337fa9));color: #fff;">保存</button>
-        </div>
-    </div>
 </div>
 
 
@@ -262,10 +282,10 @@
                     '                                </td>\n' +
                     '                                <td class="three_category" >箱子号</td>\n' +
                     '                                <td><input type="text" value="" class="single_box"></td>\n' +
-                    '                                <td>长(米)：<input type="number" min="0" value="0" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" value="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;" value="0" > 体积(立方米)：<input type="number" min="0" value="0" style="width: 15%;" class="volume" readonly></td>\n' +
+                    '                                <td>长(米)：<input type="number" min="0" value="0" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" value="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" value="0" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" value="0" style="width: 15%;" class="volume" readonly></td>\n' +
                     '                            </tr>' ;
 
-                    $('#tbody').append(add);
+                $('#tbody').append(add);
             }else if(category == "two"){
                 var add =' <tr class="two">\n' +
                     '                                <td>\n' +
@@ -294,7 +314,7 @@
                     '                                </td>\n' +
                     '                                <td class="three_category" >箱子号</td>\n' +
                     '                                <td><input type="text" value="" class="single_box"></td>\n' +
-                    '                                <td>长(米)：<input type="number" min="0" value="0" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" value="0" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" value="0" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" value="0" style="width: 15%;" class="volume" readonly></td>\n' +
+                    '                                <td>长(米)：<input type="number" min="0" value="0" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" value="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" value="0" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" value="0" style="width: 15%;" class="volume" readonly></td>\n' +
                     '                            </tr>';
                 $(this).parent().parent().after(add);
             }
@@ -386,18 +406,6 @@
             box_all_volume = 0;
         }
 
-
-        //判断商品发货的最大数量
-        $("#acGridWrap").on('input','#good_logistics',function (){
-            max_num = $("#max_num").val();
-            good_logistics = $("#good_logistics").val();
-            if(good_logistics > max_num){
-                parent.Public.tips({
-                    type:1,
-                    content:"商品数量已超出！"
-                });
-            }
-        });
         $(".bills").on('click',"#submit",function () {
 
             var shipping_name = $("#shipping_name").val();
@@ -408,6 +416,7 @@
             var invoice_info_id = $("#invoice_info_id").val();
             var good_name = $("#good_name").val();
             var good_logistics = $("#good_logistics").val();
+            var logistics_id = $("#logistics_id").val();
             var logistics = $("#logistics").val();
             var trade_remarks = $("#trade_remarks").val();
             var logistics_remarks = $("#logistics_remarks").val();
@@ -419,11 +428,6 @@
                 parent.Public.tips({
                     type:1,
                     content:"船运/航空公司名称，订舱号，到达港口，物流单,商品数量不能为空！"
-                });
-            }else if(good_logistics > max_num){
-                parent.Public.tips({
-                    type:1,
-                    content:"商品数量已超出！"
                 });
             }else{
                 var box = new Array();
@@ -500,7 +504,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo site_url('deliver/doadd');?>",
+                    url: "<?php echo site_url('deliver/logistics_edit');?>",
                     cache:false,
                     data: {
                         shipping_name: shipping_name,
@@ -513,13 +517,14 @@
                         good_name:good_name,
                         good_logistics:good_logistics,
                         logistics:logistics,
+                        logistics_id:logistics_id,
                         trade_remarks:trade_remarks,
                         logistics_remarks:logistics_remarks,
                     },
                     dataType: "json",
 
                     success: function (data) {
-
+console.log(data);
                         if(data.code == 1){
                             parent.Public.tips({
                                 content:data.text
@@ -549,4 +554,3 @@
 </html>
 
 
- 

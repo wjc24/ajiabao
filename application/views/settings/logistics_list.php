@@ -380,7 +380,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <form action="<?php echo site_url('deliver/index');?>" method="post" id="form">
+    <form action="<?php echo site_url('deliver/logisticsList');?>" method="post" id="form">
         <div class="mod-search cf">
             <div class="fl" >
                 <ul class="ul-inline">
@@ -391,7 +391,7 @@
                         <?php if ($like) :?>
                             <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" value ="<?php echo $like ?>" style="width: 280px;">
                         <?php else:?>
-                            <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="输入单据/运输公司/集装箱号/托盘号/箱子编号 查询" style="width: 280px;">
+                            <input type="text" name="matchCon" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="输入物流单编号/发货人 查询" style="width: 280px;">
                         <?php endif; ?>
 
                     </li>
@@ -404,24 +404,23 @@
                                 <option value="0" >请选择</option>
                             <?php endif ;?>
                             <?php if($sel == 1) :?>
-                                <option value="1" selected>未发货</option>
+                                <option value="1" selected>未领货</option>
                             <?php else :?>
-                                <option value="1">未发货</option>
+                                <option value="1">未领货</option>
                             <?php endif ;?>
                             <?php if($sel == 2) :?>
-                                <option value="2" selected>部分发货</option>
+                                <option value="2" selected>部分领货</option>
                             <?php else :?>
-                                <option value="2">部分发货</option>
+                                <option value="2">部分领货</option>
                             <?php endif ;?>
                             <?php if($sel == 3) :?>
-                                <option value="3" selected>已发货</option>
+                                <option value="3" selected>已领货</option>
                             <?php else :?>
-                                <option value="3">已发货</option>
+                                <option value="3">已领货</option>
                             <?php endif ;?>
 
                         </select>
                     </li>
-                    <li><a class="ui-btn mrb add_people" id="">提醒</a></li>
                 </ul>
             </div>
 
@@ -431,49 +430,39 @@
                 <table style="width: 100%;">
                     <thead style="width: 100%;">
                     <tr style="width: 100%;">
-                        <th style="width: 10%;">单据日期</th>
-                        <th style="width: 10%;">单据编号</th>
-                        <th style="width: 10%;">制单人</th>
-                        <th style="width: 10%;">商品名称</th>
-                        <th style="width: 10%;">商品总数量</th>
-                        <th style="width: 10%;">商品已发数量</th>
-                        <th style="width: 10%;">商品未发数量</th>
-                        <th style="width: 10%;">发货状态</th>
-                        <th style="width: 10%;">新增发货</th>
-                        <th style="width: 10%;">详情</th>
+                        <th>物流单日期</th>
+                        <th>物流单编号</th>
+                        <th>发货人</th>
+                        <th>状态</th>
+                        <th>发货时间</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php if ($data) :?>
                         <?php foreach ($data as $k=>$v) :?>
-                            <tr>
-                                <input type="hidden" value="<?php echo $v['invoice_id']?>">
-                                <td><span><?php echo $v['billDate'] ?></span></td>
-                                <td class="billNo"><span><?php echo $v['billNo'] ?></span></td>
-                                <td><span><?php echo $v['userName'] ?></span></td>
-                                <td><span><?php echo $v['good_name'] ?></span></td>
-                                <td><span><?php echo $v['good_num'] ?></span></td>
-                                <td><span><?php echo $v['issued_num'] ?></span></td>
-                                <td><span><?php echo $v['good_num']-$v['issued_num'] ?></span></td>
-                                <?php if($v['deliver_status'] == 1) :?>
-                                    <td><span>未发货</span></td>
-                                    <td><span><a tabTxt="新增发货信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/add?id=".$v['invoice_info_id']."&good_name=".$v['good_name'])?>" class="ui-btn mrb detail">新增发货信息</a></span></td>
-                                <?php elseif($v['deliver_status'] == 2) :?>
-                                    <td><span>部分发货</span></td>
-                                    <td><span><a tabTxt="新增发货信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/add?id=".$v['invoice_info_id']."&good_name=".$v['good_name'])?>" class="ui-btn mrb detail">新增发货信息</a></span></td>
-                                <?php elseif($v['deliver_status'] == 3) :?>
-                                    <td><span>已发货</span></td>
-                                    <td><span><a href="" class="ui-btn mrb detail">已全部发货</a></span></td>
+                            <tr class="good_detail">
+                                <input type="hidden" value="<?php echo $v->id?>">
+                                <td><span><?php echo date('Y-m-d H:i',$v->addtime) ?></span></td>
+                                <td><span><a tabTxt="发货商品" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/logistics_list_goods?id=".$v->id)?>"><?php echo $v->number ?></a></span></td>
+                                <td><span><?php echo $v->checkName ?></span></td>
+                                <?php if($v->status == 1) :?>
+                                    <td><span>未领货</span></td>
+                                <?php elseif($v->status == 2):?>
+                                    <td><span>部分领货</span></td>
+                                <?php elseif($v->status == 3):?>
+                                    <td><span>已领货</span></td>
                                 <?php endif;?>
-
-                                <td><span><a tabTxt="发货详情" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/detail?id=".$v['invoice_info_id'])?>" class="ui-btn mrb detail">发货详情</a></span></td>
-
+                                <?php if($v->end_time) :?>
+                                    <td><span><?php echo date('Y-m-d H:i',$v->end_time) ?></span></td>
+                                <?php else:?>
+                                    <td><span></span></td>
+                                <?php endif;?>
                             </tr>
                         <?php endforeach;?>
 
                     <?php else: ?>
                         <tr>
-                            <td colspan="16">暂无记录</td>
+                            <td colspan="5">暂无记录</td>
                         </tr>
                     <?php endif ;?>
 
@@ -562,14 +551,13 @@
         <div class="add_close close_add">&times;</div>
     </div>
     <div class="add_content clearfix">
-        物流单号：<input type="text" id="logistic" placeholder="请输入物流单号">
         <div class="parts_l">
 
             <table>
                 <thead>
                 <tr>
                     <th style="width: 5%;">
-                        <input type="checkbox" id="all" checked>
+                        <input type="checkbox" id="all">
                     </th>
                     <th>名字</th>
                 </tr>
@@ -578,7 +566,7 @@
                 <?php foreach ($customer as $k=>$v) :?>
                     <tr class="people_tr">
                         <td class="check">
-                            <input type="checkbox" checked class="check_child" value="<?php echo $v->id ?>"><!--放id-->
+                            <input type="checkbox" class="check_child" value="<?php echo $v->id ?>"><!--放id-->
                         </td>
                         <td class="people_td userName"><?php echo $v->nickname ?></td>
 
@@ -592,7 +580,7 @@
     <div class="add_footer">
         <td colspan="2">
             <div class="ui_buttons">
-
+                <input type="hidden" value="" id="invoice_info_id_2">
                 <input type="button" id="add_people_val" value="确定" class="ui_state_highlight" />
                 <input type="button" class="close_add" value="关闭" />
             </div>
@@ -601,7 +589,7 @@
 </div>
 <script>
     $(function () {
-
+        volume_all();
 
         // 单选框
         $('#all').on('click',function () {
@@ -670,6 +658,7 @@
             $('#ldg_lockmask').css('display','none');
             $('#add').css('display','none');
             $("#invoice_info_id").val('');
+            $("#invoice_info_id_2").val('');
             $('#add_people').css('display','none');
         });
         $("#save").click(function(){
@@ -740,56 +729,49 @@
         $('.add_people').on('click',function () {
             $('#add_people').show();
             $('#ldg_lockmask').show();
-
+            invoice_info_id = $(this).parent().find('input').val();
+            $("#invoice_info_id_2").val(invoice_info_id);
         });
         $('#add_people_val').on('click',function () {
-            var logistic = $("#logistic").val();
             var userName = new Array();
             $.each($('.check_child'),function(i,val){
                 if($(this).is(':checked')){
                     userName.push($(this).val());
                 }
             });
-            if(!logistic || !userName){
-                parent.Public.tips({
-                    type:1,
-                    content:"请填写物流单号和选择通知人员！"
-                });
-            }else{
+            invoice_info_id_2 = $("#invoice_info_id_2").val();
 
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo site_url('deliver/remind');?>",
-                    traditional: true,
-                    data: {
-                        logistic:logistic,
-                        userName:JSON.stringify(userName),
-                    },
-                    dataType: "json",
+            $.ajax({
+                type: "POST",
+                url: "<?php echo site_url('deliver/remind');?>",
+                traditional: true,
+                data: {
+                    invoice_info_id:invoice_info_id_2,
+                    userName:JSON.stringify(userName),
+                },
+                dataType: "json",
 
-                    success: function (data) {
+                success: function (data) {
 
-                        if(data.code == 1){
-                            parent.Public.tips({
-                                content:data.text
-                            });
-                            changes();
-                        }else if (data.code == 2){
-                            parent.Public.tips({
-                                type:1,
-                                content:data.text
-                            });
-                        } else{
-                            parent.Public.tips({
-                                type:1,
-                                content:"未知错误"
-                            });
-                        }
+                    if(data.code == 1){
+                        parent.Public.tips({
+                            content:data.text
+                        });
+                        changes();
+                    }else if (data.code == 2){
+                        parent.Public.tips({
+                            type:1,
+                            content:data.text
+                        });
+                    } else{
+                        parent.Public.tips({
+                            type:1,
+                            content:"未知错误"
+                        });
+                    }
 
-                    },
-                });
-            }
-
+                },
+            });
         });
     });
     function changes() {
@@ -831,8 +813,77 @@
             changes();
         }
     });
+    function start(id){
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('deliver/start');?>",
+            data: {
+                id: id,
+            },
+            dataType: "json",
+            success: function (res) {
 
+                if(res.code == 1){
+                    parent.Public.tips({
+                        content:res.text
+                    });
+                    changes();
+                } else{
+                    parent.Public.tips({
+                        type:1,
+                        content:res.text
+                    });
+                }
+            },
+        });
+    }
+    function end(id){
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('deliver/end');?>",
+            data: {
+                id: id,
+            },
+            dataType: "json",
+            success: function (res) {
 
+                if(res.code == 1){
+                    parent.Public.tips({
+                        content:res.text
+                    });
+                    changes();
+                } else{
+                    parent.Public.tips({
+                        type:1,
+                        content:res.text
+                    });
+                }
+            },
+        });
+    }
+    //计算箱子体积
+    function volume() {
+
+        long = $('#long').val();
+        wide = $('#wide').val();
+        high = $('#high').val();
+        if(!long){
+            long = 0;
+        }else if(!wide){
+            wide =0;
+        }else if(!high){
+            high =0;
+        }
+        $('#box_volume').val((long*wide*high).toFixed(4));
+    }
+
+    //统计总体积
+    function volume_all(){
+        $.each($('.good_detail'),function (i,val) {
+            // var box_number = $(this).children(1).html();
+            // console.log(val);
+        });
+    }
 
 </script>
 <script>
