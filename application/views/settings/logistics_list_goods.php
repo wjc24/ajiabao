@@ -434,7 +434,7 @@
                         <?php foreach ($data as $k=>$v) :?>
                             <tr class="good_detail">
                                 <input type="hidden" value="<?php echo $v->id?>">
-                                <td><span><a tabTxt="发货详情" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/logistics_detail_detail?id=".$v->id)?>"><?php echo $v->good_name ?></a></span></td>
+                                <td><span><a tabTxt="发货详情" parentOpen="true" rel="pageTab" id="go" href="<?php echo site_url("deliver/logistics_detail_detail?id=".$v->id)?>"><?php echo $v->good_name ?></a></span></td>
                                 <?php if($v->end_time) :?>
                                     <td><span><?php echo date('Y-m-d H:i',$v->end_time) ?></span></td>
                                 <?php else :?>
@@ -578,7 +578,6 @@
 </div>
 <script>
     $(function () {
-        volume_all();
 
         // 单选框
         $('#all').on('click',function () {
@@ -802,77 +801,9 @@
             changes();
         }
     });
-    function start(id){
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('deliver/start');?>",
-            data: {
-                id: id,
-            },
-            dataType: "json",
-            success: function (res) {
-
-                if(res.code == 1){
-                    parent.Public.tips({
-                        content:res.text
-                    });
-                    changes();
-                } else{
-                    parent.Public.tips({
-                        type:1,
-                        content:res.text
-                    });
-                }
-            },
-        });
-    }
-    function end(id){
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('deliver/end');?>",
-            data: {
-                id: id,
-            },
-            dataType: "json",
-            success: function (res) {
-
-                if(res.code == 1){
-                    parent.Public.tips({
-                        content:res.text
-                    });
-                    changes();
-                } else{
-                    parent.Public.tips({
-                        type:1,
-                        content:res.text
-                    });
-                }
-            },
-        });
-    }
-    //计算箱子体积
-    function volume() {
-
-        long = $('#long').val();
-        wide = $('#wide').val();
-        high = $('#high').val();
-        if(!long){
-            long = 0;
-        }else if(!wide){
-            wide =0;
-        }else if(!high){
-            high =0;
-        }
-        $('#box_volume').val((long*wide*high).toFixed(4));
-    }
-
-    //统计总体积
-    function volume_all(){
-        $.each($('.good_detail'),function (i,val) {
-            // var box_number = $(this).children(1).html();
-            // console.log(val);
-        });
-    }
+    $(".good_detail").dblclick(function () {
+        document.getElementById("go").click();
+    });
 
 </script>
 <script>

@@ -127,6 +127,15 @@
     .three_category{
         text-align: right;
     }
+    .one{
+        background-color: Pink;
+    }
+    .two{
+        background-color: NavajoWhite;
+    }
+    .three{
+        background-color: PapayaWhip;
+    }
 </style>
 </head>
 <body>

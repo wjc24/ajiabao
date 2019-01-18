@@ -239,8 +239,8 @@ class Deliver  extends CI_Controller {
         $id = $this->input->get('id');
 
         $data = $this->db->where(['id'=>$id])->get('ci_logistics')->row();
-
-        $this->load->view('/settings/logistics_good_detail',['id'=>$id,'data'=>$data]);
+        $customer = $this->db->get('ci_customer')->result();
+        $this->load->view('/settings/logistics_good_detail',['id'=>$id,'data'=>$data,'customer'=>$customer]);
     }
 
     //物流 修改商品发货记录

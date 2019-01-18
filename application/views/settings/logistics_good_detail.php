@@ -102,7 +102,7 @@
         text-overflow:ellipsis;
     }
     .table .write,
-    .table .add,
+    .table .adds,
     .table .delete{
         display: inline-block;
         width: 16px;
@@ -115,7 +115,7 @@
     .table .delete{
         background-position: -64px -16px;
     }
-    .table .add{
+    .table .adds{
         background-position: -80px -0px;
     }
     .one_category{
@@ -126,6 +126,145 @@
     }
     .three_category{
         text-align: right;
+    }
+    .one{
+        background-color: Pink;
+    }
+    .two{
+        background-color: NavajoWhite;
+    }
+    .three{
+        background-color: PapayaWhip;
+    }
+    /*施工人员弹框*/
+    #add_people .add_content .parts_l{
+        float: left;
+        height: 100%;
+        width: 100%;
+        border: 1px solid #f1f1f1;
+        overflow-y: auto;
+    }
+    #add_people .add_content .parts_l table{
+        /*height: 99.99%;*/
+        width: 99.99%;
+    }
+    #add_people .add_content .parts_l table thead tr{
+        /*width: 453px;*/
+        width: 100%;
+        height: 40px;
+        background-color: #ddd;
+        /*position: fixed;*/
+        /*top: 57px;*/
+    }
+    #add_people .add_content .parts_l table tbody tr:hover{
+        background-color: #f8ff94;
+    }
+    #add_people .add_content .parts_l table tbody tr td{
+        width: 11.111%;
+        height: 30px;
+        border: none;
+        border-bottom: 1px solid #f1f1f1;
+        border-right: 1px solid #f1f1f1;
+    }
+    #add_people .add_content .parts_r{
+        float: right;
+        height: 100%;
+        width: 30%;
+        border: 1px solid #f1f1f1;
+        overflow-y: auto;
+    }
+    .add{
+        position: fixed;
+        width: 770px;
+        height: 500px;
+        background-color: #fff;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        box-shadow: 1px 1px 10px 10px #a9a9a9;
+        border-radius: 3px;
+        z-index: 1998;
+    }
+    .add>.add_header{
+        background-color: #f5f5f5;
+        height: 32px;
+        width: 100%;
+        border-radius: 3px;
+    }
+    .add>.add_header>.add_title{
+        float: left;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-left: 10px;
+    }
+    .add>.add_header>.add_close{
+        float: right;
+        height: 32px;
+        line-height: 32px;
+        color: #aaa;
+        font-size: 18px;
+        width: 20px;
+        cursor: pointer;
+    }
+    .add>.add_content{
+        width: 100%;
+        height: 435px;
+        box-sizing: border-box;
+        padding: 25px;
+    }
+    .add>.add_content>.content_title{
+        height: 18px;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+    }
+    .add>.add_content>.content_main{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px 0;
+    }
+    .add>.add_content>.content_main:first-child{
+        height: 50%;
+    }
+    .add>.add_content>.content_main:last-child{
+        height: 20%;
+    }
+    .add>.add_content>.content_main>li{
+        width: 50%;
+        float: left;
+        margin-bottom: 5px;
+    }
+    .add>.add_content>.content_main>li>span{
+        display: inline-block;
+        width: 70px;
+        height: 30px;
+    }
+    .add>.add_content>.content_main>li>input{
+        width: 140px;
+        height: 24px;
+        border: 1px solid #ddd;
+    }
+    .add>.add_content>.content_main>li>span>select{
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+    .add>.add_content>.content_main>li>.sel{
+        display: inline-block;
+        border: 1px solid #ddd;
+        height: 24px;
+        line-height: 24px;
+        width: 140px;
+        margin-left: -3px;
+        outline: none;
+    }
+    .add_footer{
+        position: absolute;
+        width: 770px;
+        height: 33px;
+        bottom: 0;
+        right: 0;
     }
 </style>
 </head>
@@ -138,7 +277,7 @@
 
         <div class="bills">
             <div class="grid-wrap mb10" id="acGridWrap">
-                <ul style="font-size: 20px;font-weight: bold">发货公司资料</ul>
+                <ul style="font-size: 20px;font-weight: bold">发货公司资料</ul>  <span style="margin-left: 90%;"><a class="ui-btn mrb add_people" id="">提醒</a></span>
                 <ul class="mod-form-rows base-form clearfix" id="base-form">
 
                     <li class="row-item">
@@ -188,7 +327,7 @@
                         <?php foreach (json_decode($data->content) as $key=>$val) :?>
                             <tr class="one">
                                 <td>
-                                    <span class="add"></span>
+                                    <span class="adds"></span>
                                     <span class="delete"></span>
                                 </td>
                                 <td class="one_category">集装箱号</td>
@@ -199,7 +338,7 @@
                                 <?php foreach ($val->child as $k1=>$v1) :?>
                                     <tr class="two">
                                         <td>
-                                            <span class="add"></span>
+                                            <span class="adds"></span>
                                             <span class="delete"></span>
                                         </td>
                                         <td class="two_category">托盘号</td>
@@ -211,7 +350,7 @@
 
                                             <tr class="three">
                                                 <td>
-                                                    <span class="add"></span>
+                                                    <span class="adds"></span>
                                                     <span class="delete"></span>
                                                 </td>
                                                 <td class="three_category">箱子号</td>
@@ -245,21 +384,66 @@
         </div>
 
 </div>
+<div id="ldg_lockmask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; z-index: 1977;display: none;"></div>
 
+<!--选择提醒人员弹框-->
+<div id="add_people" class="add" style="display: none;">
+    <div class="add_header clearfix">
+        <div class="add_title">选择提醒人员</div>
+        <div class="add_close close_add">&times;</div>
+    </div>
+    <div class="add_content clearfix">
+        物流单号：<input type="text" id="logistic" placeholder="请输入物流单号">
+        <div class="parts_l">
+
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 5%;">
+                        <input type="checkbox" id="all" checked>
+                    </th>
+                    <th>名字</th>
+                </tr>
+                </thead>
+                <tbody class="parts_main">
+                <?php foreach ($customer as $k=>$v) :?>
+                    <tr class="people_tr">
+                        <td class="check">
+                            <input type="checkbox" checked class="check_child" value="<?php echo $v->id ?>"><!--放id-->
+                        </td>
+                        <td class="people_td userName"><?php echo $v->nickname ?></td>
+
+                    </tr>
+                <?php endforeach;?>
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="add_footer">
+        <td colspan="2">
+            <div class="ui_buttons">
+
+                <input type="button" id="add_people_val" value="确定" class="ui_state_highlight" />
+                <input type="button" class="close_add" value="关闭" />
+            </div>
+        </td>
+    </div>
+</div>
 
 </body>
 <script>
     $(function () {
         var box_number = 0;
         var box_all_volume = 0;
-        $("#tbody").on('click','.add',function () {
+        $("#tbody").on('click','.adds',function () {
             var category = $(this).parent().parent().attr('class');
 
             if(category == "one"){
 
                 var add ='<tr class="one">\n' +
                     '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
+                    '                                    <span class="adds"></span>\n' +
                     '                                    <span class="delete"></span>\n' +
                     '                                </td>\n' +
                     '                                <td class="one_category" >集装箱号</td>\n' +
@@ -268,7 +452,7 @@
                     '                            </tr>\n' +
                     '                            <tr class="two">\n' +
                     '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
+                    '                                    <span class="adds"></span>\n' +
                     '                                    <span class="delete"></span>\n' +
                     '                                </td>\n' +
                     '                                <td class="two_category" >托盘号</td>\n' +
@@ -277,7 +461,7 @@
                     '                            </tr>\n' +
                     '                            <tr class="three">\n' +
                     '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
+                    '                                    <span class="adds"></span>\n' +
                     '                                    <span class="delete"></span>\n' +
                     '                                </td>\n' +
                     '                                <td class="three_category" >箱子号</td>\n' +
@@ -289,7 +473,7 @@
             }else if(category == "two"){
                 var add =' <tr class="two">\n' +
                     '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
+                    '                                    <span class="adds"></span>\n' +
                     '                                    <span class="delete"></span>\n' +
                     '                                </td>\n' +
                     '                                <td class="two_category" >托盘号</td>\n' +
@@ -298,7 +482,7 @@
                     '                            </tr>\n' +
                     '                            <tr class="three">\n' +
                     '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
+                    '                                    <span class="adds"></span>\n' +
                     '                                    <span class="delete"></span>\n' +
                     '                                </td>\n' +
                     '                                <td class="three_category" >箱子号</td>\n' +
@@ -309,7 +493,7 @@
             }else if(category == "three"){
                 var add ='<tr class="three">\n' +
                     '                                <td>\n' +
-                    '                                    <span class="add"></span>\n' +
+                    '                                    <span class="adds"></span>\n' +
                     '                                    <span class="delete"></span>\n' +
                     '                                </td>\n' +
                     '                                <td class="three_category" >箱子号</td>\n' +
@@ -393,6 +577,131 @@
             Calculation_box();
         });
 
+        //选择提醒人员
+        $('.close_add').on('click',function () {
+            $('#ldg_lockmask').css('display','none');
+            $('#add').css('display','none');
+            $("#invoice_info_id").val('');
+            $('#add_people').css('display','none');
+        });
+        $("#save").click(function(){
+            var shipping_name = $("#shipping_name").val();
+            var booking_number = $("#booking_number").val();
+            var container_number = $("#container_number").val();
+            var tray_number = $("#tray_number").val();
+            var box_number = $("#box_number").val();
+            var boxes = $("#boxes").val();
+            var long = $("#long").val();
+            var wide = $("#wide").val();
+            var high = $("#high").val();
+            var box_volume = $("#box_volume").val();
+            var port = $("#port").val();
+            var invoice_info_id = $("#invoice_info_id").val();
+
+
+            if(!shipping_name){
+                parent.Public.tips({
+                    type:1,
+                    content:"请填写全发货信息！"
+                });
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo site_url('deliver/doadd');?>",
+                    traditional: true,
+                    data: {
+                        shipping_name: shipping_name,
+                        booking_number:booking_number,
+                        container_number:container_number,
+                        tray_number:tray_number,
+                        box_number:box_number,
+                        boxes:boxes,
+                        long:long,
+                        wide:wide,
+                        high:high,
+                        box_volume:box_volume,
+                        port:port,
+                        invoice_info_id:invoice_info_id,
+                    },
+                    dataType: "json",
+
+                    success: function (data) {
+                        if(data.code == 1){
+                            parent.Public.tips({
+                                content:data.text
+                            });
+                            id = $("#id").val();
+                            location.href = "<?php echo site_url('deliver/index')?>";
+                        }else if (data.code == 2){
+                            parent.Public.tips({
+                                type:1,
+                                content:data.text
+                            });
+                        } else{
+                            parent.Public.tips({
+                                type:1,
+                                content:"未知错误"
+                            });
+                        }
+
+                    },
+                });
+            }
+        });
+        $('.add_people').on('click',function () {
+            $('#add_people').show();
+            $('#ldg_lockmask').show();
+
+        });
+        $('#add_people_val').on('click',function () {
+            var logistic = $("#logistic").val();
+            var userName = new Array();
+            $.each($('.check_child'),function(i,val){
+                if($(this).is(':checked')){
+                    userName.push($(this).val());
+                }
+            });
+            if(!logistic || !userName){
+                parent.Public.tips({
+                    type:1,
+                    content:"请填写物流单号和选择通知人员！"
+                });
+            }else{
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo site_url('deliver/remind');?>",
+                    traditional: true,
+                    data: {
+                        logistic:logistic,
+                        userName:JSON.stringify(userName),
+                    },
+                    dataType: "json",
+
+                    success: function (data) {
+
+                        if(data.code == 1){
+                            parent.Public.tips({
+                                content:data.text
+                            });
+                            changes();
+                        }else if (data.code == 2){
+                            parent.Public.tips({
+                                type:1,
+                                content:data.text
+                            });
+                        } else{
+                            parent.Public.tips({
+                                type:1,
+                                content:"未知错误"
+                            });
+                        }
+
+                    },
+                });
+            }
+
+        });
 
         //计算箱子的个数和总体积
         function Calculation_box(){
@@ -434,7 +743,6 @@
                 one = 0;
                 two = 0;
                 three = 0;
-
 
                 $.each($("#tbody>tr"),function(i,val){
                     category = $(this).attr('class');
@@ -524,7 +832,7 @@
                     dataType: "json",
 
                     success: function (data) {
-console.log(data);
+
                         if(data.code == 1){
                             parent.Public.tips({
                                 content:data.text
