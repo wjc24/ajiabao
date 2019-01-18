@@ -470,7 +470,7 @@ var dataReflush, list = {
 	},
     deliver: {
     	name: "发货管理",
-        href: "../deliver/index",
+        href: "../trade/index",
         dataRight: "SettAcct_QUERY",
         target: "setting-base"
 	},

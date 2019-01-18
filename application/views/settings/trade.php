@@ -380,7 +380,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <form action="<?php echo site_url('deliver/index');?>" method="post" id="form">
+    <form action="<?php echo site_url('trade/index');?>" method="post" id="form">
         <div class="mod-search cf">
             <div class="fl" >
                 <ul class="ul-inline">
@@ -457,16 +457,16 @@
                                 <td><span><?php echo $v['good_num']-$v['issued_num'] ?></span></td>
                                 <?php if($v['deliver_status'] == 1) :?>
                                     <td><span>未发货</span></td>
-                                    <td><span><a tabTxt="新增发货信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/add?id=".$v['invoice_info_id']."&good_name=".$v['good_name'])?>" class="ui-btn mrb detail">新增发货信息</a></span></td>
+                                    <td><span><a tabTxt="新增发货信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("trade/add?id=".$v['invoice_info_id']."&good_name=".$v['good_name'])?>" class="ui-btn mrb detail">新增发货信息</a></span></td>
                                 <?php elseif($v['deliver_status'] == 2) :?>
                                     <td><span>部分发货</span></td>
-                                    <td><span><a tabTxt="新增发货信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/add?id=".$v['invoice_info_id']."&good_name=".$v['good_name'])?>" class="ui-btn mrb detail">新增发货信息</a></span></td>
+                                    <td><span><a tabTxt="新增发货信息" parentOpen="true" rel="pageTab" href="<?php echo site_url("trade/add?id=".$v['invoice_info_id']."&good_name=".$v['good_name'])?>" class="ui-btn mrb detail">新增发货信息</a></span></td>
                                 <?php elseif($v['deliver_status'] == 3) :?>
                                     <td><span>已发货</span></td>
                                     <td><span><a href="" class="ui-btn mrb detail">已全部发货</a></span></td>
                                 <?php endif;?>
 
-                                <td><span><a tabTxt="发货详情" parentOpen="true" rel="pageTab" href="<?php echo site_url("deliver/detail?id=".$v['invoice_info_id'])?>" class="ui-btn mrb detail">发货详情</a></span></td>
+                                <td><span><a tabTxt="发货详情" parentOpen="true" rel="pageTab" href="<?php echo site_url("trade/detail?id=".$v['invoice_info_id'])?>" class="ui-btn mrb detail">发货详情</a></span></td>
 
                             </tr>
                         <?php endforeach;?>
@@ -522,39 +522,7 @@
     </form>
 </div>
 <div id="ldg_lockmask" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; z-index: 1977;display: none;"></div>
-<div id="add" style="display: none;">
-    <div id="add_header" class="clearfix">
-        <div id="add_title">修改发货信息</div>
-        <div id="add_close" class="close_add">&times;</div>
-    </div>
-    <div id="add_content">
-        <ul class="content_title"><h3>基本资料</h3></ul>
-        <ul class="content_main clearfix">
-            <input type="hidden" value="" id="invoice_info_id">
-            <li><span style="width: 30%;">船运/航空公司名称:</span><input type="text" id="shipping_name"></li>
-            <li><span style="width: 30%;">订舱号:</span><input type="text" id="booking_number"></li>
-            <li><span style="width: 30%;" >集装箱号:</span><input type="text" id="container_number"></li>
-            <li><span style="width: 30%;">托盘号:</span><input type="text"  id="tray_number"></li>
-            <li><span style="width: 30%;">到达港口:</span><input type="text" id="port"></li>
-            <li><span style="width: 30%;">箱子个数:</span><input type="number" min="0" id="boxes"></li>
-            <li ><span style="width: 30%;">箱子总体积(立方米):</span><input readonly type="text" id="box_volume"></li>
-            <li><span></span></li>
-            <li><span style="width: 30%;">箱子编号:</span><input type="text" id="box_number"></li>
-            <li><span style="width: 30%;">箱子长(米):</span><input oninput="volume();" type="number" min="0" id="long"></li>
-            <li><span style="width: 30%;">箱子宽(米):</span><input oninput="volume()" type="number" min="0" id="wide"></li>
-            <li><span style="width: 30%;">箱子高(米):</span><input oninput="volume()" type="number" min="0" id="high"></li>
-        </ul>
-    </div>
-    <div id="add_footer">
-        <td colspan="2">
-            <div class="ui_buttons">
-                <input type="hidden" value="" id="id">
-                <input type="button" id="save" value="保存" class="ui_state_highlight" />
-                <input type="button" class="close_add" value="关闭" />
-            </div>
-        </td>
-    </div>
-</div>
+
 <!--选择提醒人员弹框-->
 <div id="add_people" class="add" style="display: none;">
     <div class="add_header clearfix">
@@ -759,7 +727,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo site_url('deliver/remind');?>",
+                    url: "<?php echo site_url('trade/remind');?>",
                     traditional: true,
                     data: {
                         logistic:logistic,

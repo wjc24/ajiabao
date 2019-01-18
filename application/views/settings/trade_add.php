@@ -509,7 +509,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo site_url('deliver/doadd');?>",
+                    url: "<?php echo site_url('trade/doadd');?>",
                     cache:false,
                     data: {
                         shipping_name: shipping_name,
