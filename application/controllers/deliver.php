@@ -19,9 +19,9 @@ class Deliver  extends CI_Controller {
         foreach ($invoice as $k=>$v){
 
             if($sel && $sel != '0'){
-                $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%' OR booking_number LIKE '%".$like."%' OR container_number LIKE '%".$like."%' OR box_number LIKE '%".$like."%' OR shipping_name LIKE '%".$like."%') AND (STATUS = ".$sel.")";
+                $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%') AND (STATUS = ".$sel.")";
             }else{
-                $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%' OR booking_number LIKE '%".$like."%' OR container_number LIKE '%".$like."%' OR box_number LIKE '%".$like."%' OR shipping_name LIKE '%".$like."%')";
+                $where_invoice_info = "(iid =".$v->id." AND billNo = '".$v->billNo."') AND (billNo LIKE '%".$like."%')";
             }
             $invoice_id = $v->id;
             $billNo = $v->billNo;
@@ -40,21 +40,9 @@ class Deliver  extends CI_Controller {
                 $good = $this->db->where(['id'=>$val->invId])->get('ci_goods')->row();
                 $goods[$t]['good_name'] =$good->name;
                 $goods[$t]['good_num'] =substr($val->qty,1);
-                $goods[$t]['shipping_name'] =$val->shipping_name;
-                $goods[$t]['booking_number'] =$val->booking_number;
-                $goods[$t]['container_number'] =$val->container_number;
-                $goods[$t]['tray_number'] =$val->tray_number;
-                $goods[$t]['boxes'] =$val->boxes;
-                $goods[$t]['box_volume'] =$val->box_volume;
-                $goods[$t]['port'] =$val->port;
-                $goods[$t]['start_time'] =$val->start_time;
-                $goods[$t]['end_time'] =$val->end_time;
-                $goods[$t]['status'] =$val->status;
-                $goods[$t]['remind'] =$val->remind;
-
-                foreach (json_decode($val->box) as $k=>$v){
-                    $goods[$t]['box_number'] .= $v->box_number.",";
-                }
+                $goods[$t]['issued_num'] =$val->issued_num;
+                $goods[$t]['unissued_num'] =$val->unissued_num;
+                $goods[$t]['deliver_status'] =$val->deliver_status;
 
                 $t++;
             }
@@ -100,12 +88,10 @@ class Deliver  extends CI_Controller {
     public function add(){
         $id = $this->input->get('id');
 
-        $invoice = $this->db->where(['id'=>$id])->get('ci_invoice_info')->row();
-
-        $this->load->view('/settings/deliver_add',['id'=>$id,'data'=>$invoice]);
+        $this->load->view('/settings/deliver_add',['id'=>$id]);
     }
 
-    //添加修改发货信息
+    //新增发货信息
     public function doadd(){
         $res =[];
         $data = $this->input->post(NULL,TRUE);
@@ -121,27 +107,29 @@ class Deliver  extends CI_Controller {
             'start_time'=>time(),
         );
         $logistics_res = $this->db->insert('ci_logistics',$add);
-        die(json_encode($logistics_res));
-//        $box_volume = 0;
-//        foreach (json_decode($data['boxs']) as $k=>$v){
-//            $box_volume +=$v->box_single;
-//        }
-//
-//        $edit = $this->db->update('ci_invoice_info',array('shipping_name'=>$data['shipping_name'],'booking_number'=>$data['booking_number'],'container_number'=>$data['container_number'], 'tray_number'=>$data['tray_number'],'boxes'=>$data['boxes'],'box_volume'=>$box_volume,'port'=>$data['port'],'box'=>$data['boxs']),array('id'=>$data['invoice_info_id']));
-////        die(json_encode($data['boxs']));
-//        if($edit){
-//            $res['code'] = 1;
-//            $res['text'] = "修改成功";
-//            die(json_encode($res));
-//        }else{
-//            $res['code'] = 2;
-//            $res['text'] = "修改失败";
-//            die(json_encode($res));
-//        }
+
+
+        if($logistics_res){
+            $res['code'] = 1;
+            $res['text'] = "发货成功";
+            die(json_encode($res));
+        }else{
+            $res['code'] = 2;
+            $res['text'] = "发货失败";
+            die(json_encode($res));
+        }
 
     }
 
-// 开始出仓
+    //发货详情
+    public function detail(){
+        $id = $this->input->get('id');
+        $data = $this->db->where(['invoice_info_id'=>$id])->get('ci_logistics')->result();
+
+        $this->load->view('/settings/logistics_detail',['id'=>$id,'data'=>$data]);
+    }
+
+    // 开始出仓
     public function start(){
         $id = $this->input->post('id');
         $res =[];
@@ -173,6 +161,12 @@ class Deliver  extends CI_Controller {
         }
     }
 
+    //
+    public function logistics(){
+        $data = $this->db->get('ci_logistics')->result();
+var_dump($data);
+        $this->load->view('/settings/logistics',['data'=>$data]);
+    }
     //提醒
     public function remind(){
         $data = $this->input->post(NULL,TRUE);

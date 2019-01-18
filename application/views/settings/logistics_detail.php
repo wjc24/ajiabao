@@ -133,6 +133,8 @@
 <div class="wrapper">
     <span id="config" class="ui-icon ui-state-default ui-icon-config"></span>
     <input type="hidden" id="invoice_info_id" value="<?php echo $id ?>">
+    <?php foreach ($data as $k=>$v) :?>
+
     <div class="bills">
         <div class="grid-wrap mb10" id="acGridWrap">
             <ul style="font-size: 20px;font-weight: bold">发货公司资料</ul>
@@ -140,27 +142,27 @@
 
                 <li class="row-item">
                     <div class="label-wrap" style="width: 21%;"><label for="name">船运/航空公司名称:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="" class="ui-input" name="shipping_name" id="shipping_name"></div>
+                    <div class="ctn-wrap"><input type="text" value="<?php echo  $v->shipping_name ?>" class="ui-input" name="shipping_name" id="shipping_name"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap"><label for="birthday">订舱号:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="" class="ui-input" name="booking_number" id="booking_number"></div>
+                    <div class="ctn-wrap"><input type="text" value="<?php echo  $v->booking_number ?>" class="ui-input" name="booking_number" id="booking_number"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap"><label for="birthday">到达港口:</label></div>
-                    <div class="ctn-wrap"><input type="text" value="" class="ui-input" name="port" id="port"></div>
+                    <div class="ctn-wrap"><input type="text" value="<?php echo  $v->port ?>" class="ui-input" name="port" id="port"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap"><label for="birthday">箱子个数:</label></div>
-                    <div class="ctn-wrap"><input type="number" min="0" value="" class="ui-input" name="boxes" id="boxes"></div>
+                    <div class="ctn-wrap"><input type="number" min="0" value="<?php echo  $v->boxes ?>" class="ui-input" name="boxes" id="boxes"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap" style="width: 21%;"><label for="birthday">箱子总体积(立方米):</label></div>
-                    <div class="ctn-wrap"><input type="number"  min="0" value="" class="ui-input" name="box_volume" id="box_volume"></div>
+                    <div class="ctn-wrap"><input type="number" readonly min="0" value="<?php echo  $v->box_volume ?>" class="ui-input" name="box_volume" id="box_volume"></div>
                 </li>
                 <li class="row-item">
                     <div class="label-wrap" style="width: 21%;"><label for="birthday">运输商品数:</label></div>
-                    <div class="ctn-wrap"><input type="number" min="0" value="" class="ui-input" name="good_logistics" id="good_logistics"></div>
+                    <div class="ctn-wrap"><input type="number" min="0" value="<?php echo  $v->good_logistics ?>" class="ui-input" name="good_logistics" id="good_logistics"></div>
                 </li>
             </ul>
             <div class="table">
@@ -175,33 +177,48 @@
                     </tr>
                     </thead>
                     <tbody id="tbody">
-                    <tr class="one">
-                        <td>
-                            <span class="add"></span>
-                            <span class="delete"></span>
-                        </td>
-                        <td class="one_category">集装箱号</td>
-                        <td><input type="text" value="A1" class="container_number"></td>
-                        <td><span></span></td>
-                    </tr>
-                    <tr class="two">
-                        <td>
-                            <span class="add"></span>
-                            <span class="delete"></span>
-                        </td>
-                        <td class="two_category">托盘号</td>
-                        <td><input type="text" value="B1" class="tray_number"></td>
-                        <td><span></span></td>
-                    </tr>
-                    <tr class="three">
-                        <td>
-                            <span class="add"></span>
-                            <span class="delete"></span>
-                        </td>
-                        <td class="three_category">箱子号</td>
-                        <td><input type="text" value="C1" class="single_box"></td>
-                        <td>长(米)：<input type="number" min="0" value="" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" readonly></td>
-                    </tr>
+                    <?php foreach (json_decode($v->content) as $key=>$val) :?>
+                        <tr class="one">
+                            <td>
+                                <span class="add"></span>
+                                <span class="delete"></span>
+                            </td>
+                            <td class="one_category">集装箱号</td>
+                            <td><input type="text" value="<?php echo $val->container_number?>" class="container_number"></td>
+                            <td><span></span></td>
+                        </tr>
+                        <?php if($val->child) :?>
+                            <?php foreach ($val->child as $k1=>$v1) :?>
+                                <tr class="two">
+                                    <td>
+                                        <span class="add"></span>
+                                        <span class="delete"></span>
+                                    </td>
+                                    <td class="two_category">托盘号</td>
+                                    <td><input type="text" value="<?php echo $v1->tray_number ?>" class="tray_number"></td>
+                                    <td><span></span></td>
+                                </tr>
+                                <?php if($v1->child) :?>
+                                    <?php foreach ($v1->child as $k2=>$v2) :?>
+
+                                        <tr class="three">
+                                            <td>
+                                                <span class="add"></span>
+                                                <span class="delete"></span>
+                                            </td>
+                                            <td class="three_category">箱子号</td>
+                                            <td><input type="text" value="<?php echo $v2->single_box ?>" class="single_box"></td>
+                                            <td>长(米)：<input type="number" min="0" value="<?php echo $v2->long ?>" class="long" style="width: 10%;" > 宽(米)：<input type="number" min="0" class="wide" value="<?php echo $v2->wide ?>" style="width: 10%;"> 高(米)：<input type="number" min="0" class="high" style="width: 10%;" value="<?php echo $v2->high ?>"> 体积(立方米)：<input type="number" min="0" style="width: 15%;" class="volume" value="<?php echo $v2->volume ?>" readonly></td>
+                                        </tr>
+
+                                    <?php endforeach;?>
+                                <?php endif;?>
+                            <?php endforeach;?>
+                        <?php endif;?>
+                    <?php endforeach;?>
+
+
+
                     </tbody>
                 </table>
             </div>
@@ -212,6 +229,7 @@
             <button type="button" class="btn" id="submit" style="border: 1px solid #3279a0;background: -webkit-gradient(linear,0 0,0 100%,from(#4994be),to(#337fa9));color: #fff;">保存</button>
         </div>
     </div>
+    <?php endforeach;?>
 </div>
 
 
@@ -440,7 +458,7 @@
                 }
 
             });
-console.log(box);
+
             $.ajax({
                 type: "POST",
                 url: "<?php echo site_url('deliver/doadd');?>",
@@ -458,7 +476,7 @@ console.log(box);
                 dataType: "json",
 
                 success: function (data) {
-console.log(data);
+
                     if(data.code == 1){
                         parent.Public.tips({
                             content:data.text
@@ -483,53 +501,6 @@ console.log(data);
     });
 </script>
 
-<script>
-
-    //$("#submit").click(function () {
-    //    var shipping_name = $("#shipping_name").val();
-    //    var booking_number = $("#booking_number").val();
-    //    var port = $("#port").val();
-    //    var boxes = $("#boxes").val();
-    //    var box_volume = $("#box_volume").val();
-    //    var invoice_info_id = $("#invoice_info_id").val();
-    //
-    //
-    //    var box = new Array();
-    //     one = 0;
-    //     two = 0;
-    //     three = 0;
-    //
-    //    $.each($("#tbody>tr"),function(i,val){
-    //        category = $(this).attr('class');
-    //        if(category == "one"){
-    //
-    //            box[one] = new Array();
-    //            box[one]['container_number'] = $(this).find('.container_number').val();
-    //            one++;
-    //        }
-    //        // else if(category == "two"){
-    //        //     box[one]['child'] =new Array();
-    //        //     box[one]['child'][two] = new Array();
-    //        //     box[one]['child'][two]['tray_number'] = $(this).find('.tray_number').val();
-    //        // }else if(category == "three"){
-    //        //     box[one]['child'][two]['child'] =new Array();
-    //        //     box[one]['child'][two]['child'][three] = new Array();
-    //        //     box[one]['child'][two]['child'][three]['single_box'] = $(this).find('.single_box').val();
-    //        // }
-    //
-    //        // id = $(this).attr("id");
-    //        // box.push({"box_number":$("#box_number_"+id).val(),"long":$("#long_"+id).val(),"wide":$("#wide_"+id).val(),"high":$("#high_"+id).val(),"box_single":$("#box_single_"+id).val()});
-    //
-    //    });
-    //    console.log(box);
-    //    var boxs = JSON.stringify(box);//专业能力数组用JSON序列化
-    //
-
-    //});
-
-
-
-</script>
 </html>
 
 
